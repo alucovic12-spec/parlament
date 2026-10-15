@@ -1,7 +1,7 @@
 'use client'
 
 import { Search, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CmsImage } from '@/components/shared/cms-image'
 import { Button } from '@/components/ui/button'
 import type { Locale } from '@/lib/i18n/config'
@@ -30,6 +30,21 @@ const normalize = (value: string) =>
 export function MenuBrowser({ locale, labels, categories, items }: Props) {
   const [query, setQuery] = useState('')
   const [active, setActive] = useState<ActiveCategory>('all')
+
+  useEffect(() => {
+    const applyHash = () => {
+      const match = window.location.hash.match(/^#menu-(.+)$/)
+      if (!match) return
+      const id = decodeURIComponent(match[1])
+      if (!categories.some((category) => category.id === id)) return
+      setQuery('')
+      setActive(id)
+      requestAnimationFrame(() => document.getElementById(`menu-${id}`)?.scrollIntoView({ block: 'start' }))
+    }
+    applyHash()
+    window.addEventListener('hashchange', applyHash)
+    return () => window.removeEventListener('hashchange', applyHash)
+  }, [categories])
 
   const formatPrice = useMemo(() => {
     const formatter = new Intl.NumberFormat(locale === 'hr' ? 'hr-HR' : 'en-IE', {
@@ -148,7 +163,7 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <p role="status" aria-live="polite" className="text-sm text-muted-foreground">
           {labels.results.replace('{count}', String(total))}
         </p>
@@ -164,11 +179,11 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
             ) : null}
           </div>
         ) : (
-          <div className="mt-6 space-y-14">
+          <div className="mt-4 space-y-9">
             {groups.map(({ category, items: groupItems }) => (
-              <section key={category.id} aria-labelledby={`menu-${category.id}`} >
+              <section key={category.id} aria-labelledby={`menu-${category.id}`}>
                 {category.image ? (
-                  <div className="relative mb-5 aspect-[16/6] w-full overflow-hidden rounded-2xl border border-border">
+                  <div className="relative mb-3 h-24 w-full overflow-hidden rounded-xl border border-border sm:h-28">
                     <CmsImage
                       src={category.image}
                       alt=""
@@ -187,12 +202,12 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
                   id={`menu-${category.id}`}
                   className={cn(
                     'scroll-mt-52 font-display font-normal tracking-[-0.035em] text-foreground xl:scroll-mt-60',
-                    category.parentId ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl',
+                    category.parentId ? 'text-xl sm:text-2xl' : 'text-2xl sm:text-3xl',
                   )}
                 >
                   {category.name}
                 </h2>
-                <ul className="mt-5 grid gap-3 md:grid-cols-2">
+                <ul className="mt-2 grid gap-x-10 md:grid-cols-2">
                   {groupItems.map((item) => (
                     <MenuItemCard key={item.id} item={item} labels={labels} formatPrice={formatPrice} />
                   ))}
