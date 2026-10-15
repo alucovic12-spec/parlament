@@ -10,7 +10,7 @@ export const en: Messages = {
   nav: {
     home: 'Home',
     menu: 'Menu',
-    events: 'Evening Sessions',
+    events: 'Programme',
     reservations: 'Reservations',
     gallery: 'Archive',
     careers: 'Join Our Team',
@@ -29,7 +29,7 @@ export const en: Messages = {
       description: 'The Parlament digital menu: coffee, beer, wine, spirits, cocktails and small bites.',
     },
     events: {
-      title: 'Evening Sessions',
+      title: 'Programme',
       description: 'Music, comedy and special nights at Parlament.',
     },
     reservations: {
@@ -219,14 +219,14 @@ export const en: Messages = {
       text: 'Morning coffee, daily conversation, an evening drink and a programme under one roof. A neighbourhood bar that takes its guests seriously, and itself rather less so.',
       viewMenu: 'View the menu',
       reserve: 'Take a seat',
-      viewEvents: 'Evening Sessions',
+      viewEvents: 'Programme',
       moments: ['Morning coffee', 'Daily conversation', 'Evening drink'],
     },
     nextEvent: {
       eyebrow: 'Next session',
       title: 'Tonight the rhythm sits.',
       text: 'We’ll share dates and guests as soon as they’re confirmed. Until then the motion is on the table: check the agenda or follow us.',
-      cta: 'All evening sessions',
+      cta: 'Full programme',
       note: 'Temporary content',
     },
     offer: {

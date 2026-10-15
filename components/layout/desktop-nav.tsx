@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { navIconFor } from '@/components/layout/nav-icons'
 import { parsePath } from '@/lib/i18n/config'
 import { linkAttrs, type NavItem } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
@@ -50,6 +51,7 @@ export function DesktopNav({ items, label, className }: { items: NavItem[]; labe
         {items.map((item) => {
           const active = item.id === activeId
           const lit = item.id === target
+          const Icon = navIconFor(item)
           return (
             <li key={item.id} className="relative">
               <Link
@@ -67,6 +69,7 @@ export function DesktopNav({ items, label, className }: { items: NavItem[]; labe
                   lit ? 'text-brand-ink' : 'text-foreground/80',
                 )}
               >
+                <Icon aria-hidden className="mr-1.5 hidden size-3.5 shrink-0 2xl:block" />
                 {item.label}
               </Link>
             </li>

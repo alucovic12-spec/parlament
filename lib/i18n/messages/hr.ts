@@ -12,7 +12,7 @@ export const hr = {
   nav: {
     home: 'Početna',
     menu: 'Meni',
-    events: 'Večernje sjednice',
+    events: 'Program',
     reservations: 'Rezervacije',
     gallery: 'Arhiva',
     careers: 'Pridruži nam se',
@@ -31,7 +31,7 @@ export const hr = {
       description: 'Digitalni meni Parlamenta: kave, pivo, vino, žestoka pića, kokteli i mali zalogaji.',
     },
     events: {
-      title: 'Večernje sjednice',
+      title: 'Program',
       description: 'Glazba, komedija i posebne večeri u Parlamentu.',
     },
     reservations: {
@@ -221,14 +221,14 @@ export const hr = {
       text: 'Jutarnja kava, dnevni razgovor, večernje piće i program pod istim krovom. Kvartovski bar s ozbiljnim odnosom prema gostu, a bez ukočenosti.',
       viewMenu: 'Pogledaj meni',
       reserve: 'Zauzmi mjesto',
-      viewEvents: 'Večernje sjednice',
+      viewEvents: 'Program',
       moments: ['Jutarnja kava', 'Dnevni razgovor', 'Večernje piće'],
     },
     nextEvent: {
       eyebrow: 'Sljedeća sjednica',
       title: 'Večeras zasjeda ritam.',
       text: 'Datume i goste objavljujemo čim ih potvrdimo. Do tada je prijedlog na stolu: pogledaj dnevni red ili nas prati.',
-      cta: 'Sve večernje sjednice',
+      cta: 'Cijeli program',
       note: 'Privremeni sadržaj',
     },
     offer: {

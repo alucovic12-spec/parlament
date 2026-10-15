@@ -74,7 +74,7 @@ export function homePageDefaults() {
 
 export const pageRoutes = [
   { route: 'menu', title: 'Meni' },
-  { route: 'events', title: 'Večernje sjednice' },
+  { route: 'events', title: 'Program' },
   { route: 'reservations', title: 'Rezervacije' },
   { route: 'gallery', title: 'Arhiva' },
   { route: 'careers', title: 'Pridruži nam se' },
