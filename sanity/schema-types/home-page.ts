@@ -306,12 +306,6 @@ export const homePage = defineType({
       string('eyebrow', 'Nadnaslov'),
       string('title', 'Naslov'),
       text('text', 'Tekst'),
-      defineField({
-        name: 'materials',
-        title: 'Materijali koji nose identitet',
-        type: 'array',
-        of: [defineArrayMember({ type: 'localizedString' })],
-      }),
       image('mainImage', 'Velika fotografija'),
       image('accentImage', 'Mala fotografija', 'Kvadratni detalj koji se preklapa s velikom fotografijom.'),
     ]),
@@ -328,8 +322,8 @@ export const homePage = defineType({
           defineArrayMember({
             type: 'object',
             name: 'galleryTile',
-            fields: [image('image', 'Fotografija'), string('label', 'Natpis na fotografiji')],
-            preview: { select: { title: 'label.hr', media: 'image' } },
+            fields: [image('image', 'Fotografija')],
+            preview: { select: { media: 'image' }, prepare: () => ({ title: 'Fotografija' }) },
           }),
         ],
       }),

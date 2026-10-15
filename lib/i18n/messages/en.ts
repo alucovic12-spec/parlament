@@ -241,20 +241,10 @@ export const en: Messages = {
       eyebrow: 'Communitas et Consensus',
       title: 'A meeting place, without pretension.',
       text: 'Parlament is a neighbourhood bar that takes its guests seriously. The guest is a conversation partner, not an audience. Civic gravitas, the warmth of a local and modern hospitality, without the clichés of a classic pub and without a cover charge for good atmosphere.',
-      materialsLabel: 'Materials carry the identity',
-      materials: [
-        'Dark oak',
-        'Old brick',
-        'Anthracite metal',
-        'Green velvet',
-        'Brass',
-        'An olive tree at the centre',
-      ],
     },
     gallery: {
       eyebrow: 'Archive',
       title: 'From the minutes.',
-      tiles: ['Interior', 'Atmosphere', 'Drinks and food', 'Events'],
       cta: 'Open the archive',
     },
     careers: {

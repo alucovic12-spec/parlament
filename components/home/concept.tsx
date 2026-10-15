@@ -12,21 +12,6 @@ export function Concept({ m, images }: { m: Messages; images: { main: string | n
       <div className={images.main || images.accent ? 'grid items-center gap-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-28' : 'grid gap-16'}>
         <Reveal>
           <SectionHeading id="concept-title" eyebrow={c.eyebrow} title={c.title} intro={c.text} />
-          {c.materials.length > 0 ? (
-            <>
-              <h3 className="mt-12 text-xs font-medium uppercase tracking-[0.26em] text-eyebrow">{c.materialsLabel}</h3>
-              <ul className="mt-5 flex flex-wrap gap-2">
-                {c.materials.map((material) => (
-                  <li
-                    key={material}
-                    className="cursor-default rounded-full border border-foreground/15 bg-foreground/[0.04] px-4 py-2 text-sm text-foreground/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-green/60 hover:bg-brand-green/15 hover:text-foreground"
-                  >
-                    {material}
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : null}
         </Reveal>
 
         {images.main || images.accent ? (

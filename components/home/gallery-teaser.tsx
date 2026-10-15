@@ -6,7 +6,7 @@ import { localizedPath, type Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
 import { cn } from '@/lib/utils'
 
-/** Same order as `gallery.tiles`: interior, atmosphere, drinks and food, events. */
+/** Same order as the home page gallery images. */
 const tilePositions = [
   'col-span-2 aspect-[16/10] lg:row-span-2 lg:aspect-auto',
   'aspect-[4/5] lg:aspect-auto',
@@ -27,7 +27,7 @@ export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messag
       </Reveal>
 
       <ul className="group/list mt-14 grid grid-cols-2 gap-3 sm:gap-4 lg:h-[38rem] lg:grid-cols-4 lg:grid-rows-2">
-        {g.tiles.slice(0, tilePositions.length).map((label, index) => (
+        {tilePositions.map((_, index) => (
           <li
             key={index}
             className={cn(
@@ -48,11 +48,6 @@ export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messag
               aria-hidden
               className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-brand-ink/90 to-transparent"
             />
-            {label ? (
-            <p className="font-accent absolute bottom-4 left-4 rounded-full border border-white/20 bg-brand-ink/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-brand-cream backdrop-blur-xl motion-safe:transition-all motion-safe:duration-500 group-hover:-translate-y-0.5 group-hover:border-brand-green/60 group-hover:bg-brand-ink/75">
-              {label}
-            </p>
-            ) : null}
           </li>
         ))}
       </ul>
