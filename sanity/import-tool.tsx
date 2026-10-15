@@ -171,8 +171,8 @@ async function runImport(client: StudioClient, note: (line: string) => void) {
             defaultHomeImages.gallery.map(async (path, index) => ({
               _key: `tile-${index}`,
               _type: 'galleryTile',
-              image: await photo(path),
-              label: { hr: hr.home.gallery.tiles[index] ?? '', en: en.home.gallery.tiles[index] ?? '' },
+  image: await photo(path),
+
             })),
           ),
         },

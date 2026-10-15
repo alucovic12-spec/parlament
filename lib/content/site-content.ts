@@ -61,8 +61,8 @@ type SiteContent = {
       buttons?: HeroButtonSource[] | null
     }
     offer?: { eyebrow?: Localized; title?: Localized; intro?: Localized; items?: TitleText[] }
-    concept?: { eyebrow?: Localized; title?: Localized; text?: Localized; materials?: Localized[] }
-    gallery?: { title?: Localized; tiles?: { label?: Localized }[] }
+    concept?: { eyebrow?: Localized; title?: Localized; text?: Localized }
+    gallery?: { title?: Localized }
     careers?: {
       title?: Localized
       text?: Localized
@@ -88,10 +88,10 @@ const query = `{
     hero{..., buttons[]{..., ${linkProjection}}},
     nextEvent{..., buttons[]{..., ${linkProjection}}},
     careers{..., buttons[]{..., ${linkProjection}}},
-    gallery{title, tiles[]{label{hr, en}}},
+    gallery{title},
     ticker[]{hr, en},
     offer{eyebrow, title, intro, items[]{title, text}},
-    concept{eyebrow, title, text, materials[]{hr, en}}
+    concept{eyebrow, title, text}
   },
   "pages": *[_type == "pageContent"]{"route": string::split(_id, "page-")[1], title, description, intro}
 }`
@@ -174,12 +174,8 @@ export async function getMessagesWithContent(locale: Locale): Promise<Messages> 
     m.home.concept.eyebrow = text(home.concept?.eyebrow, m.home.concept.eyebrow)
     m.home.concept.title = text(home.concept?.title, m.home.concept.title)
     m.home.concept.text = text(home.concept?.text, m.home.concept.text)
-    m.home.concept.materials = list(home.concept?.materials, m.home.concept.materials)
 
     m.home.gallery.title = text(home.gallery?.title, m.home.gallery.title)
-    if (imported) {
-      m.home.gallery.tiles = (home.gallery?.tiles ?? []).map((tile) => localizedValue(tile.label, locale) ?? '')
-    }
     m.home.careers.title = text(home.careers?.title, m.home.careers.title)
     m.home.careers.text = text(home.careers?.text, m.home.careers.text)
     m.home.visit.title = text(home.visit?.title, m.home.visit.title)

@@ -243,20 +243,10 @@ export const hr = {
       eyebrow: 'Communitas et Consensus',
       title: 'Mjesto susreta, bez pretencioznosti.',
       text: 'Parlament je kvartovski bar s ozbiljnim odnosom prema gostu. Gost je sugovornik, ne publika. Građanska ozbiljnost, toplina kvartovskog bara i suvremeno ugostiteljstvo, bez klišeja klasičnog puba i bez ulaznice za dobru atmosferu.',
-      materialsLabel: 'Materijali nose identitet',
-      materials: [
-        'Tamni hrast',
-        'Stara cigla',
-        'Antracitni metal',
-        'Zeleni baršun',
-        'Mesing',
-        'Maslina kao središte',
-      ],
     },
     gallery: {
       eyebrow: 'Arhiva',
       title: 'Iz zapisnika.',
-      tiles: ['Interijer', 'Atmosfera', 'Pića i hrana', 'Događanja'],
       cta: 'Otvori arhivu',
     },
     careers: {

@@ -61,8 +61,7 @@ export function homePageDefaults() {
       eyebrow: both(h.concept.eyebrow, e.concept.eyebrow),
       title: both(h.concept.title, e.concept.title),
       text: both(h.concept.text, e.concept.text),
-      materials: keyed(h.concept.materials.map((line, index) => both(line, e.concept.materials[index] ?? line))),
-    },
+        },
     gallery: { title: both(h.gallery.title, e.gallery.title) },
     careers: {
       title: both(h.careers.title, e.careers.title),
