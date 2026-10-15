@@ -1,6 +1,6 @@
 import { Upload as UploadIcon } from 'lucide-react'
-import { useState } from 'react'
-import { definePlugin, useClient } from 'sanity'
+import { useEffect, useState } from 'react'
+import { definePlugin, type LayoutProps, useClient } from 'sanity'
 import { defaultHomeImages, defaultOfferCategories } from '../lib/content/default-images'
 import { venueEvents } from '../lib/events/data'
 import { en } from '../lib/i18n/messages/en'
@@ -9,21 +9,9 @@ import { homePageDefaults, pageDefaults, pageRoutes } from './defaults'
 
 type Reference = { _type: 'image'; asset: { _type: 'reference'; _ref: string } }
 
-function ImportTool() {
-  const client = useClient({ apiVersion: '2025-01-01' })
-  const [busy, setBusy] = useState(false)
-  const [log, setLog] = useState<string[]>([])
-  const note = (line: string) => setLog((lines) => [...lines, line])
+type StudioClient = ReturnType<typeof useClient>
 
-  async function run() {
-    const confirmed = window.confirm(
-      'Početna stranica u Studiju bit će zamijenjena postojećim sadržajem stranice (tekstovi i fotografije). Nastaviti?',
-    )
-    if (!confirmed) return
-
-    setBusy(true)
-    setLog([])
-
+async function runImport(client: StudioClient, note: (line: string) => void) {
     const uploads = new Map<string, Promise<string>>()
     const upload = (path: string) => {
       const existing = uploads.get(path)
@@ -120,12 +108,51 @@ function ImportTool() {
         })
       }
       note(`Večernje sjednice: uvezeno ${missing.length}, ostale već postoje.`)
+      await client.createIfNotExists({ _id: 'importMarker', _type: 'importMarker' })
       note('Gotovo. Osvježi Studio i otvori Početnu stranicu, Tekstove stranica i Večernje sjednice.')
     } catch (error) {
       note(`Greška: ${error instanceof Error ? error.message : String(error)}`)
-    } finally {
-      setBusy(false)
+      return false
     }
+    return true
+}
+
+let autoImportStarted = false
+
+function AutoImportLayout(props: LayoutProps) {
+  const client = useClient({ apiVersion: '2025-01-01' })
+
+  useEffect(() => {
+    if (autoImportStarted) return
+    autoImportStarted = true
+    void (async () => {
+      const existing = await client.fetch<{ marker: number; home: number }>(
+        '{"marker": count(*[_id == "importMarker"]), "home": count(*[_id in ["homePage", "drafts.homePage"]])}',
+      )
+      if (existing.marker > 0 || existing.home > 0) return
+      await runImport(client, (line) => console.log('[v0] auto import:', line))
+    })().catch(() => {
+      autoImportStarted = false
+    })
+  }, [client])
+
+  return props.renderDefault(props)
+}
+
+function ImportTool() {
+  const client = useClient({ apiVersion: '2025-01-01' })
+  const [busy, setBusy] = useState(false)
+  const [log, setLog] = useState<string[]>([])
+
+  async function run() {
+    const confirmed = window.confirm(
+      'Početna stranica u Studiju bit će zamijenjena postojećim sadržajem stranice (tekstovi i fotografije). Nastaviti?',
+    )
+    if (!confirmed) return
+    setBusy(true)
+    setLog([])
+    await runImport(client, (line) => setLog((lines) => [...lines, line]))
+    setBusy(false)
   }
 
   return (
@@ -157,5 +184,6 @@ function ImportTool() {
 
 export const importPlugin = definePlugin({
   name: 'parlament-import',
+  studio: { components: { layout: AutoImportLayout } },
   tools: [{ name: 'import', title: 'Uvoz postojećeg', icon: UploadIcon, component: ImportTool }],
 })
