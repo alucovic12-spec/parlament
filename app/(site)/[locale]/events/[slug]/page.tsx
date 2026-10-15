@@ -118,8 +118,16 @@ export default async function EventPage({ params }: Props) {
       <div className="mt-10 grid gap-10 lg:grid-cols-[1.4fr_1fr]">
         <div>
           {event.image ? (
-            <div className="relative aspect-[16/9] overflow-hidden rounded-2xl">
-              <Image src={event.image} alt={event.title} fill priority sizes="(min-width: 1024px) 600px, 100vw" className="object-cover" />
+            <div className="overflow-hidden rounded-2xl bg-muted">
+              <Image
+                src={event.image}
+                alt={event.title}
+                width={1600}
+                height={1200}
+                priority
+                sizes="(min-width: 1024px) 600px, 100vw"
+                className="h-auto max-h-[75vh] w-full object-contain"
+              />
             </div>
           ) : (
             <PhotoPlaceholder label={labels.photoLabel} className="aspect-[16/9]" />
