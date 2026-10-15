@@ -75,7 +75,7 @@ export function GalleryBrowser({
             <li key={item.id} className="mb-3 break-inside-avoid sm:mb-5">
               <button
                 type="button"
-                aria-label={`${labels.open}: ${item.caption}`}
+                aria-label={item.caption ? `${labels.open}: ${item.caption}` : labels.open}
                 onClick={() => setOpenIndex(index)}
                 className={cn(
                   'glow-card group relative block w-full overflow-hidden rounded-[1.5rem] border border-border focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
@@ -93,7 +93,7 @@ export function GalleryBrowser({
                 ) : (
                   <PhotoPlaceholder
                     label={placeholderLabel}
-                    caption={item.caption}
+                    caption={item.caption || undefined}
                     className="size-full transition-colors group-hover:border-primary/60"
                   />
                 )}

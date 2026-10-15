@@ -105,7 +105,9 @@ export function Lightbox({ items, index, labels, placeholderLabel, onIndexChange
               ) : (
                 <PhotoPlaceholder label={placeholderLabel} className={cn('max-w-full', placeholderShape[item.aspect])} />
               )}
-              <figcaption className="text-center text-sm text-muted-foreground">{item.caption}</figcaption>
+              {item.caption ? (
+                <figcaption className="text-center text-sm text-muted-foreground">{item.caption}</figcaption>
+              ) : null}
             </figure>
 
             <Button type="button" variant="outline" size="icon" aria-label={labels.next} onClick={() => step(1)}>

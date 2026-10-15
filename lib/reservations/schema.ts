@@ -14,7 +14,9 @@ export const reservationSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date'),
   time: z.string().refine((value) => reservationSlots.includes(value), 'time'),
   partySize: z.coerce.number().int('partySize').min(1, 'partySize').max(maxOnlinePartySize, 'partySize'),
-  occasion: z.enum(occasions, { message: 'occasion' }),
+  occasion: z
+    .union([z.enum(occasions), z.literal('')], { message: 'occasion' })
+    .transform((value) => (value === '' ? undefined : value)),
   notes: z.string().trim().max(500, 'notes'),
   consent: z.string().refine((value) => value === 'on', 'consent'),
 })
