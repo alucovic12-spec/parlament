@@ -1,5 +1,5 @@
 import { ArrowUpRight, Wine } from 'lucide-react'
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import Link from 'next/link'
 import { LinkButton } from '@/components/shared/link-button'
 import { Reveal } from '@/components/shared/reveal'

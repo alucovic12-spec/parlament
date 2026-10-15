@@ -1,15 +1,74 @@
 import { Upload as UploadIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { LexoRank } from 'lexorank'
 import { definePlugin, type LayoutProps, useClient } from 'sanity'
+import { menuCategories, menuItems } from '../lib/menu/data'
 import { defaultHomeImages, defaultOfferCategories } from '../lib/content/default-images'
 import { venueEvents } from '../lib/events/data'
 import { en } from '../lib/i18n/messages/en'
 import { hr } from '../lib/i18n/messages/hr'
-import { homePageDefaults, pageDefaults, pageRoutes } from './defaults'
+import { defaultLayout, homePageDefaults, pageDefaults, pageRoutes } from './defaults'
 
 type Reference = { _type: 'image'; asset: { _type: 'reference'; _ref: string } }
 
 type StudioClient = ReturnType<typeof useClient>
+
+/**
+ * Moves what Studio does not hold yet into it: the built-in menu as editable, orderable category
+ * and item documents, and the home page section order. Safe to run repeatedly.
+ */
+async function migrateAdvanced(client: StudioClient, note: (line: string) => void) {
+  const state = await client.fetch<{ menuMarker: number; home: number }>(
+    '{"menuMarker": count(*[_id == "menuSeedMarker"]), "home": count(*[_id == "homePage"])}',
+  )
+
+  if (state.home > 0) {
+    await client.patch('homePage').setIfMissing({ layout: defaultLayout() }).commit()
+    const draft = await client.fetch<number>('count(*[_id == "drafts.homePage"])')
+    if (draft > 0) await client.patch('drafts.homePage').setIfMissing({ layout: defaultLayout() }).commit()
+  }
+
+  if (state.menuMarker > 0) return
+
+  let rank = LexoRank.min().genNext().genNext()
+  const nextRank = () => {
+    rank = rank.genNext().genNext()
+    return rank.toString()
+  }
+
+  const transaction = client.transaction()
+  for (const category of menuCategories) {
+    transaction.createIfNotExists({
+      _id: `menuCategory-${category.id}`,
+      _type: 'menuCategory',
+      orderRank: nextRank(),
+      key: category.id,
+      name: { _type: 'localizedString', hr: category.name.hr, en: category.name.en, enAuto: false },
+    })
+  }
+  for (const item of menuItems) {
+    transaction.createIfNotExists({
+      _id: `menuItem-${item.id}`,
+      _type: 'menuItem',
+      orderRank: nextRank(),
+      category: item.category,
+      categoryRef: { _type: 'reference', _ref: `menuCategory-${item.category}`, _weak: true },
+      name: { _type: 'localizedString', hr: item.name.hr, en: item.name.en, enAuto: false },
+      ...(item.description
+        ? { description: { _type: 'localizedText', hr: item.description.hr, en: item.description.en, enAuto: false } }
+        : {}),
+      ...(item.volume ? { volume: item.volume } : {}),
+      ...(typeof item.price === 'number' ? { price: item.price } : {}),
+      allergens: item.allergens,
+      tags: item.tags ?? [],
+      status: item.status,
+      placeholder: item.placeholder,
+    })
+  }
+  transaction.createIfNotExists({ _id: 'menuSeedMarker', _type: 'importMarker' })
+  await transaction.commit()
+  note(`Meni: uvezeno ${menuCategories.length} kategorija i ${menuItems.length} stavki.`)
+}
 
 async function runImport(client: StudioClient, note: (line: string) => void) {
     const uploads = new Map<string, Promise<string>>()
@@ -109,6 +168,7 @@ async function runImport(client: StudioClient, note: (line: string) => void) {
       }
       note(`Večernje sjednice: uvezeno ${missing.length}, ostale već postoje.`)
       await client.createIfNotExists({ _id: 'importMarker', _type: 'importMarker' })
+      await migrateAdvanced(client, note)
       note('Gotovo. Osvježi Studio i otvori Početnu stranicu, Tekstove stranica i Večernje sjednice.')
     } catch (error) {
       note(`Greška: ${error instanceof Error ? error.message : String(error)}`)
@@ -129,8 +189,12 @@ function AutoImportLayout(props: LayoutProps) {
       const existing = await client.fetch<{ marker: number; home: number }>(
         '{"marker": count(*[_id == "importMarker"]), "home": count(*[_id in ["homePage", "drafts.homePage"]])}',
       )
-      if (existing.marker > 0 || existing.home > 0) return
-      await runImport(client, (line) => console.log('[v0] auto import:', line))
+      const log = (line: string) => console.log('[v0] auto import:', line)
+      if (existing.marker > 0 || existing.home > 0) {
+        await migrateAdvanced(client, log)
+        return
+      }
+      await runImport(client, log)
     })().catch(() => {
       autoImportStarted = false
     })

@@ -1,6 +1,25 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
-import { homePageDefaults } from '../defaults'
-import { menuCategoryOptions } from './menu-category'
+import { homePageDefaults, homeSections, layoutTypeName } from '../defaults'
+
+const layoutBlocks = homeSections.map(({ key, title }) =>
+  defineArrayMember({
+    type: 'object',
+    name: layoutTypeName(key),
+    title,
+    fields: [
+      defineField({
+        name: 'isHidden',
+        title: 'Privremeno sakrij ovu sekciju',
+        type: 'boolean',
+        initialValue: false,
+      }),
+    ],
+    preview: {
+      select: { hidden: 'isHidden' },
+      prepare: ({ hidden }) => ({ title, subtitle: hidden ? 'Skriveno na stranici' : 'Prikazuje se na stranici' }),
+    },
+  }),
+)
 
 const hideSection = defineField({
   name: 'hideSection',
@@ -30,7 +49,8 @@ export const homePage = defineType({
   type: 'document',
   initialValue: homePageDefaults,
   groups: [
-    { name: 'hero', title: 'Naslovni dio', default: true },
+    { name: 'layout', title: 'Redoslijed sekcija', default: true },
+    { name: 'hero', title: 'Naslovni dio' },
     { name: 'ticker', title: 'Traka s porukama' },
     { name: 'nextEvent', title: 'Sljedeća sjednica' },
     { name: 'offer', title: 'Ponuda' },
@@ -45,6 +65,15 @@ export const homePage = defineType({
       type: 'boolean',
       hidden: true,
       description: 'Postavlja alat za uvoz. Kad je uključeno, prazno polje na stranici znači uklonjeno.',
+    }),
+    defineField({
+      name: 'layout',
+      title: 'Redoslijed sekcija na početnoj stranici',
+      type: 'array',
+      group: 'layout',
+      description:
+        'Povuci sekciju za promjenu mjesta, obriši je da nestane sa stranice ili je privremeno sakrij. Sadržaj sekcije uređuješ u ostalim karticama. Svaka se sekcija prikazuje najviše jednom.',
+      of: layoutBlocks,
     }),
     section('hero', 'Naslovni dio', 'hero', [
       string('eyebrow', 'Nadnaslov'),
@@ -91,12 +120,14 @@ export const homePage = defineType({
               text('text', 'Opis'),
               image('image', 'Fotografija kartice'),
               defineField({
-                name: 'category',
+                name: 'categoryRef',
                 title: 'Kamo vodi kartica (kategorija menija)',
-                type: 'string',
+                type: 'reference',
+                to: [{ type: 'menuCategory' }],
+                weak: true,
                 description: 'Može ostati prazno, tada kartica vodi na cijeli meni.',
-                options: { list: menuCategoryOptions },
               }),
+              defineField({ name: 'category', title: 'Stara kategorija', type: 'string', hidden: true }),
             ],
             preview: { select: { title: 'title.hr', subtitle: 'text.hr', media: 'image' } },
           }),

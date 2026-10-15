@@ -7,12 +7,30 @@ const both = (hrValue: string, enValue: string): Localized => ({ hr: hrValue, en
 
 const keyed = <T extends object>(items: T[]) => items.map((item, index) => ({ _key: `item-${index}`, ...item }))
 
+export const homeSections = [
+  { key: 'hero', title: 'Naslovni dio' },
+  { key: 'ticker', title: 'Traka s porukama' },
+  { key: 'nextEvent', title: 'Sljedeća sjednica' },
+  { key: 'offer', title: 'Ponuda' },
+  { key: 'concept', title: 'Koncept' },
+  { key: 'gallery', title: 'Isječak arhive' },
+  { key: 'careers', title: 'Poziv za posao' },
+  { key: 'visit', title: 'Posjet' },
+] as const
+
+export const layoutTypeName = (key: string) => `layout${key.charAt(0).toUpperCase()}${key.slice(1)}`
+
+/** The order sections have on the live page today; editors can drag, hide or delete them. */
+export const defaultLayout = () =>
+  homeSections.map(({ key }) => ({ _key: key, _type: layoutTypeName(key), isHidden: false }))
+
 /** Starting values for the home page document, so the editor opens with the copy that is live today. */
 export function homePageDefaults() {
   const h = hr.home
   const e = en.home
 
   return {
+    layout: defaultLayout(),
     meta: {
       title: both(hr.meta.defaultTitle, en.meta.defaultTitle),
       description: both(hr.meta.defaultDescription, en.meta.defaultDescription),

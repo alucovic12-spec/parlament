@@ -2,20 +2,8 @@ import type { Locale } from '@/lib/i18n/config'
 
 export type Localized = Record<Locale, string>
 
-export const menuCategoryIds = [
-  'coffee',
-  'hot-drinks',
-  'soft-drinks',
-  'beer',
-  'wine',
-  'spirits',
-  'whisky',
-  'cocktails',
-  'food',
-  'special',
-  'drink-of-the-week',
-] as const
-export type MenuCategoryId = (typeof menuCategoryIds)[number]
+/** Categories are documents editors create and delete in Studio, so the id is a plain string. */
+export type MenuCategoryId = string
 
 export const menuTags = ['new', 'popular', 'premium', 'nonAlcoholic', 'vegetarian'] as const
 export type MenuTag = (typeof menuTags)[number]
@@ -44,7 +32,7 @@ export type MenuItem = {
   placeholder: boolean
 }
 
-export type LocalizedMenuCategory = { id: MenuCategoryId; name: string }
+export type LocalizedMenuCategory = { id: MenuCategoryId; name: string; parentId?: MenuCategoryId }
 
 export type LocalizedMenuItem = {
   id: string

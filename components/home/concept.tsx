@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import { Parallax } from '@/components/shared/parallax'
 import { Reveal } from '@/components/shared/reveal'
 import { Section, SectionHeading } from '@/components/shared/section'

@@ -38,17 +38,25 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
     return (value: number) => formatter.format(value)
   }, [locale])
 
+  const parentById = useMemo(() => new Map(categories.map((category) => [category.id, category.parentId])), [categories])
+  const topCategories = useMemo(() => categories.filter((category) => !category.parentId), [categories])
+  const activeTop = active === 'all' ? undefined : parentById.get(active) ?? active
+  const subCategories = useMemo(
+    () => (activeTop ? categories.filter((category) => category.parentId === activeTop) : []),
+    [categories, activeTop],
+  )
+
   const groups = useMemo(() => {
     const needle = normalize(query)
     const matches = items.filter((item) => {
-      if (active !== 'all' && item.category !== active) return false
+      if (active !== 'all' && item.category !== active && parentById.get(item.category) !== active) return false
       if (!needle) return true
       return normalize(`${item.name} ${item.description ?? ''}`).includes(needle)
     })
     return categories
       .map((category) => ({ category, items: matches.filter((item) => item.category === category.id) }))
       .filter((group) => group.items.length > 0)
-  }, [items, categories, query, active])
+  }, [items, categories, query, active, parentById])
 
   const total = groups.reduce((sum, group) => sum + group.items.length, 0)
   const isFiltered = query !== '' || active !== 'all'
@@ -90,8 +98,8 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
 
           <nav aria-label={labels.categoriesLabel} className="-mx-4 mt-3 sm:-mx-6 lg:-mx-8">
             <ul className="flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:px-6 lg:px-8 [&::-webkit-scrollbar]:hidden">
-              {[{ id: 'all' as const, name: labels.all }, ...categories].map((category) => {
-                const selected = active === category.id
+              {[{ id: 'all' as const, name: labels.all }, ...topCategories].map((category) => {
+                const selected = category.id === 'all' ? active === 'all' : activeTop === category.id
                 return (
                   <li key={category.id} className="shrink-0">
                     <button
@@ -111,6 +119,30 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
                 )
               })}
             </ul>
+            {subCategories.length > 0 && activeTop ? (
+              <ul className="mt-2 flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:px-6 lg:px-8 [&::-webkit-scrollbar]:hidden">
+                {[{ id: activeTop, name: labels.all }, ...subCategories].map((category, index) => {
+                  const selected = active === category.id
+                  return (
+                    <li key={`${category.id}-${index}`} className="shrink-0">
+                      <button
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => setActive(category.id)}
+                        className={cn(
+                          'flex min-h-10 items-center rounded-full border px-3.5 text-[0.8125rem] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                          selected
+                            ? 'border-primary bg-primary/15 text-foreground'
+                            : 'border-border text-foreground/65 hover:border-foreground/40 hover:text-foreground',
+                        )}
+                      >
+                        {category.name}
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            ) : null}
           </nav>
         </div>
       </div>
@@ -134,7 +166,18 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
           <div className="mt-6 space-y-14">
             {groups.map(({ category, items: groupItems }) => (
               <section key={category.id} aria-labelledby={`menu-${category.id}`} >
-                <h2 id={`menu-${category.id}`} className="scroll-mt-52 font-display text-3xl font-normal tracking-[-0.035em] text-foreground sm:text-4xl xl:scroll-mt-60">
+                {category.parentId ? (
+                  <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
+                    {categories.find((parent) => parent.id === category.parentId)?.name}
+                  </p>
+                ) : null}
+                <h2
+                  id={`menu-${category.id}`}
+                  className={cn(
+                    'scroll-mt-52 font-display font-normal tracking-[-0.035em] text-foreground xl:scroll-mt-60',
+                    category.parentId ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl',
+                  )}
+                >
                   {category.name}
                 </h2>
                 <ul className="mt-5 grid gap-3 md:grid-cols-2">

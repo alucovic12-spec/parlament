@@ -1,3 +1,4 @@
+import { orderableDocumentListDeskItem } from '@sanity/orderable-document-list'
 import {
   Calendar as CalendarIcon,
   FileText as PageIcon,
@@ -17,7 +18,7 @@ const singleton = (S: StructureBuilder, title: string, documentId: string, schem
     .icon(icon)
     .child(S.document().schemaType(schemaType).documentId(documentId).title(title))
 
-export const structure: StructureResolver = (S) =>
+export const structure: StructureResolver = (S, context) =>
   S.list()
     .title('Parlament')
     .items([
@@ -25,9 +26,36 @@ export const structure: StructureResolver = (S) =>
         .title('Večernje sjednice')
         .icon(CalendarIcon)
         .child(
-          S.documentTypeList('event')
+          S.list()
             .title('Večernje sjednice')
-            .defaultOrdering([{ field: 'start', direction: 'desc' }]),
+            .items([
+              S.listItem()
+                .title('Nadolazeće i nedavne')
+                .icon(CalendarIcon)
+                .child(
+                  S.documentList()
+                    .title('Nadolazeće i nedavne')
+                    .filter('_type == "event" && dateTime(start) > dateTime(now()) - 60*60*24*30')
+                    .defaultOrdering([{ field: 'start', direction: 'asc' }]),
+                ),
+              S.listItem()
+                .title('Arhiva sjednica')
+                .icon(CalendarIcon)
+                .child(
+                  S.documentList()
+                    .title('Arhiva sjednica')
+                    .filter('_type == "event" && dateTime(start) <= dateTime(now()) - 60*60*24*30')
+                    .defaultOrdering([{ field: 'start', direction: 'desc' }]),
+                ),
+              S.listItem()
+                .title('Sve sjednice')
+                .icon(CalendarIcon)
+                .child(
+                  S.documentTypeList('event')
+                    .title('Sve sjednice')
+                    .defaultOrdering([{ field: 'start', direction: 'desc' }]),
+                ),
+            ]),
         ),
       S.listItem()
         .title('Meni')
@@ -36,25 +64,54 @@ export const structure: StructureResolver = (S) =>
           S.list()
             .title('Meni')
             .items([
-              S.listItem().title('Stavke menija').icon(BasketIcon).child(S.documentTypeList('menuItem').title('Stavke menija')),
+              orderableDocumentListDeskItem({
+                type: 'menuCategory',
+                id: 'orderable-menu-categories',
+                title: 'Kategorije i potkategorije (povuci za redoslijed)',
+                icon: TagIcon,
+                S,
+                context,
+              }),
               S.listItem()
-                .title('Kategorije')
-                .icon(TagIcon)
+                .title('Stavke po kategoriji (povuci za redoslijed)')
+                .icon(BasketIcon)
                 .child(
-                  S.documentTypeList('menuCategory')
-                    .title('Kategorije')
-                    .defaultOrdering([{ field: 'order', direction: 'asc' }]),
+                  S.documentList()
+                    .title('Odaberi kategoriju')
+                    .filter('_type == "menuCategory"')
+                    .defaultOrdering([{ field: 'orderRank', direction: 'asc' }])
+                    .child((categoryId) =>
+                      S.component()
+                        .id(`items-${categoryId}`)
+                        .title('Stavke')
+                        .child(
+                          orderableDocumentListDeskItem({
+                            type: 'menuItem',
+                            id: `orderable-menu-items-${categoryId}`,
+                            title: 'Stavke',
+                            filter: 'categoryRef._ref == $category',
+                            params: { category: categoryId.replace(/^drafts\./, '') },
+                            icon: BasketIcon,
+                            S,
+                            context,
+                          }).child as never,
+                        ),
+                    ),
                 ),
+              S.listItem()
+                .title('Sve stavke menija')
+                .icon(BasketIcon)
+                .child(S.documentTypeList('menuItem').title('Sve stavke menija')),
             ]),
         ),
-      S.listItem()
-        .title('Arhiva (galerija)')
-        .icon(ImageIcon)
-        .child(
-          S.documentTypeList('galleryItem')
-            .title('Arhiva (galerija)')
-            .defaultOrdering([{ field: 'order', direction: 'asc' }]),
-        ),
+      orderableDocumentListDeskItem({
+        type: 'galleryItem',
+        id: 'orderable-gallery',
+        title: 'Arhiva (galerija, povuci za redoslijed)',
+        icon: ImageIcon,
+        S,
+        context,
+      }),
       S.divider(),
       singleton(S, 'Početna stranica', 'homePage', 'homePage', HomeIcon),
       S.listItem()

@@ -1,7 +1,7 @@
 'use client'
 
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import { useEffect, useRef, type KeyboardEvent } from 'react'
 import { PhotoPlaceholder } from '@/components/shared/photo-placeholder'
 import { Button } from '@/components/ui/button'

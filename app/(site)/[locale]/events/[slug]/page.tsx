@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'lucide-react'
 import type { Metadata } from 'next'
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { EventActions } from '@/components/events/event-actions'

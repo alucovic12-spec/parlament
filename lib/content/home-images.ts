@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import { sanityFetch } from '@/lib/sanity/fetch'
+import { imageUrl, sizedImage } from '@/lib/sanity/image'
 import { defaultHomeImages, defaultOfferCategories } from './default-images'
 
 export type HomeSection = 'hero' | 'nextEvent' | 'offer' | 'concept' | 'gallery' | 'careers' | 'visit'
@@ -18,7 +19,7 @@ export { defaultHomeImages }
 
 type RawHome = {
   imported?: boolean | null
-  hero?: (string | null)[] | null
+  hero?: { url?: string | null }[] | null
   offer?: { image?: string | null; category?: string | null }[] | null
   conceptMain?: string | null
   conceptAccent?: string | null
@@ -29,12 +30,12 @@ type RawHome = {
 
 const query = `*[_id == "homePage"][0]{
   imported,
-  "hero": hero.slides[].asset->url,
-  "offer": offer.items[]{ "image": image.asset->url, category },
-  "conceptMain": concept.mainImage.asset->url,
-  "conceptAccent": concept.accentImage.asset->url,
-  "tiles": gallery.tiles[]{ "url": image.asset->url },
-  "nextEvent": nextEvent.image.asset->url,
+  "hero": hero.slides[]{ "url": ${imageUrl('@')} },
+  "offer": offer.items[]{ "image": ${imageUrl('image')}, category },
+  "conceptMain": ${imageUrl('concept.mainImage')},
+  "conceptAccent": ${imageUrl('concept.accentImage')},
+  "tiles": gallery.tiles[]{ "url": ${imageUrl('image')} },
+  "nextEvent": ${imageUrl('nextEvent.image')},
   "hidden": {
     "hero": hero.hideSection,
     "nextEvent": nextEvent.hideSection,
@@ -46,7 +47,9 @@ const query = `*[_id == "homePage"][0]{
   }
 }`
 
-const sized = (url: string, width: number) => `${url}?w=${width}&auto=format`
+const sized = sizedImage
+const heroUrls = (raw: RawHome) =>
+  (raw?.hero ?? []).map((slide) => slide.url).filter((url): url is string => Boolean(url))
 const sizedOrNull = (url: string | null | undefined, width: number) => (url ? sized(url, width) : null)
 
 const fallbackImages: HomeImages = {
@@ -78,7 +81,7 @@ export const getHomeImages = cache(async (): Promise<HomeImages> => {
   if (raw.imported) {
     const items = raw.offer ?? []
     return {
-      hero: (raw.hero ?? []).filter((url): url is string => Boolean(url)).map((url) => sized(url, 2000)),
+      hero: heroUrls(raw).map((url) => sized(url, 2000)),
       offer: items.map((item) => sizedOrNull(item.image, 1000)),
       offerCategories: items.map((item) => item.category ?? null),
       concept: { main: sizedOrNull(raw.conceptMain, 1400), accent: sizedOrNull(raw.conceptAccent, 700) },
@@ -88,7 +91,7 @@ export const getHomeImages = cache(async (): Promise<HomeImages> => {
     }
   }
 
-  const heroUploads = (raw.hero ?? []).filter((url): url is string => Boolean(url))
+  const heroUploads = heroUrls(raw)
 
   return {
     hero: heroUploads.length > 0 ? heroUploads.map((url) => sized(url, 2000)) : defaultHomeImages.hero,

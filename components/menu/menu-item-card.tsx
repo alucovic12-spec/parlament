@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import { cn } from '@/lib/utils'
 import type { Messages } from '@/lib/i18n/messages'
 import type { LocalizedMenuItem } from '@/lib/menu/types'
