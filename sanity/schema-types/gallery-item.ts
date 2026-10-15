@@ -1,6 +1,15 @@
 import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
 
+export const galleryCategoryOptions = [
+  { title: 'Interijer', value: 'interior' },
+  { title: 'Atmosfera', value: 'atmosphere' },
+  { title: 'Pića i hrana', value: 'drinks' },
+  { title: 'Događanja', value: 'events' },
+  { title: 'Osoblje', value: 'team' },
+  { title: 'Gostovanja i večeri', value: 'guest' },
+]
+
 export const galleryItem = defineType({
   name: 'galleryItem',
   title: 'Fotografija arhive',
@@ -17,16 +26,7 @@ export const galleryItem = defineType({
       name: 'category',
       title: 'Kategorija',
       type: 'string',
-      options: {
-        list: [
-          { title: 'Interijer', value: 'interior' },
-          { title: 'Atmosfera', value: 'atmosphere' },
-          { title: 'Pića i hrana', value: 'drinks' },
-          { title: 'Događanja', value: 'events' },
-          { title: 'Osoblje', value: 'team' },
-          { title: 'Gostovanja i večeri', value: 'guest' },
-        ],
-      },
+      options: { list: galleryCategoryOptions },
     }),
     defineField({
       name: 'caption',

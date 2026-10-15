@@ -15,7 +15,7 @@ type SanityGalleryItem = {
   caption?: Localized
 }
 
-const query = `*[_type == "galleryItem" && defined(image.asset)] | order(order asc, _createdAt desc){
+const query = `*[_type == "galleryItem" && defined(image.asset)] | order(orderRank asc, _createdAt desc){
   "id": _id,
   category,
   "url": image.asset->url,
