@@ -52,16 +52,14 @@ export const en: Messages = {
     },
   },
   placeholder: {
-    photo: 'Photo placeholder',
-    logo: 'Logo placeholder',
-    hero: 'Hero photo — awaiting official material',
-    pending: 'Awaiting confirmation',
+    photo: 'Photo',
+    logo: 'Logo',
+    hero: 'Cover photo',
+    pending: 'Coming soon',
   },
   menu: {
     eyebrow: 'First Reading',
     intro: 'The whole proposal in one place. Search by name or filter by category.',
-    temporaryNotice:
-      'The selection, prices and allergens are temporary content and will be published once confirmed.',
     searchLabel: 'Search the menu',
     searchPlaceholder: 'Search drinks or food',
     clearSearch: 'Clear search',
@@ -79,8 +77,7 @@ export const en: Messages = {
       premium: 'Premium',
       nonAlcoholic: 'Non-alcoholic',
       vegetarian: 'Vegetarian',
-      unavailable: 'Temporarily unavailable',
-      placeholder: 'Temporary',
+      unavailable: 'Unavailable',
     },
     reserveTitle: 'Come for a drink',
     reserveText: 'Book a table and save a spot for you and your friends.',
@@ -89,8 +86,6 @@ export const en: Messages = {
   events: {
     eyebrow: 'Evening programme',
     intro: 'Music, comedy and special nights at Parlament. See what is coming up and take your seat.',
-    temporaryNotice:
-      'The events shown are temporary samples. The official programme will be published once confirmed.',
     tabsLabel: 'Event view',
     upcoming: 'Upcoming',
     past: 'Past',
@@ -115,7 +110,6 @@ export const en: Messages = {
       soldOut: 'Sold out',
       cancelled: 'Cancelled',
       past: 'Past event',
-      placeholder: 'Temporary',
     },
     details: 'Details',
     reserve: 'Reserve a table',
@@ -141,8 +135,6 @@ export const en: Messages = {
     eyebrow: 'Reservations',
     intro: 'Send a table request. Our staff reviews it and gets back to you with a confirmation.',
     notice: 'A reservation is only valid once confirmed by our staff.',
-    temporaryNotice:
-      'Opening hours are not confirmed yet, so the time slots are provisional. Staff will contact you if a change is needed.',
     formTitle: 'Reservation request',
     fields: {
       fullName: 'Full name',
@@ -227,7 +219,6 @@ export const en: Messages = {
       title: 'Tonight the rhythm sits.',
       text: 'We’ll share dates and guests as soon as they’re confirmed. Until then the motion is on the table: check the agenda or follow us.',
       cta: 'Full programme',
-      note: 'Temporary content',
     },
     offer: {
       eyebrow: 'First Reading',
@@ -483,7 +474,6 @@ export const en: Messages = {
     prev: 'Previous photo',
     next: 'Next photo',
     of: 'of',
-    note: 'We will add official Parlament photography as soon as it is ready.',
   },
   footer: {
     explore: 'Explore',

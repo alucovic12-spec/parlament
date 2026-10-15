@@ -28,9 +28,6 @@ export const site = {
     facebook: null as string | null,
     tiktok: null as string | null,
   },
-
-  /** Set NEXT_PUBLIC_SHOW_PLACEHOLDERS=false in production to hide the placeholder captions. */
-  showPlaceholders: process.env.NEXT_PUBLIC_SHOW_PLACEHOLDERS !== 'false',
 }
 
 export function getSiteUrl(): string {

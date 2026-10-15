@@ -12,7 +12,6 @@ export function MenuItemCard({ item, labels, formatPrice }: Props) {
   const tags = [
     ...item.tags.map((tag) => ({ key: tag, label: labels.tags[tag], tone: 'gold' as const })),
     ...(item.unavailable ? [{ key: 'unavailable', label: labels.tags.unavailable, tone: 'muted' as const }] : []),
-    ...(item.placeholder ? [{ key: 'placeholder', label: labels.tags.placeholder, tone: 'dashed' as const }] : []),
   ]
 
   return (
@@ -43,7 +42,6 @@ export function MenuItemCard({ item, labels, formatPrice }: Props) {
                 'rounded-full px-1.5 py-px font-medium',
                 tag.tone === 'gold' && 'bg-primary/15 text-primary',
                 tag.tone === 'muted' && 'bg-muted text-foreground',
-                tag.tone === 'dashed' && 'border border-dashed border-foreground/30',
               )}
             >
               {tag.label}

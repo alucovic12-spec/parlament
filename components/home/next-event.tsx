@@ -8,7 +8,6 @@ import type { LocalizedEvent } from '@/lib/events/types'
 import { localizedPath, type Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
 import { linkAttrs } from '@/lib/navigation'
-import { site } from '@/lib/site'
 
 type Props = {
   locale: Locale
@@ -21,7 +20,6 @@ type Props = {
 export function NextEvent({ locale, m, image, event, buttons }: Props) {
   const n = m.home.nextEvent
   const photo = event?.image ?? image
-  const showNote = site.showPlaceholders && (event ? event.placeholder : true)
 
   return (
     <Section labelledBy="next-event-title" tone="base" compact>
@@ -65,11 +63,6 @@ export function NextEvent({ locale, m, image, event, buttons }: Props) {
                 </p>
               ) : n.text ? (
                 <p className="mt-5 max-w-xl text-lg text-muted-foreground">{n.text}</p>
-              ) : null}
-              {showNote ? (
-                <p className="mt-5 inline-block rounded-full border border-dashed border-foreground/30 px-3 py-1 text-xs text-muted-foreground">
-                  {n.note}
-                </p>
               ) : null}
             </div>
             {buttons ? (

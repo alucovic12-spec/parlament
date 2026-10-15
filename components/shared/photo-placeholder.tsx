@@ -1,5 +1,4 @@
 import { ImageIcon } from 'lucide-react'
-import { site } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
 const tones = {
@@ -19,7 +18,7 @@ type PhotoPlaceholderProps = {
 }
 
 /** Colourful stand-in for official photography. Replace with next/image once material is delivered. */
-export function PhotoPlaceholder({ label, caption, tone = 'sand', className }: PhotoPlaceholderProps) {
+export function PhotoPlaceholder({ label, tone = 'sand', className }: PhotoPlaceholderProps) {
   return (
     <div
       role="img"
@@ -31,12 +30,6 @@ export function PhotoPlaceholder({ label, caption, tone = 'sand', className }: P
       )}
     >
       <ImageIcon aria-hidden className="absolute right-4 top-4 size-6 text-current/45" />
-      {site.showPlaceholders ? (
-        <div>
-          <p className="text-xs uppercase tracking-[0.16em] text-current">{label}</p>
-          {caption ? <p className="mt-1 text-xs text-current/75">{caption}</p> : null}
-        </div>
-      ) : null}
     </div>
   )
 }

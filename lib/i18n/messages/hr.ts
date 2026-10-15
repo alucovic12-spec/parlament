@@ -54,16 +54,14 @@ export const hr = {
     },
   } satisfies Record<RouteKey, PageMeta>,
   placeholder: {
-    photo: 'Placeholder fotografije',
-    logo: 'Placeholder logotipa',
-    hero: 'Hero fotografija — čeka službeni materijal',
-    pending: 'Čeka potvrdu',
+    photo: 'Fotografija',
+    logo: 'Logotip',
+    hero: 'Naslovna fotografija',
+    pending: 'Uskoro',
   },
   menu: {
     eyebrow: 'Prvo čitanje',
     intro: 'Cijeli prijedlog ponude na jednom mjestu. Pretraži po nazivu ili filtriraj po kategoriji.',
-    temporaryNotice:
-      'Ponuda, cijene i alergeni su privremeni sadržaj i bit će objavljeni nakon potvrde.',
     searchLabel: 'Pretraži meni',
     searchPlaceholder: 'Pretraži piće ili hranu',
     clearSearch: 'Obriši pretragu',
@@ -81,8 +79,7 @@ export const hr = {
       premium: 'Premium',
       nonAlcoholic: 'Bezalkoholno',
       vegetarian: 'Vegetarijansko',
-      unavailable: 'Privremeno nedostupno',
-      placeholder: 'Privremeno',
+      unavailable: 'Nedostupno',
     },
     reserveTitle: 'Dođi na piće',
     reserveText: 'Rezerviraj stol i osiguraj mjesto za sebe i svoje društvo.',
@@ -91,8 +88,6 @@ export const hr = {
   events: {
     eyebrow: 'Večernji program',
     intro: 'Glazba, komedija i posebne večeri u Parlamentu. Pogledaj što dolazi i zauzmi svoje mjesto.',
-    temporaryNotice:
-      'Prikazana događanja su privremeni primjeri. Službeni program objavit ćemo nakon potvrde.',
     tabsLabel: 'Prikaz događanja',
     upcoming: 'Nadolazeća',
     past: 'Održana',
@@ -117,7 +112,6 @@ export const hr = {
       soldOut: 'Rasprodano',
       cancelled: 'Otkazano',
       past: 'Održano',
-      placeholder: 'Privremeno',
     },
     details: 'Detalji',
     reserve: 'Rezerviraj stol',
@@ -143,8 +137,6 @@ export const hr = {
     eyebrow: 'Rezervacije',
     intro: 'Pošalji zahtjev za stol. Osoblje ga pregleda i javi se s potvrdom: prijedlog nije usvojen dok ga ne potvrdimo.',
     notice: 'Rezervacija vrijedi tek nakon potvrde osoblja.',
-    temporaryNotice:
-      'Radno vrijeme još nije potvrđeno, pa su termini privremeni. Osoblje će te kontaktirati ako je potrebna promjena.',
     formTitle: 'Zahtjev za rezervaciju',
     fields: {
       fullName: 'Ime i prezime',
@@ -229,7 +221,6 @@ export const hr = {
       title: 'Večeras zasjeda ritam.',
       text: 'Datume i goste objavljujemo čim ih potvrdimo. Do tada je prijedlog na stolu: pogledaj dnevni red ili nas prati.',
       cta: 'Cijeli program',
-      note: 'Privremeni sadržaj',
     },
     offer: {
       eyebrow: 'Prvo čitanje',
@@ -485,7 +476,6 @@ export const hr = {
     prev: 'Prethodna fotografija',
     next: 'Sljedeća fotografija',
     of: 'od',
-    note: 'Službene fotografije Parlamenta dodat ćemo čim budu spremne.',
   },
   footer: {
     explore: 'Istraži',

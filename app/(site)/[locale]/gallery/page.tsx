@@ -5,7 +5,6 @@ import type { Locale } from '@/lib/i18n/config'
 import { getMessagesWithContent } from '@/lib/content/site-content'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
-import { site } from '@/lib/site'
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -32,9 +31,6 @@ export default async function GalleryPage({ params }: Props) {
 
       <div className="mx-auto max-w-5xl px-4 pb-24 sm:px-6 lg:px-8">
         <GalleryBrowser items={items} labels={m.galleryPage} placeholderLabel={m.placeholder.photo} />
-        {site.showPlaceholders ? (
-          <p className="mt-10 text-sm text-muted-foreground">{m.galleryPage.note}</p>
-        ) : null}
       </div>
     </main>
   )

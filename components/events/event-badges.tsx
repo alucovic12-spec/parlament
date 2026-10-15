@@ -11,7 +11,6 @@ export function EventBadges({ event, labels }: { event: LocalizedEvent; labels: 
   if (event.status === 'sold-out') tags.push({ key: 'sold-out', label: labels.status.soldOut, tone: 'muted' })
   if (event.status === 'cancelled') tags.push({ key: 'cancelled', label: labels.status.cancelled, tone: 'muted' })
   if (event.isPast && event.status !== 'cancelled') tags.push({ key: 'past', label: labels.status.past, tone: 'muted' })
-  if (event.placeholder) tags.push({ key: 'placeholder', label: labels.status.placeholder, tone: 'dashed' })
 
   return (
     <ul className="flex flex-wrap gap-1.5">
@@ -22,7 +21,6 @@ export function EventBadges({ event, labels }: { event: LocalizedEvent; labels: 
             'rounded-full px-2.5 py-1 text-[0.6875rem] font-medium',
             tag.tone === 'gold' && 'bg-primary/15 text-primary',
             tag.tone === 'muted' && 'bg-muted text-foreground',
-            tag.tone === 'dashed' && 'border border-dashed border-foreground/30 text-muted-foreground',
           )}
         >
           {tag.label}
