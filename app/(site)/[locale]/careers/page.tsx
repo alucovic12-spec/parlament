@@ -23,8 +23,8 @@ export default async function CareersPage({ params }: Props) {
           {c.seekingTitle}
         </h2>
         <ul className="mt-4 space-y-3">
-          {c.seeking.map((item) => (
-            <li key={item} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
+          {c.seeking.map((item, index) => (
+            <li key={`${index}-${item}`} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
               <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-primary" />
               <span>{item}</span>
             </li>
@@ -38,7 +38,7 @@ export default async function CareersPage({ params }: Props) {
         </h2>
         <ol className="mt-4 space-y-4">
           {c.how.items.map((item, index) => (
-            <li key={item} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
+            <li key={`${index}-${item}`} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
               <span aria-hidden className="font-display text-2xl leading-none text-primary">
                 {index + 1}
               </span>
