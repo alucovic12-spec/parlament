@@ -1,6 +1,7 @@
 import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { pageDefaults, pageRoutes } from './sanity/defaults'
+import { importPlugin } from './sanity/import-tool'
 import { schemaTypes, singletonTypes } from './sanity/schema-types'
 import { structure } from './sanity/structure'
 
@@ -9,7 +10,7 @@ export const config = defineConfig({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   title: 'Parlament Admin',
   basePath: '/admin',
-  plugins: [structureTool({ structure })],
+  plugins: [structureTool({ structure }), importPlugin()],
   schema: {
     types: schemaTypes,
     templates: (templates) => [
@@ -27,7 +28,7 @@ export const config = defineConfig({
       creationContext.type === 'global' ? prev.filter(({ templateId }) => !singletonTypes.has(templateId) && !templateId.startsWith('page-')) : prev,
     actions: (prev, { schemaType }) =>
       singletonTypes.has(schemaType)
-        ? prev.filter(({ action }) => action !== 'delete' && action !== 'duplicate' && action !== 'unpublish')
+        ? prev.filter(({ action }) => action !== 'duplicate')
         : prev,
   },
 })

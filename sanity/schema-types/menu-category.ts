@@ -27,7 +27,6 @@ export const menuCategory = defineType({
       type: 'string',
       description: 'Povezuje kategoriju s kodom stranice (sidra, poveznice). Ne mijenjati nakon objave.',
       options: { list: menuCategoryOptions },
-      validation: (rule) => rule.required(),
     }),
     defineField({ name: 'name', title: 'Naziv', type: 'localizedString' }),
     defineField({
@@ -35,7 +34,7 @@ export const menuCategory = defineType({
       title: 'Redoslijed',
       type: 'number',
       initialValue: 0,
-      validation: (rule) => rule.required().integer().min(0),
+      validation: (rule) => rule.integer().min(0),
     }),
   ],
   orderings: [{ title: 'Redoslijed', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] }],

@@ -14,7 +14,7 @@ const tilePositions = [
   'col-span-2 aspect-[16/10] lg:aspect-auto',
 ]
 
-export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messages; images: string[] }) {
+export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messages; images: (string | null)[] }) {
   const g = m.home.gallery
 
   return (
@@ -27,28 +27,32 @@ export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messag
       </Reveal>
 
       <ul className="group/list mt-14 grid grid-cols-2 gap-3 sm:gap-4 lg:h-[38rem] lg:grid-cols-4 lg:grid-rows-2">
-        {g.tiles.map((label, index) => (
+        {g.tiles.slice(0, tilePositions.length).map((label, index) => (
           <li
-            key={label}
+            key={index}
             className={cn(
               'glow-card image-reveal group relative overflow-hidden rounded-[1.75rem] border border-border bg-brand-ink motion-safe:transition-all motion-safe:duration-700 lg:group-hover/list:opacity-70 lg:hover:!opacity-100',
               tilePositions[index],
             )}
           >
-            <Image
-              src={images[index]}
-              alt=""
-              fill
-              sizes="(min-width: 1024px) 30vw, 50vw"
-              className="object-cover motion-safe:transition-transform motion-safe:duration-1000 group-hover:scale-105"
-            />
+            {images[index] ? (
+              <Image
+                src={images[index]}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 30vw, 50vw"
+                className="object-cover motion-safe:transition-transform motion-safe:duration-1000 group-hover:scale-105"
+              />
+            ) : null}
             <div
               aria-hidden
               className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-brand-ink/90 to-transparent"
             />
+            {label ? (
             <p className="font-accent absolute bottom-4 left-4 rounded-full border border-white/20 bg-brand-ink/55 px-4 py-2 text-xs font-medium uppercase tracking-[0.16em] text-brand-cream backdrop-blur-xl motion-safe:transition-all motion-safe:duration-500 group-hover:-translate-y-0.5 group-hover:border-brand-green/60 group-hover:bg-brand-ink/75">
               {label}
             </p>
+            ) : null}
           </li>
         ))}
       </ul>

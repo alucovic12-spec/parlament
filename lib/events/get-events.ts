@@ -1,3 +1,4 @@
+import { isContentImported } from '@/lib/content/imported'
 import type { Locale } from '@/lib/i18n/config'
 import { venueEvents } from './data'
 import { fetchSanityEvents } from './sanity-events'
@@ -43,7 +44,10 @@ function localize(event: VenueEvent, locale: Locale, now: Date): LocalizedEvent 
 
 /** Sanity events override local entries that share the same slug. */
 async function getAllEvents(): Promise<VenueEvent[]> {
-  const remote = (await fetchSanityEvents()) ?? []
+  const [fetched, imported] = await Promise.all([fetchSanityEvents(), isContentImported()])
+  if (imported && fetched) return fetched
+
+  const remote = fetched ?? []
   const remoteIds = new Set(remote.map((event) => event.id))
   return [...venueEvents.filter((event) => !remoteIds.has(event.id)), ...remote]
 }

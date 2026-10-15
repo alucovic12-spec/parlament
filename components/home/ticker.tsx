@@ -2,6 +2,8 @@ import type { Messages } from '@/lib/i18n/messages'
 
 /** Decorative moving strip. The same information is available as text in the offer section. */
 export function Ticker({ m }: { m: Messages }) {
+  if (m.home.ticker.length === 0) return null
+
   return (
     <div aria-hidden className="tone-green group overflow-hidden border-y border-brand-ink/10">
       <div className="marquee-track flex w-max items-end py-3 group-hover:[animation-play-state:paused] sm:py-4">

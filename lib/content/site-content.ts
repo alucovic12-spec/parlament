@@ -18,13 +18,14 @@ type SiteContent = {
     tiktok?: string | null
   } | null
   home: {
+    imported?: boolean | null
     meta?: { title?: Localized; description?: Localized }
     hero?: { eyebrow?: Localized; title?: Localized; text?: Localized }
     ticker?: Localized[]
     nextEvent?: { eyebrow?: Localized; title?: Localized; text?: Localized }
     offer?: { eyebrow?: Localized; title?: Localized; intro?: Localized; items?: TitleText[] }
     concept?: { eyebrow?: Localized; title?: Localized; text?: Localized; materials?: Localized[] }
-    gallery?: { title?: Localized }
+    gallery?: { title?: Localized; tiles?: { label?: Localized }[] }
     careers?: { title?: Localized; text?: Localized }
     visit?: { title?: Localized }
   } | null
@@ -34,7 +35,8 @@ type SiteContent = {
 const query = `{
   "settings": *[_id == "siteSettings"][0]{address, phone, email, hours, instagram, facebook, tiktok},
   "home": *[_id == "homePage"][0]{
-    meta, hero, nextEvent, gallery, careers, visit,
+    imported, meta, hero, nextEvent, careers, visit,
+    gallery{title, tiles[]{label{hr, en}}},
     ticker[]{hr, en},
     offer{eyebrow, title, intro, items[]{title, text}},
     concept{eyebrow, title, text, materials[]{hr, en}}
@@ -80,16 +82,19 @@ export async function getMessagesWithContent(locale: Locale): Promise<Messages> 
   if (!content) return base
 
   const m = structuredClone(base)
-  const text = (value: Localized, fallback: string) => localizedValue(value, locale) ?? fallback
+  const imported = content.home?.imported === true
+  const keep = (value: Localized, fallback: string) => localizedValue(value, locale) ?? fallback
+  // Once content is imported, an emptied field means "removed", not "use the built-in copy".
+  const text = (value: Localized, fallback: string) => localizedValue(value, locale) ?? (imported ? '' : fallback)
   const list = (values: Localized[] | undefined, fallback: string[]) => {
     const resolved = (values ?? []).map((value) => localizedValue(value, locale)).filter((value): value is string => Boolean(value))
-    return resolved.length > 0 ? resolved : fallback
+    return resolved.length > 0 || imported ? resolved : fallback
   }
 
   const { home } = content
   if (home) {
-    m.meta.defaultTitle = text(home.meta?.title, m.meta.defaultTitle)
-    m.meta.defaultDescription = text(home.meta?.description, m.meta.defaultDescription)
+    m.meta.defaultTitle = keep(home.meta?.title, m.meta.defaultTitle)
+    m.meta.defaultDescription = keep(home.meta?.description, m.meta.defaultDescription)
 
     m.home.hero.eyebrow = text(home.hero?.eyebrow, m.home.hero.eyebrow)
     m.home.hero.title = text(home.hero?.title, m.home.hero.title)
@@ -104,10 +109,15 @@ export async function getMessagesWithContent(locale: Locale): Promise<Messages> 
     m.home.offer.eyebrow = text(home.offer?.eyebrow, m.home.offer.eyebrow)
     m.home.offer.title = text(home.offer?.title, m.home.offer.title)
     m.home.offer.intro = text(home.offer?.intro, m.home.offer.intro)
-    m.home.offer.items = m.home.offer.items.map((item, index) => ({
-      title: text(home.offer?.items?.[index]?.title, item.title),
-      text: text(home.offer?.items?.[index]?.text, item.text),
-    }))
+    m.home.offer.items = imported
+      ? (home.offer?.items ?? []).map((item) => ({
+          title: localizedValue(item.title, locale) ?? '',
+          text: localizedValue(item.text, locale) ?? '',
+        }))
+      : m.home.offer.items.map((item, index) => ({
+          title: text(home.offer?.items?.[index]?.title, item.title),
+          text: text(home.offer?.items?.[index]?.text, item.text),
+        }))
 
     m.home.concept.eyebrow = text(home.concept?.eyebrow, m.home.concept.eyebrow)
     m.home.concept.title = text(home.concept?.title, m.home.concept.title)
@@ -115,6 +125,9 @@ export async function getMessagesWithContent(locale: Locale): Promise<Messages> 
     m.home.concept.materials = list(home.concept?.materials, m.home.concept.materials)
 
     m.home.gallery.title = text(home.gallery?.title, m.home.gallery.title)
+    if (imported) {
+      m.home.gallery.tiles = (home.gallery?.tiles ?? []).map((tile) => localizedValue(tile.label, locale) ?? '')
+    }
     m.home.careers.title = text(home.careers?.title, m.home.careers.title)
     m.home.careers.text = text(home.careers?.text, m.home.careers.text)
     m.home.visit.title = text(home.visit?.title, m.home.visit.title)
@@ -124,8 +137,8 @@ export async function getMessagesWithContent(locale: Locale): Promise<Messages> 
     const route = page.route as keyof Messages['pages'] | undefined
     if (!route || !(route in m.pages)) continue
 
-    m.pages[route].title = text(page.title, m.pages[route].title)
-    m.pages[route].description = text(page.description, m.pages[route].description)
+    m.pages[route].title = keep(page.title, m.pages[route].title)
+    m.pages[route].description = keep(page.description, m.pages[route].description)
 
     const intro = localizedValue(page.intro, locale)
     if (!intro) continue
