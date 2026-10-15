@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { LinkButton } from '@/components/shared/link-button'
 import { localizedPath, type Locale, type RouteKey } from '@/lib/i18n/config'
-import { getMessages } from '@/lib/i18n/messages'
+import { getMessagesWithContent } from '@/lib/content/site-content'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
 
@@ -19,7 +19,7 @@ export function upcomingRoute(key: RouteKey) {
 
   async function Page({ params }: Props) {
     const locale = (await params).locale as Locale
-    const m = getMessages(locale)
+    const m = await getMessagesWithContent(locale)
     return (
       <main className="interior-page flex min-h-[75svh] items-center">
         <JsonLd data={breadcrumbJsonLd(locale, key)} />

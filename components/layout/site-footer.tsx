@@ -3,13 +3,15 @@ import { BrandWordmark } from '@/components/layout/brand-wordmark'
 import type { Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
 import type { NavItem } from '@/lib/navigation'
+import { getSiteSettings } from '@/lib/content/site-content'
 import { site } from '@/lib/site'
 
 type SiteFooterProps = { locale: Locale; m: Messages; items: NavItem[] }
 
-export function SiteFooter({ locale, m, items }: SiteFooterProps) {
+export async function SiteFooter({ locale, m, items }: SiteFooterProps) {
   const v = m.home.visit
-  const socials = Object.entries(site.social).filter((entry): entry is [string, string] => Boolean(entry[1]))
+  const settings = await getSiteSettings(locale)
+  const socials = Object.entries(settings.social).filter((entry): entry is [string, string] => Boolean(entry[1]))
 
   return (
     <footer className="tone-ink relative overflow-hidden border-t border-brand-cream/10">
@@ -37,18 +39,18 @@ export function SiteFooter({ locale, m, items }: SiteFooterProps) {
           <dl className="mt-4 space-y-3 text-sm">
             <div>
               <dt className="sr-only">{v.address}</dt>
-              <dd className={site.contact.address ? '' : 'text-muted-foreground'}>{site.contact.address ?? v.addressPending}</dd>
+              <dd className={settings.contact.address ? '' : 'text-muted-foreground'}>{settings.contact.address ?? v.addressPending}</dd>
             </div>
             <div>
               <dt className="sr-only">{v.phone}</dt>
-              <dd className={site.contact.phone ? '' : 'text-muted-foreground'}>{site.contact.phone ?? v.phonePending}</dd>
+              <dd className={settings.contact.phone ? '' : 'text-muted-foreground'}>{settings.contact.phone ?? v.phonePending}</dd>
             </div>
             <div>
               <dt className="sr-only">{v.email}</dt>
-              <dd className={site.contact.email ? '' : 'text-muted-foreground'}>
-                {site.contact.email ? (
-                  <a href={`mailto:${site.contact.email}`} className="inline-flex min-h-11 items-center hover:text-primary">
-                    {site.contact.email}
+              <dd className={settings.contact.email ? '' : 'text-muted-foreground'}>
+                {settings.contact.email ? (
+                  <a href={`mailto:${settings.contact.email}`} className="inline-flex min-h-11 items-center hover:text-primary">
+                    {settings.contact.email}
                   </a>
                 ) : (
                   v.emailPending

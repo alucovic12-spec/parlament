@@ -9,15 +9,15 @@ import type { Messages } from '@/lib/i18n/messages'
 
 /** Same order as `offer.items` in the messages. Each card opens its matching menu category. */
 const cards = [
-  { photo: '/images/coffee.png', category: 'coffee' },
-  { photo: '/images/beer-wine.png', category: 'beer' },
-  { photo: '/images/wine.png', category: 'wine' },
-  { photo: '/images/whisky.png', category: 'whisky' },
-  { photo: '/images/cocktail.png', category: 'cocktails' },
-  { photo: '/images/small-bites.png', category: 'food' },
+  { category: 'coffee' },
+  { category: 'beer' },
+  { category: 'wine' },
+  { category: 'whisky' },
+  { category: 'cocktails' },
+  { category: 'food' },
 ]
 
-export function Offer({ locale, m }: { locale: Locale; m: Messages }) {
+export function Offer({ locale, m, images }: { locale: Locale; m: Messages; images: string[] }) {
   const o = m.home.offer
   const menuPath = localizedPath(locale, 'menu')
 
@@ -40,9 +40,9 @@ export function Offer({ locale, m }: { locale: Locale; m: Messages }) {
                 className="glow-card group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-border bg-card text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <div className="relative h-60 overflow-hidden sm:h-64 lg:h-72">
-                  {card ? (
+                  {images[index] ? (
                     <Image
-                      src={card.photo}
+                      src={images[index]}
                       alt=""
                       fill
                       sizes="(min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"

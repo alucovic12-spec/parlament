@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { localizedPath, locales, type Locale, type PageKey } from '@/lib/i18n/config'
+import { getMessagesWithContent, getSiteSettings } from '@/lib/content/site-content'
 import { getMessages } from '@/lib/i18n/messages'
 import { getSiteUrl, site } from '@/lib/site'
 
@@ -22,8 +23,8 @@ export function alternateLanguages(page: PageKey, rest: string[] = []): Record<s
   return languages
 }
 
-export function buildMetadata(locale: Locale, page: PageKey = 'home'): Metadata {
-  const m = getMessages(locale)
+export async function buildMetadata(locale: Locale, page: PageKey = 'home'): Promise<Metadata> {
+  const m = await getMessagesWithContent(locale)
   const isHome = page === 'home'
   const title = isHome ? m.meta.defaultTitle : m.pages[page].title
   const description = isHome ? m.meta.defaultDescription : m.pages[page].description
@@ -50,10 +51,11 @@ export function buildMetadata(locale: Locale, page: PageKey = 'home'): Metadata 
 type JsonLdNode = Record<string, unknown>
 
 /** Site-wide entities: the venue itself and the website. Only confirmed contact data is emitted. */
-export function siteJsonLd(locale: Locale): JsonLdNode[] {
-  const m = getMessages(locale)
+export async function siteJsonLd(locale: Locale): Promise<JsonLdNode[]> {
+  const m = await getMessagesWithContent(locale)
+  const settings = await getSiteSettings(locale)
   const url = getSiteUrl()
-  const sameAs = Object.values(site.social).filter((value): value is string => Boolean(value))
+  const sameAs = Object.values(settings.social).filter((value): value is string => Boolean(value))
 
   const venue: JsonLdNode = {
     '@context': 'https://schema.org',
@@ -67,10 +69,10 @@ export function siteJsonLd(locale: Locale): JsonLdNode[] {
     inLanguage: locale,
     hasMenu: absoluteUrl(localizedPath(locale, 'menu')),
     acceptsReservations: absoluteUrl(localizedPath(locale, 'reservations')),
-    ...(site.contact.email ? { email: site.contact.email } : {}),
-    ...(site.contact.phone ? { telephone: site.contact.phone } : {}),
-    ...(site.contact.address
-      ? { address: { '@type': 'PostalAddress', streetAddress: site.contact.address, addressCountry: 'HR' } }
+    ...(settings.contact.email ? { email: settings.contact.email } : {}),
+    ...(settings.contact.phone ? { telephone: settings.contact.phone } : {}),
+    ...(settings.contact.address
+      ? { address: { '@type': 'PostalAddress', streetAddress: settings.contact.address, addressCountry: 'HR' } }
       : {}),
     ...(sameAs.length ? { sameAs } : {}),
   }

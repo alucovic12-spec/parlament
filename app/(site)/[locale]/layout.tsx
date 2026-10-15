@@ -8,7 +8,7 @@ import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
 import { JsonLd } from '@/components/shared/json-ld'
 import { isLocale, locales } from '@/lib/i18n/config'
-import { getMessages } from '@/lib/i18n/messages'
+import { getMessagesWithContent } from '@/lib/content/site-content'
 import { getNavItems, splitMobileNav } from '@/lib/navigation'
 import { siteJsonLd } from '@/lib/seo'
 import { getSiteUrl, site } from '@/lib/site'
@@ -30,11 +30,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   if (!isLocale(locale)) return {}
+  const m = await getMessagesWithContent(locale)
   return {
     metadataBase: new URL(getSiteUrl()),
     applicationName: site.shortName,
-    title: { default: getMessages(locale).meta.defaultTitle, template: `%s | ${site.shortName}` },
-    description: getMessages(locale).meta.defaultDescription,
+    title: { default: m.meta.defaultTitle, template: `%s | ${site.shortName}` },
+    description: m.meta.defaultDescription,
     authors: [{ name: site.shortName }],
     creator: site.shortName,
     publisher: site.shortName,
@@ -68,7 +69,7 @@ export default async function LocaleLayout({
   const { locale } = await params
   if (!isLocale(locale)) notFound()
 
-  const m = getMessages(locale)
+  const m = await getMessagesWithContent(locale)
   const items = getNavItems(locale, m)
   const { primary, more } = splitMobileNav(items)
 
@@ -81,7 +82,7 @@ export default async function LocaleLayout({
         >
           {m.nav.skip}
         </a>
-        <JsonLd data={siteJsonLd(locale)} />
+        <JsonLd data={await siteJsonLd(locale)} />
         <SiteHeader locale={locale} m={m} items={items} />
         <main id="main">{children}</main>
         <SiteFooter locale={locale} m={m} items={items} />

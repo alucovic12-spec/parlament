@@ -9,24 +9,26 @@ import { EventCta } from '@/components/events/event-cta'
 import { eventPriceText } from '@/components/events/event-price'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PhotoPlaceholder } from '@/components/shared/photo-placeholder'
+import { getSiteSettings } from '@/lib/content/site-content'
 import { getEvent, getEventIds } from '@/lib/events/get-events'
 import { isLocale, localizedPath, locales, type Locale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/messages'
 import { absoluteUrl, alternateLanguages, breadcrumbJsonLd, defaultOgImage } from '@/lib/seo'
 import { getSiteUrl, site } from '@/lib/site'
 
-export const revalidate = 3600
+export const revalidate = 60
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
 
-export function generateStaticParams() {
-  return locales.flatMap((locale) => getEventIds().map((slug) => ({ locale, slug })))
+export async function generateStaticParams() {
+  const ids = await getEventIds()
+  return locales.flatMap((locale) => ids.map((slug) => ({ locale, slug })))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params
   if (!isLocale(locale)) return {}
-  const event = getEvent(locale, slug)
+  const event = await getEvent(locale, slug)
   if (!event) return {}
 
   const m = getMessages(locale)
@@ -55,10 +57,11 @@ export default async function EventPage({ params }: Props) {
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale: Locale = rawLocale
-  const event = getEvent(locale, slug)
+  const event = await getEvent(locale, slug)
   if (!event) notFound()
 
   const m = getMessages(locale)
+  const { contact } = await getSiteSettings(locale)
   const labels = m.events
   const eventsHref = localizedPath(locale, 'events')
 
@@ -81,7 +84,7 @@ export default async function EventPage({ params }: Props) {
         location: {
           '@type': 'Place',
           name: site.name,
-          ...(site.contact.address ? { address: site.contact.address } : {}),
+          ...(contact.address ? { address: contact.address } : {}),
         },
         ...(event.performer ? { performer: { '@type': 'PerformingGroup', name: event.performer } } : {}),
       }
@@ -160,7 +163,7 @@ export default async function EventPage({ params }: Props) {
               description={event.description}
               start={event.start}
               end={event.end}
-              location={site.contact.address ?? site.name}
+              location={contact.address ?? site.name}
               labels={labels}
             />
           </div>

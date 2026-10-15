@@ -4,20 +4,21 @@ import { Reveal } from '@/components/shared/reveal'
 import { Section, SectionHeading } from '@/components/shared/section'
 import { localizedPath, type Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
-import { site } from '@/lib/site'
+import { getSiteSettings } from '@/lib/content/site-content'
 
 const iconBox =
   'mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-full border border-foreground/15 bg-background/60 text-eyebrow transition-colors duration-300 group-hover:border-brand-green group-hover:bg-brand-green'
 
-export function Visit({ locale, m }: { locale: Locale; m: Messages }) {
+export async function Visit({ locale, m }: { locale: Locale; m: Messages }) {
   const v = m.home.visit
-  const socials = Object.entries(site.social).filter((entry): entry is [string, string] => Boolean(entry[1]))
+  const settings = await getSiteSettings(locale)
+  const socials = Object.entries(settings.social).filter((entry): entry is [string, string] => Boolean(entry[1]))
 
   const rows = [
-    { icon: MapPin, label: v.address, value: site.contact.address, pending: v.addressPending },
-    { icon: Clock, label: v.hours, value: site.contact.hours, pending: v.hoursPending },
-    { icon: Phone, label: v.phone, value: site.contact.phone, pending: v.phonePending },
-    { icon: Mail, label: v.email, value: site.contact.email, pending: v.emailPending },
+    { icon: MapPin, label: v.address, value: settings.contact.address, pending: v.addressPending },
+    { icon: Clock, label: v.hours, value: settings.contact.hours, pending: v.hoursPending },
+    { icon: Phone, label: v.phone, value: settings.contact.phone, pending: v.phonePending },
+    { icon: Mail, label: v.email, value: settings.contact.email, pending: v.emailPending },
   ]
 
   return (
@@ -33,7 +34,7 @@ export function Visit({ locale, m }: { locale: Locale; m: Messages }) {
                 </span>
                 <div>
                   <dt className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{label}</dt>
-                  <dd className={value ? 'mt-1 text-lg' : 'mt-1 text-lg text-muted-foreground'}>
+                  <dd className={value ? 'mt-1 whitespace-pre-line text-lg' : 'mt-1 text-lg text-muted-foreground'}>
                     {value && Icon === Mail ? (
                       <a href={`mailto:${value}`} className="inline-flex min-h-11 items-center underline-offset-4 hover:underline">
                         {value}

@@ -5,17 +5,11 @@ import type { LocalizedEvent } from '@/lib/events/types'
 import { localizedPath, type Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
 
-const slides = [
-  { src: '/images/space/hall-olive-island.png' },
-  { src: '/images/space/facade-blue-hour.png' },
-  { src: '/images/space/lounge-central-tree.png' },
-  { src: '/images/space/hall-oak-tables.png' },
-  { src: '/images/space/bar-brick-tv.png' },
-  { src: '/images/space/concept-round-bar.png' },
-]
+type HeroProps = { locale: Locale; m: Messages; images: string[]; events?: LocalizedEvent[] }
 
-export function Hero({ locale, m, events = [] }: { locale: Locale; m: Messages; events?: LocalizedEvent[] }) {
+export function Hero({ locale, m, images, events = [] }: HeroProps) {
   const h = m.home.hero
+  const slides = images.map((src) => ({ src }))
   const [firstLine, ...rest] = h.title.split(/(?<=\.)\s+/)
   const secondLine = rest.join(' ')
   const slideLabels = slides.map((_, index) =>

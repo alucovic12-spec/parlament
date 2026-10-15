@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { ReservationForm } from '@/components/reservations/reservation-form'
 import type { Locale } from '@/lib/i18n/config'
-import { getMessages } from '@/lib/i18n/messages'
+import { getMessagesWithContent } from '@/lib/content/site-content'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
 import { site } from '@/lib/site'
@@ -15,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ReservationsPage({ params }: Props) {
   const locale = (await params).locale as Locale
-  const m = getMessages(locale)
+  const m = await getMessagesWithContent(locale)
   const r = m.reservations
 
   return (

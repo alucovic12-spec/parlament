@@ -28,10 +28,10 @@ function entry(
   }))
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages = (['home', ...routeKeys] as PageKey[]).flatMap((page) =>
     entry(page, [], page === 'events' || page === 'home' ? 'daily' : 'weekly', priorities[page]),
   )
-  const events = getEventIds().flatMap((id) => entry('events', [id], 'weekly', 0.5))
+  const events = (await getEventIds()).flatMap((id) => entry('events', [id], 'weekly', 0.5))
   return [...pages, ...events]
 }
