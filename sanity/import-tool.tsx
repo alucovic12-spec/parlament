@@ -70,6 +70,49 @@ async function migrateAdvanced(client: StudioClient, note: (line: string) => voi
   note(`Meni: uvezeno ${menuCategories.length} kategorija i ${menuItems.length} stavki.`)
 }
 
+const galleryPhotos = [
+  { path: '/images/space/hall-olive-island.png', category: 'interior' },
+  { path: '/images/space/hall-oak-tables.png', category: 'interior' },
+  { path: '/images/space/lounge-central-tree.png', category: 'interior' },
+  { path: '/images/space/bar-brick-tv.png', category: 'interior' },
+  { path: '/images/space/concept-round-bar.png', category: 'interior' },
+  { path: '/images/space/velvet-chair.png', category: 'interior' },
+  { path: '/images/space/facade-blue-hour.png', category: 'atmosphere' },
+  { path: '/images/space/print-still-life.png', category: 'atmosphere' },
+  { path: '/images/space/every-voice.png', category: 'atmosphere' },
+  { path: '/images/space/whisky-one-seat.png', category: 'drinks' },
+  { path: '/images/events/dj-dule-delante.png', category: 'events' },
+  { path: '/images/events/sandi-cenov-live.png', category: 'events' },
+  { path: '/images/events/stand-up-zuhra.png', category: 'events' },
+]
+
+/** Puts the photos that ship with the site into the archive, once. Deleting them later is final. */
+async function migrateGallery(client: StudioClient, note: (line: string) => void) {
+  const marker = await client.fetch<number>('count(*[_id == "gallerySeedMarker"])')
+  if (marker > 0) return
+
+  const existing = await client.fetch<number>('count(*[_type == "galleryItem"])')
+  if (existing === 0) {
+    let rank = LexoRank.min().genNext().genNext()
+    for (const photo of galleryPhotos) {
+      const response = await fetch(photo.path)
+      if (!response.ok) throw new Error(`Slika se ne može učitati: ${photo.path}`)
+      const filename = photo.path.split('/').pop() ?? 'photo.png'
+      const asset = await client.assets.upload('image', await response.blob(), { filename })
+      rank = rank.genNext().genNext()
+      await client.createIfNotExists({
+        _id: `galleryItem-${filename.replace(/\.[^.]+$/, '')}`,
+        _type: 'galleryItem',
+        orderRank: rank.toString(),
+        category: photo.category,
+        image: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } },
+      })
+    }
+    note(`Arhiva: uvezeno ${galleryPhotos.length} fotografija.`)
+  }
+  await client.createIfNotExists({ _id: 'gallerySeedMarker', _type: 'importMarker' })
+}
+
 async function runImport(client: StudioClient, note: (line: string) => void) {
     const uploads = new Map<string, Promise<string>>()
     const upload = (path: string) => {
@@ -169,6 +212,7 @@ async function runImport(client: StudioClient, note: (line: string) => void) {
       note(`Večernje sjednice: uvezeno ${missing.length}, ostale već postoje.`)
       await client.createIfNotExists({ _id: 'importMarker', _type: 'importMarker' })
       await migrateAdvanced(client, note)
+      await migrateGallery(client, note)
       note('Gotovo. Osvježi Studio i otvori Početnu stranicu, Tekstove stranica i Večernje sjednice.')
     } catch (error) {
       note(`Greška: ${error instanceof Error ? error.message : String(error)}`)
@@ -192,6 +236,7 @@ function AutoImportLayout(props: LayoutProps) {
       const log = (line: string) => console.log('[v0] auto import:', line)
       if (existing.marker > 0 || existing.home > 0) {
         await migrateAdvanced(client, log)
+        await migrateGallery(client, log)
         return
       }
       await runImport(client, log)

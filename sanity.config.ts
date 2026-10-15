@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { pageDefaults, pageRoutes } from './sanity/defaults'
 import { importPlugin } from './sanity/import-tool'
+import { managerPlugin } from './sanity/manager'
 import { schemaTypes, singletonTypes } from './sanity/schema-types'
 import { structure } from './sanity/structure'
 import { translateAllAction, translateMissingAction } from './sanity/translate/translate-actions'
@@ -11,7 +12,7 @@ export const config = defineConfig({
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   title: 'Parlament Admin',
   basePath: '/admin',
-  plugins: [structureTool({ structure }), importPlugin()],
+  plugins: [managerPlugin(), structureTool({ structure }), importPlugin()],
   schema: {
     types: schemaTypes,
     templates: (templates) => [
