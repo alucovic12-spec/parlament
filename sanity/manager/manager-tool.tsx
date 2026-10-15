@@ -5,7 +5,7 @@ import { GalleryPanel } from './gallery-panel'
 import { MenuPanel } from './menu-panel'
 
 const tabs = [
-  { id: 'events', label: 'Večernje sjednice', Panel: EventsPanel },
+  { id: 'events', label: 'Program', Panel: EventsPanel },
   { id: 'menu', label: 'Stavke menija', Panel: MenuPanel },
   { id: 'categories', label: 'Kategorije menija', Panel: CategoriesPanel },
   { id: 'gallery', label: 'Arhiva fotografija', Panel: GalleryPanel },

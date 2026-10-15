@@ -209,11 +209,11 @@ async function runImport(client: StudioClient, note: (line: string) => void) {
           ...(event.image ? { image: await photo(event.image) } : {}),
         })
       }
-      note(`Večernje sjednice: uvezeno ${missing.length}, ostale već postoje.`)
+      note(`Program: uvezeno ${missing.length}, ostale već postoje.`)
       await client.createIfNotExists({ _id: 'importMarker', _type: 'importMarker' })
       await migrateAdvanced(client, note)
       await migrateGallery(client, note)
-      note('Gotovo. Osvježi Studio i otvori Početnu stranicu, Tekstove stranica i Večernje sjednice.')
+      note('Gotovo. Osvježi Studio i otvori Početnu stranicu, Tekstove stranica i Program.')
     } catch (error) {
       note(`Greška: ${error instanceof Error ? error.message : String(error)}`)
       return false

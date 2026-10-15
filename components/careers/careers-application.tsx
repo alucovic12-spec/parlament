@@ -380,7 +380,7 @@ function Application({ locale, labels, aside, onReset }: Props & { onReset: () =
                   <div className="mt-2 flex gap-1.5" aria-hidden="true">
                     {f.stepTitles.map((title, index) => (
                       <span
-                        key={title}
+                        key={`${index}-${title}`}
                         className={cn('h-1 flex-1 rounded-full', index <= step ? 'bg-primary' : 'bg-border')}
                       />
                     ))}

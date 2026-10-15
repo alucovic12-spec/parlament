@@ -24,11 +24,11 @@ export const structure: StructureResolver = (S, context) =>
     .title('Parlament')
     .items([
       S.listItem()
-        .title('Večernje sjednice')
+        .title('Program')
         .icon(CalendarIcon)
         .child(
           S.list()
-            .title('Večernje sjednice')
+            .title('Program')
             .items([
               S.listItem()
                 .title('Nadolazeće i nedavne')

@@ -220,7 +220,7 @@ export const homePage = defineType({
         title: 'Gumbi u naslovnom dijelu',
         type: 'array',
         description:
-          'Dodaj, obriši i presloži gumbe. Ako je popis prazan, prikazuju se zadani gumbi (Rezerviraj, Meni, Večernje sjednice).',
+          'Dodaj, obriši i presloži gumbe. Ako je popis prazan, prikazuju se zadani gumbi (Rezerviraj, Meni, Program).',
         of: [
           defineArrayMember({
             type: 'object',
