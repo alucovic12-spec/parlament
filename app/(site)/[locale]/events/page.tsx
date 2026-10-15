@@ -5,7 +5,6 @@ import type { Locale } from '@/lib/i18n/config'
 import { getMessagesWithContent } from '@/lib/content/site-content'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
-import { site } from '@/lib/site'
 
 export const revalidate = 60
 
@@ -20,7 +19,6 @@ export default async function EventsPage({ params }: Props) {
   const locale = (await params).locale as Locale
   const m = await getMessagesWithContent(locale)
   const { upcoming, past } = await getEvents(locale)
-  const showNotice = site.showPlaceholders && [...upcoming, ...past].some((event) => event.placeholder)
 
   return (
     <main className="interior-page">
@@ -30,11 +28,6 @@ export default async function EventsPage({ params }: Props) {
         <p className="interior-eyebrow">{m.events.eyebrow}</p>
         <h1 className="interior-title">{m.pages.events.title}</h1>
         <p className="interior-intro">{m.events.intro}</p>
-        {showNotice ? (
-          <p className="mt-5 inline-block rounded-full border border-dashed border-foreground/30 px-4 py-2 text-xs text-muted-foreground">
-            {m.events.temporaryNotice}
-          </p>
-        ) : null}
         </div>
       </header>
 

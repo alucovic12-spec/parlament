@@ -5,7 +5,6 @@ import type { Locale } from '@/lib/i18n/config'
 import { getMessagesWithContent } from '@/lib/content/site-content'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
-import { site } from '@/lib/site'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -37,11 +36,6 @@ export default async function ReservationsPage({ params, searchParams }: Props) 
         <h1 className="interior-title">{m.pages.reservations.title}</h1>
         <p className="interior-intro">{r.intro}</p>
         <p className="mt-3 text-sm font-medium text-brand-green">{r.notice}</p>
-        {site.showPlaceholders ? (
-          <p className="mt-5 inline-block max-w-xl rounded-2xl border border-dashed border-foreground/30 px-4 py-2 text-xs text-muted-foreground">
-            {r.temporaryNotice}
-          </p>
-        ) : null}
         </div>
       </header>
 

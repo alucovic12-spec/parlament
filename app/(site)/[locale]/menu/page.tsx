@@ -26,9 +26,6 @@ export default async function MenuPage({ params }: Props) {
         <p className="interior-eyebrow">{m.menu.eyebrow}</p>
         <h1 className="interior-title">{m.pages.menu.title}</h1>
         <p className="interior-intro">{m.menu.intro}</p>
-        <p className="mt-5 inline-block rounded-full border border-dashed border-foreground/30 px-4 py-2 text-xs text-muted-foreground">
-          {m.menu.temporaryNotice}
-        </p>
         </div>
       </header>
 
