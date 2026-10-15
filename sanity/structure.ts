@@ -1,6 +1,4 @@
-import { CalendarIcon } from '@sanity/icons/Calendar'
-import { BasketIcon } from '@sanity/icons/Basket'
-import { TagIcon } from '@sanity/icons/Tag'
+import { Calendar as CalendarIcon, ShoppingBasket as BasketIcon, Tag as TagIcon } from 'lucide-react'
 import type { StructureResolver } from 'sanity/structure'
 
 export const structure: StructureResolver = (S) =>

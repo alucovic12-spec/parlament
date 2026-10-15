@@ -1,4 +1,4 @@
-import { TagIcon } from '@sanity/icons/Tag'
+import { Tag as TagIcon } from 'lucide-react'
 import { defineField, defineType } from 'sanity'
 
 export const menuCategoryOptions = [

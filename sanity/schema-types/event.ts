@@ -1,4 +1,4 @@
-import { CalendarIcon } from '@sanity/icons/Calendar'
+import { Calendar as CalendarIcon } from 'lucide-react'
 import { defineField, defineType } from 'sanity'
 
 export const eventTypeOptions = [
