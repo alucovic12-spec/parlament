@@ -9,7 +9,7 @@ import { Ticker } from '@/components/home/ticker'
 import { Visit } from '@/components/home/visit'
 import { getEvents } from '@/lib/events/get-events'
 import type { Locale } from '@/lib/i18n/config'
-import { getMessages } from '@/lib/i18n/messages'
+import { getMessagesWithContent } from '@/lib/content/site-content'
 import { buildMetadata } from '@/lib/seo'
 
 export const revalidate = 60
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function HomePage({ params }: Props) {
   const locale = (await params).locale as Locale
-  const m = getMessages(locale)
+  const m = await getMessagesWithContent(locale)
   const { upcoming } = await getEvents(locale)
   const nextEvent = upcoming.find((event) => event.status !== 'cancelled')
   const announcements = upcoming.filter((event) => event.image && event.status !== 'cancelled').slice(0, 3)

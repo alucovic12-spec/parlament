@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { EventBrowser } from '@/components/events/event-browser'
 import { getEvents } from '@/lib/events/get-events'
 import type { Locale } from '@/lib/i18n/config'
-import { getMessages } from '@/lib/i18n/messages'
+import { getMessagesWithContent } from '@/lib/content/site-content'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
 import { site } from '@/lib/site'
@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function EventsPage({ params }: Props) {
   const locale = (await params).locale as Locale
-  const m = getMessages(locale)
+  const m = await getMessagesWithContent(locale)
   const { upcoming, past } = await getEvents(locale)
   const showNotice = site.showPlaceholders && [...upcoming, ...past].some((event) => event.placeholder)
 

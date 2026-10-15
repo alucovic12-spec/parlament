@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { GalleryBrowser } from '@/components/gallery/gallery-browser'
 import { getGallery } from '@/lib/gallery/get-gallery'
 import type { Locale } from '@/lib/i18n/config'
-import { getMessages } from '@/lib/i18n/messages'
+import { getMessagesWithContent } from '@/lib/content/site-content'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
 import { site } from '@/lib/site'
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function GalleryPage({ params }: Props) {
   const locale = (await params).locale as Locale
-  const m = getMessages(locale)
+  const m = await getMessagesWithContent(locale)
   const items = await getGallery(locale, m)
 
   return (

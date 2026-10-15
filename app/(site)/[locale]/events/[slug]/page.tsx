@@ -9,6 +9,7 @@ import { EventCta } from '@/components/events/event-cta'
 import { eventPriceText } from '@/components/events/event-price'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PhotoPlaceholder } from '@/components/shared/photo-placeholder'
+import { getSiteSettings } from '@/lib/content/site-content'
 import { getEvent, getEventIds } from '@/lib/events/get-events'
 import { isLocale, localizedPath, locales, type Locale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/messages'
@@ -60,6 +61,7 @@ export default async function EventPage({ params }: Props) {
   if (!event) notFound()
 
   const m = getMessages(locale)
+  const { contact } = await getSiteSettings(locale)
   const labels = m.events
   const eventsHref = localizedPath(locale, 'events')
 
@@ -82,7 +84,7 @@ export default async function EventPage({ params }: Props) {
         location: {
           '@type': 'Place',
           name: site.name,
-          ...(site.contact.address ? { address: site.contact.address } : {}),
+          ...(contact.address ? { address: contact.address } : {}),
         },
         ...(event.performer ? { performer: { '@type': 'PerformingGroup', name: event.performer } } : {}),
       }
@@ -161,7 +163,7 @@ export default async function EventPage({ params }: Props) {
               description={event.description}
               start={event.start}
               end={event.end}
-              location={site.contact.address ?? site.name}
+              location={contact.address ?? site.name}
               labels={labels}
             />
           </div>

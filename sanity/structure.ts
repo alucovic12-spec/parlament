@@ -1,5 +1,21 @@
-import { Calendar as CalendarIcon, ShoppingBasket as BasketIcon, Tag as TagIcon } from 'lucide-react'
-import type { StructureResolver } from 'sanity/structure'
+import {
+  Calendar as CalendarIcon,
+  FileText as PageIcon,
+  House as HomeIcon,
+  Image as ImageIcon,
+  MapPin as ContactIcon,
+  ShoppingBasket as BasketIcon,
+  Tag as TagIcon,
+} from 'lucide-react'
+import type { StructureBuilder, StructureResolver } from 'sanity/structure'
+import { pageRoutes } from './defaults'
+
+const singleton = (S: StructureBuilder, title: string, documentId: string, schemaType: string, icon: typeof HomeIcon) =>
+  S.listItem()
+    .id(documentId)
+    .title(title)
+    .icon(icon)
+    .child(S.document().schemaType(schemaType).documentId(documentId).title(title))
 
 export const structure: StructureResolver = (S) =>
   S.list()
@@ -13,7 +29,6 @@ export const structure: StructureResolver = (S) =>
             .title('Večernje sjednice')
             .defaultOrdering([{ field: 'start', direction: 'desc' }]),
         ),
-      S.divider(),
       S.listItem()
         .title('Meni')
         .icon(BasketIcon)
@@ -32,4 +47,38 @@ export const structure: StructureResolver = (S) =>
                 ),
             ]),
         ),
+      S.listItem()
+        .title('Arhiva (galerija)')
+        .icon(ImageIcon)
+        .child(
+          S.documentTypeList('galleryItem')
+            .title('Arhiva (galerija)')
+            .defaultOrdering([{ field: 'order', direction: 'asc' }]),
+        ),
+      S.divider(),
+      singleton(S, 'Početna stranica', 'homePage', 'homePage', HomeIcon),
+      S.listItem()
+        .title('Tekstovi stranica')
+        .icon(PageIcon)
+        .child(
+          S.list()
+            .title('Tekstovi stranica')
+            .items(
+              pageRoutes.map(({ route, title }) =>
+                S.listItem()
+                  .id(`page-${route}`)
+                  .title(title)
+                  .icon(PageIcon)
+                  .child(
+                    S.document()
+                      .schemaType('pageContent')
+                      .documentId(`page-${route}`)
+                      .title(title)
+                      .initialValueTemplate(`page-${route}`),
+                  ),
+              ),
+            ),
+        ),
+      S.divider(),
+      singleton(S, 'Kontakt i radno vrijeme', 'siteSettings', 'siteSettings', ContactIcon),
     ])

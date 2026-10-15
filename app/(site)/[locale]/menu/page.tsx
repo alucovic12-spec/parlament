@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { MenuBrowser } from '@/components/menu/menu-browser'
 import { LinkButton } from '@/components/shared/link-button'
 import { localizedPath, type Locale } from '@/lib/i18n/config'
-import { getMessages } from '@/lib/i18n/messages'
+import { getMessagesWithContent } from '@/lib/content/site-content'
 import { getMenu } from '@/lib/menu/get-menu'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function MenuPage({ params }: Props) {
   const locale = (await params).locale as Locale
-  const m = getMessages(locale)
+  const m = await getMessagesWithContent(locale)
   const { categories, items } = getMenu(locale)
 
   return (

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { CareersApplication } from '@/components/careers/careers-application'
 import type { Locale } from '@/lib/i18n/config'
-import { getMessages } from '@/lib/i18n/messages'
+import { getMessagesWithContent } from '@/lib/content/site-content'
 import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
 
@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CareersPage({ params }: Props) {
   const locale = (await params).locale as Locale
-  const c = getMessages(locale).careersPage
+  const c = (await getMessagesWithContent(locale)).careersPage
 
   const aside = (
     <div className="flex h-fit flex-col gap-6">
