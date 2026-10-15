@@ -1,4 +1,3 @@
-import { Button, Flex, Stack, Text } from '@sanity/ui'
 import { Languages } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { type ObjectInputProps, set, useClient, useFormValue } from 'sanity'
@@ -76,24 +75,43 @@ export function TranslateInput(props: ObjectInputProps) {
   }, [value?.en, value?.enAuto, props])
 
   return (
-    <Stack gap={3}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       {props.renderDefault(props)}
-      <Flex align="center" gap={3} wrap="wrap">
-        <Button
-          icon={Languages}
-          text="Prevedi na engleski"
-          mode="ghost"
-          fontSize={1}
-          padding={2}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <button
+          type="button"
           disabled={busy || !value?.hr?.trim()}
           onClick={translate}
-        />
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            padding: '6px 12px',
+            font: 'inherit',
+            fontSize: 13,
+            color: 'var(--card-fg-color)',
+            background: 'transparent',
+            border: '1px solid var(--card-border-color)',
+            borderRadius: 3,
+            cursor: busy || !value?.hr?.trim() ? 'not-allowed' : 'pointer',
+            opacity: busy || !value?.hr?.trim() ? 0.5 : 1,
+          }}
+        >
+          <Languages size={14} aria-hidden="true" />
+          Prevedi na engleski
+        </button>
         {message ? (
-          <Text size={1} muted={!failed} style={failed ? { color: 'var(--card-badge-critical-fg-color)' } : undefined}>
+          <span
+            role="status"
+            style={{
+              fontSize: 13,
+              color: failed ? 'var(--card-badge-critical-fg-color)' : 'var(--card-muted-fg-color)',
+            }}
+          >
             {message}
-          </Text>
+          </span>
         ) : null}
-      </Flex>
-    </Stack>
+      </div>
+    </div>
   )
 }
