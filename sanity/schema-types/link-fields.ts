@@ -39,8 +39,9 @@ export const linkFields = () => [
     title: 'Nova stranica',
     type: 'reference',
     to: [{ type: 'customPage' }],
+    weak: true,
     options: { disableNew: true },
-    description: 'Stranice koje si napravio pod "Nove stranice".',
+    description: 'Stranice koje si napravio pod "Nove stranice". Ako stranicu obrišeš, poveznica se jednostavno sakrije.',
     hidden: ({ parent }) => (parent as LinkParent)?.kind !== 'customPage',
   }),
   defineField({
