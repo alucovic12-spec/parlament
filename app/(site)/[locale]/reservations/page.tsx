@@ -1,0 +1,59 @@
+import type { Metadata } from 'next'
+import { ReservationForm } from '@/components/reservations/reservation-form'
+import type { Locale } from '@/lib/i18n/config'
+import { getMessages } from '@/lib/i18n/messages'
+import { JsonLd } from '@/components/shared/json-ld'
+import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
+import { site } from '@/lib/site'
+
+type Props = { params: Promise<{ locale: string }> }
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params
+  return buildMetadata(locale as Locale, 'reservations')
+}
+
+export default async function ReservationsPage({ params }: Props) {
+  const locale = (await params).locale as Locale
+  const m = getMessages(locale)
+  const r = m.reservations
+
+  return (
+    <main className="interior-page">
+      <JsonLd data={breadcrumbJsonLd(locale, 'reservations')} />
+      <header className="interior-hero">
+        <div className="interior-hero-inner">
+        <p className="interior-eyebrow">{r.eyebrow}</p>
+        <h1 className="interior-title">{m.pages.reservations.title}</h1>
+        <p className="interior-intro">{r.intro}</p>
+        <p className="mt-3 text-sm font-medium text-brand-green">{r.notice}</p>
+        {site.showPlaceholders ? (
+          <p className="mt-5 inline-block max-w-xl rounded-2xl border border-dashed border-foreground/30 px-4 py-2 text-xs text-muted-foreground">
+            {r.temporaryNotice}
+          </p>
+        ) : null}
+        </div>
+      </header>
+
+      <div className="mx-auto grid max-w-5xl gap-8 px-4 pb-20 sm:px-6 lg:grid-cols-[1fr_20rem] lg:px-8">
+        <ReservationForm locale={locale} labels={r} />
+
+        <aside aria-labelledby="reservation-info" className="interior-panel h-fit p-6">
+          <h2 id="reservation-info" className="font-display text-2xl">
+            {r.infoTitle}
+          </h2>
+          <ol className="mt-4 space-y-4">
+            {r.info.map((item, index) => (
+              <li key={item} className="flex gap-3 text-sm leading-relaxed text-muted-foreground">
+                <span aria-hidden className="font-display text-2xl leading-none text-primary">
+                  {index + 1}
+                </span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ol>
+        </aside>
+      </div>
+    </main>
+  )
+}
