@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
+import { getCustomPageSlugs } from '@/lib/content/custom-pages'
 import { getEventIds } from '@/lib/events/get-events'
-import { localizedPath, locales, routeKeys, type PageKey } from '@/lib/i18n/config'
+import { customPagePath, localizedPath, locales, routeKeys, type PageKey } from '@/lib/i18n/config'
 import { absoluteUrl } from '@/lib/seo'
 
 const priorities: Record<PageKey, number> = {
@@ -33,5 +34,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     entry(page, [], page === 'events' || page === 'home' ? 'daily' : 'weekly', priorities[page]),
   )
   const events = (await getEventIds()).flatMap((id) => entry('events', [id], 'weekly', 0.5))
-  return [...pages, ...events]
+  const custom = (await getCustomPageSlugs()).flatMap((slug) => {
+    const languages = Object.fromEntries(locales.map((l) => [l, absoluteUrl(customPagePath(l, slug))]))
+    return locales.map((locale) => ({
+      url: absoluteUrl(customPagePath(locale, slug)),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+      alternates: { languages },
+    }))
+  })
+  return [...pages, ...events, ...custom]
 }

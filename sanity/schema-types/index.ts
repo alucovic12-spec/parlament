@@ -1,3 +1,4 @@
+import { customPage } from './custom-page'
 import { event } from './event'
 import { galleryItem } from './gallery-item'
 import { homePage } from './home-page'
@@ -19,6 +20,7 @@ export const schemaTypes = [
   siteHeader,
   homePage,
   pageContent,
+  customPage,
 ]
 
 /** Documents that exist exactly once and cannot be created, duplicated or deleted. */

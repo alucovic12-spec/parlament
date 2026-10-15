@@ -110,7 +110,7 @@ const customTones = [
   { title: 'Svijetla (pješčana)', value: 'sand' },
 ]
 
-const customBlock = defineArrayMember({
+export const customBlock = defineArrayMember({
   type: 'object',
   name: layoutTypeName('custom'),
   title: 'Nova sekcija (vlastiti sadržaj)',

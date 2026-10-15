@@ -138,6 +138,10 @@ export const structure: StructureResolver = (S, context) =>
               ),
             ),
         ),
+      S.listItem()
+        .title('Nove stranice')
+        .icon(PageIcon)
+        .child(S.documentTypeList('customPage').title('Nove stranice').defaultOrdering([{ field: '_createdAt', direction: 'desc' }])),
       S.divider(),
       singleton(S, 'Kontakt i radno vrijeme', 'siteSettings', 'siteSettings', ContactIcon),
     ])

@@ -19,6 +19,7 @@ export const linkFields = () => [
       layout: 'radio',
       list: [
         { title: 'Stranica na ovoj web stranici', value: 'page' },
+        { title: 'Nova stranica napravljena u Studiju', value: 'customPage' },
         { title: 'Vanjska poveznica, e-mail ili telefon', value: 'external' },
       ],
     },
@@ -28,7 +29,19 @@ export const linkFields = () => [
     title: 'Stranica',
     type: 'string',
     options: { list: pageOptions },
-    hidden: ({ parent }) => (parent as LinkParent)?.kind === 'external',
+    hidden: ({ parent }) => {
+      const kind = (parent as LinkParent)?.kind
+      return kind === 'external' || kind === 'customPage'
+    },
+  }),
+  defineField({
+    name: 'customPage',
+    title: 'Nova stranica',
+    type: 'reference',
+    to: [{ type: 'customPage' }],
+    options: { disableNew: true },
+    description: 'Stranice koje si napravio pod "Nove stranice".',
+    hidden: ({ parent }) => (parent as LinkParent)?.kind !== 'customPage',
   }),
   defineField({
     name: 'url',
@@ -52,6 +65,7 @@ export const linkFields = () => [
 
 export function linkSubtitle(link: { kind?: string; page?: string; url?: string }) {
   if (link.kind === 'external') return link.url || 'Vanjska poveznica bez adrese'
+  if (link.kind === 'customPage') return 'Nova stranica iz Studija'
   const page = pageOptions.find((option) => option.value === link.page)
   return page ? `Stranica: ${page.title}` : 'Odredište nije odabrano'
 }
