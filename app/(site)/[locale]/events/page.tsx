@@ -7,7 +7,7 @@ import { JsonLd } from '@/components/shared/json-ld'
 import { breadcrumbJsonLd, buildMetadata } from '@/lib/seo'
 import { site } from '@/lib/site'
 
-export const revalidate = 3600
+export const revalidate = 60
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function EventsPage({ params }: Props) {
   const locale = (await params).locale as Locale
   const m = getMessages(locale)
-  const { upcoming, past } = getEvents(locale)
+  const { upcoming, past } = await getEvents(locale)
   const showNotice = site.showPlaceholders && [...upcoming, ...past].some((event) => event.placeholder)
 
   return (

@@ -15,18 +15,19 @@ import { getMessages } from '@/lib/i18n/messages'
 import { absoluteUrl, alternateLanguages, breadcrumbJsonLd, defaultOgImage } from '@/lib/seo'
 import { getSiteUrl, site } from '@/lib/site'
 
-export const revalidate = 3600
+export const revalidate = 60
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
 
-export function generateStaticParams() {
-  return locales.flatMap((locale) => getEventIds().map((slug) => ({ locale, slug })))
+export async function generateStaticParams() {
+  const ids = await getEventIds()
+  return locales.flatMap((locale) => ids.map((slug) => ({ locale, slug })))
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params
   if (!isLocale(locale)) return {}
-  const event = getEvent(locale, slug)
+  const event = await getEvent(locale, slug)
   if (!event) return {}
 
   const m = getMessages(locale)
@@ -55,7 +56,7 @@ export default async function EventPage({ params }: Props) {
   const { locale: rawLocale, slug } = await params
   if (!isLocale(rawLocale)) notFound()
   const locale: Locale = rawLocale
-  const event = getEvent(locale, slug)
+  const event = await getEvent(locale, slug)
   if (!event) notFound()
 
   const m = getMessages(locale)

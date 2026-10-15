@@ -1,5 +1,6 @@
 import type { Locale } from '@/lib/i18n/config'
 import { venueEvents } from './data'
+import { fetchSanityEvents } from './sanity-events'
 import type { LocalizedEvent, VenueEvent } from './types'
 
 const timeZone = 'Europe/Zagreb'
@@ -40,12 +41,22 @@ function localize(event: VenueEvent, locale: Locale, now: Date): LocalizedEvent 
   }
 }
 
+/** Sanity events override local entries that share the same slug. */
+async function getAllEvents(): Promise<VenueEvent[]> {
+  const remote = (await fetchSanityEvents()) ?? []
+  const remoteIds = new Set(remote.map((event) => event.id))
+  return [...venueEvents.filter((event) => !remoteIds.has(event.id)), ...remote]
+}
+
 /**
- * Single data seam for the public programme. Swap the local array for a database query here
- * once the admin phase lands; callers keep receiving locale-resolved plain objects.
+ * Single data seam for the public programme: events published in Sanity plus the local list.
+ * Callers receive locale-resolved plain objects.
  */
-export function getEvents(locale: Locale, now = new Date()): { upcoming: LocalizedEvent[]; past: LocalizedEvent[] } {
-  const all = venueEvents
+export async function getEvents(
+  locale: Locale,
+  now = new Date(),
+): Promise<{ upcoming: LocalizedEvent[]; past: LocalizedEvent[] }> {
+  const all = (await getAllEvents())
     .map((event) => localize(event, locale, now))
     .filter((event): event is LocalizedEvent => event !== null)
 
@@ -56,11 +67,11 @@ export function getEvents(locale: Locale, now = new Date()): { upcoming: Localiz
   }
 }
 
-export function getEvent(locale: Locale, id: string): LocalizedEvent | null {
-  const event = venueEvents.find((candidate) => candidate.id === id)
+export async function getEvent(locale: Locale, id: string): Promise<LocalizedEvent | null> {
+  const event = (await getAllEvents()).find((candidate) => candidate.id === id)
   return event ? localize(event, locale, new Date()) : null
 }
 
-export function getEventIds(): string[] {
-  return venueEvents.filter((event) => event.status !== 'hidden').map((event) => event.id)
+export async function getEventIds(): Promise<string[]> {
+  return (await getAllEvents()).filter((event) => event.status !== 'hidden').map((event) => event.id)
 }

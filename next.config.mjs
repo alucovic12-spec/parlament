@@ -2,7 +2,11 @@
 const nextConfig = {
   poweredByHeader: false,
   compress: true,
-  images: { formats: ['image/avif', 'image/webp'], minimumCacheTTL: 60 * 60 * 24 * 30 },
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
+    remotePatterns: [{ protocol: 'https', hostname: 'cdn.sanity.io' }],
+  },
   experimental: {
     // CV uploads are capped at 5 MB, so the multipart body needs headroom above the 1 MB default.
     serverActions: { bodySizeLimit: '6mb' },

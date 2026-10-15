@@ -12,7 +12,7 @@ import type { Locale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/messages'
 import { buildMetadata } from '@/lib/seo'
 
-export const revalidate = 3600
+export const revalidate = 60
 
 type Props = { params: Promise<{ locale: string }> }
 
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function HomePage({ params }: Props) {
   const locale = (await params).locale as Locale
   const m = getMessages(locale)
-  const { upcoming } = getEvents(locale)
+  const { upcoming } = await getEvents(locale)
   const nextEvent = upcoming.find((event) => event.status !== 'cancelled')
   const announcements = upcoming.filter((event) => event.image && event.status !== 'cancelled').slice(0, 3)
 
