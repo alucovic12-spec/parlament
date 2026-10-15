@@ -12,8 +12,6 @@ export const en: Messages = {
     menu: 'Menu',
     events: 'The Agenda',
     reservations: 'Reservations',
-    tickets: 'Tickets',
-    loyalty: 'The Caucus',
     gallery: 'Archive',
     careers: 'Join Our Team',
     contact: 'Final Word',
@@ -38,14 +36,6 @@ export const en: Messages = {
       title: 'Table reservations',
       description:
         'Send a table reservation request to Parlament. A booking is only confirmed once our team confirms it.',
-    },
-    tickets: {
-      title: 'Tickets',
-      description: 'Tickets for events at Parlament.',
-    },
-    loyalty: {
-      title: 'The Caucus',
-      description: 'The Parlament digital membership card. You have a mandate, you have a card.',
     },
     gallery: {
       title: 'Archive',
@@ -146,22 +136,6 @@ export const en: Messages = {
     googleCalendar: 'Google Calendar',
     downloadIcs: 'Download .ics',
     calendarLabel: 'Add to calendar',
-  },
-  tickets: {
-    eyebrow: 'Tickets',
-    intro: 'For events with limited capacity, tickets are bought through an external platform.',
-    temporaryNotice:
-      'The ticketing platform is not connected yet. Links will appear on each event as soon as they are confirmed.',
-    howTitle: 'How it works',
-    steps: [
-      { title: 'Pick an event', text: 'Browse the programme and open the event you are interested in.' },
-      { title: 'Buy a ticket', text: 'An external page opens where you complete the payment.' },
-      { title: 'Come and enjoy', text: 'Show your ticket at the door of Parlament.' },
-    ],
-    listTitle: 'Events with tickets',
-    emptyTitle: 'No tickets on sale right now',
-    emptyText: 'Browse the full programme or follow us to be the first to know.',
-    viewProgram: 'Full programme',
   },
   reservations: {
     eyebrow: 'Reservations',
@@ -285,12 +259,6 @@ export const en: Messages = {
         'An olive tree at the centre',
       ],
     },
-    loyalty: {
-      eyebrow: 'The Caucus',
-      title: 'You have a mandate. You have a card.',
-      text: 'A digital membership card with a unique code and member number. We’ll publish the Caucus benefits as soon as we’ve voted them through.',
-      cta: 'Join the Caucus',
-    },
     gallery: {
       eyebrow: 'Archive',
       title: 'From the minutes.',
@@ -320,58 +288,6 @@ export const en: Messages = {
       reserve: 'Book a table',
       contact: 'Contact and location',
     },
-  },
-  member: {
-    eyebrow: 'The Caucus',
-    intro:
-      'A free digital Parlament card, always with you. Sign up with your email and a password and your mandate is waiting in the app.',
-    benefitsTitle: 'What you get today',
-    benefits: [
-      'A digital member card with a unique QR code',
-      'Your member number and an overview of your account details',
-      'A place in the club once points and rewards launch',
-    ],
-    notice: 'Points, tiers and rewards are not active yet. We will announce them once the business rules are defined.',
-    tabs: { register: 'Sign up', login: 'Sign in' },
-    fields: {
-      fullName: 'Full name',
-      email: 'Email',
-      password: 'Password',
-      passwordHint: 'At least 8 characters.',
-    },
-    consent:
-      'I agree that Parlament stores my name and email to run my loyalty membership. I can withdraw consent at any time.',
-    submitRegister: 'Create my card',
-    submitLogin: 'Sign in',
-    pending: 'Please wait…',
-    errors: {
-      fullName: 'Enter your full name.',
-      email: 'Enter a valid email address.',
-      password: 'Your password needs at least 8 characters.',
-      passwordLogin: 'Enter your password.',
-      consent: 'Consent is required for membership.',
-      invalid: 'Email or password is incorrect.',
-      unconfirmed: 'Your email is not confirmed yet. Open the link in the message we sent you.',
-      rateLimit: 'Too many attempts. Please try again in a few minutes.',
-      server: 'Something went wrong. Please try again.',
-      callback: 'Email confirmation failed. Sign in or sign up again.',
-    },
-    checkEmail: {
-      title: 'Check your email',
-      text: 'We sent a confirmation link to',
-      after: 'Once confirmed, your card is ready.',
-      toLogin: 'Already confirmed? Sign in',
-    },
-    card: {
-      welcome: 'Hi',
-      memberNumber: 'Member number',
-      since: 'Member since',
-      qrLabel: 'Member QR code',
-      qrHelp: 'Show this code to our staff when you visit.',
-      suspended: 'Your membership is temporarily suspended. Please talk to our staff.',
-    },
-    missing: 'There is no member card for this account.',
-    signOut: 'Sign out',
   },
   careersPage: {
     eyebrow: 'Join Our Team',
