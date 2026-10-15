@@ -12,7 +12,7 @@ export const hr = {
   nav: {
     home: 'Početna',
     menu: 'Meni',
-    events: 'Dnevni red',
+    events: 'Večernje sjednice',
     reservations: 'Rezervacije',
     gallery: 'Arhiva',
     careers: 'Pridruži nam se',
@@ -31,8 +31,8 @@ export const hr = {
       description: 'Digitalni meni Parlamenta: kave, pivo, vino, žestoka pića, kokteli i mali zalogaji.',
     },
     events: {
-      title: 'Dnevni red: program događanja',
-      description: 'Što večeras zasjeda u Parlamentu: glazba, kvizovi, degustacije i posebne večeri.',
+      title: 'Večernje sjednice',
+      description: 'Glazba, komedija i posebne večeri u Parlamentu.',
     },
     reservations: {
       title: 'Rezervacije stolova',
@@ -89,8 +89,8 @@ export const hr = {
     reserveCta: 'Rezerviraj stol',
   },
   events: {
-    eyebrow: 'Dnevni red',
-    intro: 'Live glazba, DJ večeri, kvizovi i posebne sjednice. Pogledaj što dolazi i zauzmi svoje mjesto.',
+    eyebrow: 'Večernji program',
+    intro: 'Glazba, komedija i posebne večeri u Parlamentu. Pogledaj što dolazi i zauzmi svoje mjesto.',
     temporaryNotice:
       'Prikazana događanja su privremeni primjeri. Službeni program objavit ćemo nakon potvrde.',
     tabsLabel: 'Prikaz događanja',
@@ -221,14 +221,14 @@ export const hr = {
       text: 'Jutarnja kava, dnevni razgovor, večernje piće i program pod istim krovom. Kvartovski bar s ozbiljnim odnosom prema gostu, a bez ukočenosti.',
       viewMenu: 'Pogledaj meni',
       reserve: 'Zauzmi mjesto',
-      viewEvents: 'Dnevni red',
+      viewEvents: 'Večernje sjednice',
       moments: ['Jutarnja kava', 'Dnevni razgovor', 'Večernje piće'],
     },
     nextEvent: {
       eyebrow: 'Sljedeća sjednica',
       title: 'Večeras zasjeda ritam.',
       text: 'Datume i goste objavljujemo čim ih potvrdimo. Do tada je prijedlog na stolu: pogledaj dnevni red ili nas prati.',
-      cta: 'Cijeli dnevni red',
+      cta: 'Sve večernje sjednice',
       note: 'Privremeni sadržaj',
     },
     offer: {

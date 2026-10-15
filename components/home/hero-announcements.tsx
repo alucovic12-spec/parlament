@@ -20,7 +20,7 @@ function dayAndMonth(iso: string) {
 export function HeroAnnouncements({ locale, m, events }: Props) {
   if (events.length === 0) return null
 
-  const heading = locale === 'hr' ? 'Uskoro u Parlamentu' : 'Coming up at Parlament'
+  const heading = locale === 'hr' ? 'Sljedeće večernje sjednice' : 'Upcoming evening sessions'
 
   return (
     <div style={{ animationDelay: '560ms' }} className="fade-up mt-12 lg:mt-10">
