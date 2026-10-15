@@ -30,8 +30,7 @@ export function SiteHeader({ locale, m, items }: SiteHeaderProps) {
         <div className="relative mx-auto flex h-16 max-w-[90rem] items-center justify-between gap-4 px-4 2xl:gap-6 sm:h-[4.5rem] sm:px-6 lg:px-8 xl:h-24">
           <BrandWordmark
             locale={locale}
-            variant="wordmark"
-            optical
+            priority
             className="origin-left transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-data-[scrolled=true]/header:scale-[0.88]"
             logoClassName="text-[1.3rem] min-[420px]:text-[1.5rem] sm:text-[1.7rem] xl:text-[1.7rem] 2xl:text-[2rem]"
           />
