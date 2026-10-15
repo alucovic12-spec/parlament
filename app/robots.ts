@@ -9,7 +9,7 @@ export default function robots(): MetadataRoute.Robots {
   if (!isIndexable) return { rules: { userAgent: '*', disallow: '/' } }
 
   return {
-    rules: { userAgent: '*', allow: '/', disallow: ['/auth/', '/brand', '/en/brand'] },
+    rules: { userAgent: '*', allow: '/', disallow: ['/admin', '/auth/', '/brand', '/en/brand'] },
     sitemap: absoluteUrl('/sitemap.xml'),
     host: getSiteUrl(),
   }
