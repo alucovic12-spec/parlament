@@ -88,7 +88,7 @@ export function GalleryBrowser({
                     alt=""
                     fill
                     sizes="(min-width: 1024px) 30vw, 50vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
+                    className="object-contain transition-transform duration-700 ease-out group-hover:scale-[1.07]"
                   />
                 ) : (
                   <PhotoPlaceholder

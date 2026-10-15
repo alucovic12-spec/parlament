@@ -41,7 +41,7 @@ export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messag
                 alt=""
                 fill
                 sizes="(min-width: 1024px) 30vw, 50vw"
-                className="object-cover motion-safe:transition-transform motion-safe:duration-1000 group-hover:scale-105"
+                className="object-contain motion-safe:transition-transform motion-safe:duration-1000 group-hover:scale-105"
               />
             ) : null}
             <div

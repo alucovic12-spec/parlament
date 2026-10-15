@@ -65,11 +65,11 @@ export function CustomSection({ locale, block }: { locale: Locale; block: Custom
             <div className={cn(block.imagePosition === 'left' && 'lg:order-2')}>{content}</div>
             <div
               className={cn(
-                'image-reveal relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-brand-cream/12',
+                'image-reveal relative aspect-[5/4] overflow-hidden rounded-[2rem] border border-brand-cream/12 bg-brand-ink',
                 block.imagePosition === 'left' && 'lg:order-1',
               )}
             >
-              <Image src={block.image} alt={alt} fill sizes="(min-width: 1024px) 45vw, 90vw" className="object-cover" />
+              <Image src={block.image} alt={alt} fill sizes="(min-width: 1024px) 45vw, 90vw" className="object-contain" />
             </div>
           </div>
         ) : (

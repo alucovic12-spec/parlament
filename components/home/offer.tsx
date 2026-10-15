@@ -31,14 +31,14 @@ export function Offer({ locale, m, images, categories }: OfferProps) {
                 href={category ? `${menuPath}#menu-${category}` : menuPath}
                 className="glow-card group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-border bg-card text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <div className="relative h-60 overflow-hidden sm:h-64 lg:h-72">
+                <div className="relative h-60 overflow-hidden bg-brand-ink sm:h-64 lg:h-72">
                   {images[index] ? (
                     <Image
                       src={images[index]}
                       alt=""
                       fill
                       sizes="(min-width: 1024px) 40vw, (min-width: 640px) 50vw, 100vw"
-                      className="object-cover brightness-[0.88] saturate-[0.9] motion-safe:transition-all motion-safe:duration-1000 motion-safe:ease-out group-hover:scale-[1.06] group-hover:brightness-100 group-hover:saturate-100"
+                      className="object-contain brightness-[0.88] saturate-[0.9] motion-safe:transition-all motion-safe:duration-1000 motion-safe:ease-out group-hover:scale-[1.06] group-hover:brightness-100 group-hover:saturate-100"
                     />
                   ) : (
                     <div className="flex size-full items-center justify-center bg-brand-green text-brand-ink">

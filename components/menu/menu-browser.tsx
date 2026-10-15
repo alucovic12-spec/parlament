@@ -54,11 +54,13 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
     const applyHash = () => {
       const match = window.location.hash.match(/^#menu-(.+)$/)
       if (!match) return
-      const id = decodeURIComponent(match[1])
-      if (!categories.some((category) => category.id === id)) return
+      const raw = decodeURIComponent(match[1])
+      const bare = (value: string) => value.replace(/^menuCategory-/, '')
+      const id = categories.find((category) => category.id === raw || bare(category.id) === bare(raw))?.id
+      if (!id) return
       setQuery('')
+      scrollAfterSelect.current = true
       setActive(id)
-      requestAnimationFrame(() => document.getElementById(`menu-${id}`)?.scrollIntoView({ block: 'start' }))
     }
     applyHash()
     window.addEventListener('hashchange', applyHash)
@@ -202,13 +204,13 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
             {groups.map(({ category, items: groupItems }) => (
               <section key={category.id} aria-labelledby={`menu-${category.id}`}>
                 {category.image ? (
-                  <div className="relative mb-3 h-24 w-full overflow-hidden rounded-xl border border-border sm:h-28">
+                  <div className="relative mb-3 h-40 w-full overflow-hidden rounded-xl border border-border bg-brand-ink sm:h-52">
                     <CmsImage
                       src={category.image}
                       alt=""
                       fill
                       sizes="(min-width: 1024px) 64rem, 100vw"
-                      className="object-cover"
+                      className="object-contain"
                     />
                   </div>
                 ) : null}
