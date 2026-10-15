@@ -10,7 +10,7 @@ export const en: Messages = {
   nav: {
     home: 'Home',
     menu: 'Menu',
-    events: 'The Agenda',
+    events: 'Evening Sessions',
     reservations: 'Reservations',
     gallery: 'Archive',
     careers: 'Join Our Team',
@@ -87,7 +87,7 @@ export const en: Messages = {
     reserveCta: 'Reserve a table',
   },
   events: {
-    eyebrow: 'The Agenda',
+    eyebrow: 'Evening programme',
     intro: 'Live music, DJ nights, quizzes and special sessions. See what is coming up and take your seat.',
     temporaryNotice:
       'The events shown are temporary samples. The official programme will be published once confirmed.',
@@ -219,14 +219,14 @@ export const en: Messages = {
       text: 'Morning coffee, daily conversation, an evening drink and a programme under one roof. A neighbourhood bar that takes its guests seriously, and itself rather less so.',
       viewMenu: 'View the menu',
       reserve: 'Take a seat',
-      viewEvents: 'The Agenda',
+      viewEvents: 'Evening Sessions',
       moments: ['Morning coffee', 'Daily conversation', 'Evening drink'],
     },
     nextEvent: {
       eyebrow: 'Next session',
       title: 'Tonight the rhythm sits.',
       text: 'We’ll share dates and guests as soon as they’re confirmed. Until then the motion is on the table: check the agenda or follow us.',
-      cta: 'Full agenda',
+      cta: 'All evening sessions',
       note: 'Temporary content',
     },
     offer: {
