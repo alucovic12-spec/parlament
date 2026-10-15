@@ -14,8 +14,6 @@ export const hr = {
     menu: 'Meni',
     events: 'Dnevni red',
     reservations: 'Rezervacije',
-    tickets: 'Ulaznice',
-    loyalty: 'Klub zastupnika',
     gallery: 'Arhiva',
     careers: 'Pridruži nam se',
     contact: 'Završna riječ',
@@ -40,14 +38,6 @@ export const hr = {
       title: 'Rezervacije stolova',
       description:
         'Pošalji zahtjev za rezervaciju stola u Parlamentu. Rezervacija vrijedi tek nakon potvrde osoblja.',
-    },
-    tickets: {
-      title: 'Ulaznice',
-      description: 'Ulaznice za događanja u Parlamentu.',
-    },
-    loyalty: {
-      title: 'Klub zastupnika',
-      description: 'Digitalna članska kartica Parlamenta. Imaš mandat, imaš karticu.',
     },
     gallery: {
       title: 'Arhiva',
@@ -148,22 +138,6 @@ export const hr = {
     googleCalendar: 'Google Calendar',
     downloadIcs: 'Preuzmi .ics',
     calendarLabel: 'Dodaj u kalendar',
-  },
-  tickets: {
-    eyebrow: 'Ulaznice',
-    intro: 'Za događanja s ograničenim brojem mjesta ulaznice se kupuju putem vanjske platforme.',
-    temporaryNotice:
-      'Platforma za prodaju ulaznica još nije povezana. Poveznice će se pojaviti uz svako događanje čim budu potvrđene.',
-    howTitle: 'Kako funkcionira',
-    steps: [
-      { title: 'Odaberi događanje', text: 'Pregledaj program i otvori događanje koje te zanima.' },
-      { title: 'Kupi ulaznicu', text: 'Otvara se vanjska stranica na kojoj se obavlja plaćanje.' },
-      { title: 'Dođi i uživaj', text: 'Ulaznicu pokaži na ulazu u Parlament.' },
-    ],
-    listTitle: 'Događanja s ulaznicama',
-    emptyTitle: 'Trenutno nema ulaznica u prodaji',
-    emptyText: 'Pogledaj cijeli program ili nas prati kako bi saznao prvi.',
-    viewProgram: 'Cijeli program',
   },
   reservations: {
     eyebrow: 'Rezervacije',
@@ -287,12 +261,6 @@ export const hr = {
         'Maslina kao središte',
       ],
     },
-    loyalty: {
-      eyebrow: 'Klub zastupnika',
-      title: 'Imaš mandat. Imaš karticu.',
-      text: 'Digitalna članska kartica s jedinstvenim kodom i brojem člana. Pogodnosti Kluba objavljujemo čim ih izglasamo.',
-      cta: 'Postani zastupnik',
-    },
     gallery: {
       eyebrow: 'Arhiva',
       title: 'Iz zapisnika.',
@@ -322,59 +290,6 @@ export const hr = {
       reserve: 'Rezerviraj stol',
       contact: 'Kontakt i lokacija',
     },
-  },
-  member: {
-    eyebrow: 'Klub zastupnika',
-    intro:
-      'Besplatna digitalna kartica Parlamenta uvijek uz tebe. Registriraj se e-mailom i lozinkom, a mandat te čeka u aplikaciji.',
-    benefitsTitle: 'Što dobivaš sada',
-    benefits: [
-      'Digitalnu člansku karticu s jedinstvenim QR kodom',
-      'Svoj broj člana i pregled podataka računa',
-      'Mjesto u klubu kad pokrenemo bodove i nagrade',
-    ],
-    notice:
-      'Bodovi, razine i nagrade još nisu aktivni. Objavit ćemo ih tek kad poslovna pravila budu definirana.',
-    tabs: { register: 'Registracija', login: 'Prijava' },
-    fields: {
-      fullName: 'Ime i prezime',
-      email: 'E-mail',
-      password: 'Lozinka',
-      passwordHint: 'Najmanje 8 znakova.',
-    },
-    consent:
-      'Slažem se da Parlament pohrani moje ime i e-mail radi vođenja loyalty članstva. Privolu mogu povući u svakom trenutku.',
-    submitRegister: 'Izradi karticu',
-    submitLogin: 'Prijavi se',
-    pending: 'Molimo pričekaj…',
-    errors: {
-      fullName: 'Upiši ime i prezime.',
-      email: 'Upiši ispravan e-mail.',
-      password: 'Lozinka mora imati najmanje 8 znakova.',
-      passwordLogin: 'Upiši lozinku.',
-      consent: 'Za članstvo je potrebna privola.',
-      invalid: 'E-mail ili lozinka nisu ispravni.',
-      unconfirmed: 'E-mail još nije potvrđen. Otvori poveznicu iz poruke koju smo ti poslali.',
-      rateLimit: 'Previše pokušaja. Pokušaj ponovno za nekoliko minuta.',
-      server: 'Došlo je do pogreške. Pokušaj ponovno.',
-      callback: 'Potvrda e-maila nije uspjela. Prijavi se ili se ponovno registriraj.',
-    },
-    checkEmail: {
-      title: 'Provjeri e-mail',
-      text: 'Poslali smo poveznicu za potvrdu na adresu',
-      after: 'Nakon potvrde tvoja je kartica spremna.',
-      toLogin: 'Već si potvrdio/la? Prijavi se',
-    },
-    card: {
-      welcome: 'Bok',
-      memberNumber: 'Broj člana',
-      since: 'Član od',
-      qrLabel: 'Članski QR kod',
-      qrHelp: 'Pokaži ovaj kod osoblju kad dođeš.',
-      suspended: 'Članstvo je privremeno obustavljeno. Javi se osoblju.',
-    },
-    missing: 'Za ovaj račun ne postoji članska kartica.',
-    signOut: 'Odjava',
   },
   careersPage: {
     eyebrow: 'Pridruži nam se',
