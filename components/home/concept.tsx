@@ -40,7 +40,7 @@ export function Concept({ m, images }: { m: Messages; images: { main: string | n
                   alt=""
                   fill
                   sizes="(min-width: 1024px) 40vw, 90vw"
-                  className="object-cover object-[60%_center] motion-safe:transition-transform motion-safe:duration-1000 group-hover:scale-105"
+                  className="object-contain motion-safe:transition-transform motion-safe:duration-1000 group-hover:scale-105"
                 />
               </div>
             </Parallax>
@@ -53,7 +53,7 @@ export function Concept({ m, images }: { m: Messages; images: { main: string | n
                   alt=""
                   fill
                   sizes="20vw"
-                  className="object-cover motion-safe:transition-transform motion-safe:duration-700 group-hover:scale-110"
+                  className="object-contain motion-safe:transition-transform motion-safe:duration-700 group-hover:scale-110"
                 />
               </div>
             </Parallax>

@@ -27,14 +27,14 @@ export function NextEvent({ locale, m, image, event, buttons }: Props) {
     <Section labelledBy="next-event-title" tone="base" compact>
       <Reveal>
         <div className="tone-ink glow-card group grid overflow-hidden rounded-[2rem] border border-border bg-brand-anthracite md:grid-cols-[1.2fr_1fr]">
-          <div className="image-reveal relative min-h-72 overflow-hidden md:min-h-full">
+          <div className="image-reveal relative min-h-72 overflow-hidden bg-brand-ink md:min-h-full">
             {photo ? (
             <Image
               src={photo}
               alt=""
               fill
               sizes="(min-width: 768px) 40vw, 100vw"
-              className="object-cover motion-safe:transition-transform motion-safe:duration-1000 group-hover:scale-105"
+              className="object-contain motion-safe:transition-transform motion-safe:duration-1000 group-hover:scale-105"
             />
             ) : null}
             <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-brand-ink/70 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-brand-ink/80" />

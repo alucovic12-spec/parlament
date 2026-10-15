@@ -31,7 +31,7 @@ type RawHome = {
 const query = `*[_id == "homePage"][0]{
   imported,
   "hero": hero.slides[]{ "url": ${imageUrl('@')} },
-  "offer": offer.items[]{ "image": ${imageUrl('image')}, category },
+  "offer": offer.items[]{ "image": ${imageUrl('image')}, "category": coalesce(categoryRef._ref, category) },
   "conceptMain": ${imageUrl('concept.mainImage')},
   "conceptAccent": ${imageUrl('concept.accentImage')},
   "tiles": gallery.tiles[]{ "url": ${imageUrl('image')} },

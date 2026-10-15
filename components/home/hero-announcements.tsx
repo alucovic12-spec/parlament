@@ -51,7 +51,7 @@ export function HeroAnnouncements({ locale, m, events }: Props) {
                       alt=""
                       fill
                       sizes="144px"
-                      className="object-cover motion-safe:transition-transform motion-safe:duration-700 group-hover:scale-110"
+                      className="object-contain motion-safe:transition-transform motion-safe:duration-700 group-hover:scale-110"
                     />
                   ) : null}
                   <span aria-hidden className="absolute inset-0 bg-gradient-to-r from-transparent to-brand-ink/60" />
