@@ -1,5 +1,5 @@
-import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from 'lucide-react'
-import { useMemo } from 'react'
+import { ArrowDown, ArrowUp, ImagePlus, Pencil, Plus, Trash2, X } from 'lucide-react'
+import { useMemo, useRef } from 'react'
 import { IntentLink } from 'sanity/router'
 import { patchEach, useRows } from './data'
 import {
@@ -16,10 +16,10 @@ import {
   useRunner,
 } from './ui'
 
-type CategoryRow = { name?: string; parentId?: string; orderRank?: string }
+type CategoryRow = { name?: string; parentId?: string; orderRank?: string; imageUrl?: string }
 type ItemRef = { categoryId?: string }
 
-const categoryProjection = '"name": name.hr, "parentId": parent._ref, orderRank'
+const categoryProjection = '"name": name.hr, "parentId": parent._ref, "imageUrl": image.asset->url, orderRank'
 const itemProjection = '"categoryId": categoryRef._ref'
 
 const byRank = (a: { orderRank?: string }, b: { orderRank?: string }) => (a.orderRank ?? '~').localeCompare(b.orderRank ?? '~')
@@ -57,6 +57,33 @@ export function CategoriesPanel() {
       await patchEach(client, [row], () =>
         parentId ? { set: { parent: { _type: 'reference', _ref: parentId, _weak: true } } } : { unset: ['parent'] },
       )
+      await refresh()
+    })
+
+  const fileInput = useRef<HTMLInputElement>(null)
+  const uploadTarget = useRef<(typeof categories.rows)[number] | null>(null)
+
+  const chooseImage = (row: (typeof categories.rows)[number]) => {
+    uploadTarget.current = row
+    fileInput.current?.click()
+  }
+
+  const uploadImage = (file: File | undefined) => {
+    const row = uploadTarget.current
+    uploadTarget.current = null
+    if (!file || !row || !file.type.startsWith('image/')) return
+    void run('Slika kategorije je spremljena.', async () => {
+      const asset = await client.assets.upload('image', file, { filename: file.name })
+      await patchEach(client, [row], () => ({
+        set: { image: { _type: 'image', asset: { _type: 'reference', _ref: asset._id } } },
+      }))
+      await refresh()
+    })
+  }
+
+  const removeImage = (row: (typeof categories.rows)[number]) =>
+    run('Slika kategorije je uklonjena.', async () => {
+      await patchEach(client, [row], () => ({ unset: ['image'] }))
       await refresh()
     })
 
@@ -107,6 +134,16 @@ export function CategoriesPanel() {
         </IntentLink>
       </Toolbar>
       <Notice notice={notice} />
+      <input
+        ref={fileInput}
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={(event) => {
+          uploadImage(event.target.files?.[0])
+          event.target.value = ''
+        }}
+      />
       {categories.error ? <Empty>{categories.error}</Empty> : null}
       {categories.loading ? <Empty>Učitavam...</Empty> : null}
       {!categories.loading && !categories.error && ordered.length === 0 ? <Empty>Nema kategorija.</Empty> : null}
@@ -115,6 +152,7 @@ export function CategoriesPanel() {
         <table style={tableStyle}>
           <thead>
             <tr>
+              <th style={headCellStyle}>Slika</th>
               <th style={headCellStyle}>Kategorija</th>
               <th style={headCellStyle}>Nadređena kategorija</th>
               <th style={headCellStyle}>Stavke</th>
@@ -127,6 +165,36 @@ export function CategoriesPanel() {
               const hasChildren = childrenOf(row.id).length > 0
               return (
                 <tr key={row.id}>
+                  <td style={cellStyle}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      {row.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={`${row.imageUrl}?w=96&h=64&fit=crop&auto=format`}
+                          alt=""
+                          width={48}
+                          height={32}
+                          style={{ width: 48, height: 32, objectFit: 'cover', borderRadius: 4 }}
+                        />
+                      ) : null}
+                      <Btn
+                        icon={ImagePlus}
+                        disabled={busy}
+                        onClick={() => chooseImage(row)}
+                        aria-label={row.imageUrl ? 'Zamijeni sliku' : 'Dodaj sliku'}
+                        title={row.imageUrl ? 'Zamijeni sliku' : 'Dodaj sliku'}
+                      />
+                      {row.imageUrl ? (
+                        <Btn
+                          icon={X}
+                          disabled={busy}
+                          onClick={() => void removeImage(row)}
+                          aria-label="Ukloni sliku"
+                          title="Ukloni sliku"
+                        />
+                      ) : null}
+                    </div>
+                  </td>
                   <td style={{ ...cellStyle, paddingLeft: 12 + depth * 28 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <strong>{row.name ?? 'Bez naziva'}</strong>

@@ -7,7 +7,7 @@ import type { LocalizedMenuCategory, LocalizedMenuItem, MenuTag } from './types'
 type Localized = { hr?: string | null; en?: string | null } | null | undefined
 
 type SanityMenu = {
-  categories: { id: string; name?: Localized; parentId?: string | null }[]
+  categories: { id: string; name?: Localized; parentId?: string | null; image?: string | null }[]
   items: {
     id: string
     category?: string | null
@@ -27,7 +27,8 @@ const uncategorizedId = 'uncategorized'
 
 const query = `{
   "categories": *[_type == "menuCategory"] | order(orderRank asc, _createdAt asc){
-    "id": _id, name, "parentId": parent._ref
+    "id": _id, name, "parentId": parent._ref,
+    "image": ${imageUrl('image')}
   },
   "items": *[_type == "menuItem" && status != "hidden"] | order(orderRank asc, _createdAt asc){
     "id": _id,
@@ -101,6 +102,7 @@ export async function getMenu(locale: Locale): Promise<{ categories: LocalizedMe
       id: category.id,
       name: pick(category.name, locale),
       parentId: parentOf.get(category.id),
+      image: category.image ? sizedImage(category.image, 1000) : undefined,
     }))
 
   const tops = resolved.filter((category) => !category.parentId)

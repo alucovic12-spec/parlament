@@ -26,6 +26,13 @@ export const menuCategory = defineType({
         }),
       },
     }),
+    defineField({
+      name: 'image',
+      title: 'Slika kategorije',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Prikazuje se uz naziv kategorije na javnom meniju. Nije obavezna.',
+    }),
     defineField({ name: 'key', title: 'Identifikator', type: 'string', hidden: true }),
     defineField({ name: 'order', title: 'Stari redoslijed', type: 'number', hidden: true }),
   ],

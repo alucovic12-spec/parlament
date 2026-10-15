@@ -22,7 +22,7 @@ export function EventCta({ event, locale, labels, className }: Props) {
   }
 
   return (
-    <LinkButton href={localizedPath(locale, 'reservations')} className={className}>
+    <LinkButton href={`${localizedPath(locale, 'reservations')}?event=${encodeURIComponent(event.id)}`} className={className}>
       {labels.reserve}
     </LinkButton>
   )
