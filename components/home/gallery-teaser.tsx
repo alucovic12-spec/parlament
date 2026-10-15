@@ -7,14 +7,14 @@ import type { Messages } from '@/lib/i18n/messages'
 import { cn } from '@/lib/utils'
 
 /** Same order as `gallery.tiles`: interior, atmosphere, drinks and food, events. */
-const tiles = [
-  { src: '/images/space/lounge-central-tree.png', position: 'col-span-2 aspect-[16/10] lg:row-span-2 lg:aspect-auto' },
-  { src: '/images/space/velvet-chair.png', position: 'aspect-[4/5] lg:aspect-auto' },
-  { src: '/images/space/whisky-one-seat.png', position: 'aspect-[4/5] lg:aspect-auto' },
-  { src: '/images/space/bar-brick-tv.png', position: 'col-span-2 aspect-[16/10] lg:aspect-auto' },
+const tilePositions = [
+  'col-span-2 aspect-[16/10] lg:row-span-2 lg:aspect-auto',
+  'aspect-[4/5] lg:aspect-auto',
+  'aspect-[4/5] lg:aspect-auto',
+  'col-span-2 aspect-[16/10] lg:aspect-auto',
 ]
 
-export function GalleryTeaser({ locale, m }: { locale: Locale; m: Messages }) {
+export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messages; images: string[] }) {
   const g = m.home.gallery
 
   return (
@@ -32,11 +32,11 @@ export function GalleryTeaser({ locale, m }: { locale: Locale; m: Messages }) {
             key={label}
             className={cn(
               'glow-card image-reveal group relative overflow-hidden rounded-[1.75rem] border border-border bg-brand-ink motion-safe:transition-all motion-safe:duration-700 lg:group-hover/list:opacity-70 lg:hover:!opacity-100',
-              tiles[index].position,
+              tilePositions[index],
             )}
           >
             <Image
-              src={tiles[index].src}
+              src={images[index]}
               alt=""
               fill
               sizes="(min-width: 1024px) 30vw, 50vw"

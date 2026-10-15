@@ -13,6 +13,18 @@ const section = (name: string, title: string, group: string, fields: ReturnType<
 
 const string = (name: string, title: string) => defineField({ name, title, type: 'localizedString' })
 const text = (name: string, title: string) => defineField({ name, title, type: 'localizedText' })
+const image = (name: string, title: string, description?: string) =>
+  defineField({ name, title, type: 'image', description, options: { hotspot: true } })
+const imageList = (name: string, title: string, description: string, max?: number) =>
+  defineField({
+    name,
+    title,
+    type: 'array',
+    description,
+    validation: max ? (rule) => rule.max(max) : undefined,
+    options: { layout: 'grid' },
+    of: [defineArrayMember({ type: 'image', options: { hotspot: true } })],
+  })
 
 export const homePage = defineType({
   name: 'homePage',
@@ -29,7 +41,16 @@ export const homePage = defineType({
     { name: 'seo', title: 'SEO' },
   ],
   fields: [
-    section('hero', 'Naslovni dio', 'hero', [string('eyebrow', 'Nadnaslov'), string('title', 'Naslov'), text('text', 'Tekst')]),
+    section('hero', 'Naslovni dio', 'hero', [
+      string('eyebrow', 'Nadnaslov'),
+      string('title', 'Naslov'),
+      text('text', 'Tekst'),
+      imageList(
+        'slides',
+        'Slike u naslovnom dijelu',
+        'Izmjenjuju se jedna za drugom. Ako ostane prazno, prikazuju se standardne fotografije prostora. Najbolje su široke fotografije.',
+      ),
+    ]),
     defineField({
       name: 'ticker',
       title: 'Poruke u traci',
@@ -42,6 +63,11 @@ export const homePage = defineType({
       string('eyebrow', 'Nadnaslov'),
       string('title', 'Naslov'),
       text('text', 'Tekst'),
+      image(
+        'image',
+        'Slika sljedeće sjednice',
+        'Prikazuje se kad najavljeni događaj nema vlastitu sliku. Slika koju dodaš na samom događaju ima prednost.',
+      ),
     ]),
     defineField({
       name: 'offer',
@@ -58,14 +84,14 @@ export const homePage = defineType({
           title: 'Kartice ponude',
           type: 'array',
           description:
-            'Redoslijed je fiksan: kave, pivo, vino, whisky, kokteli, hrana. Fotografije kartica ostaju iste, mijenjaju se samo tekstovi.',
+            'Redoslijed je fiksan: kave, pivo, vino, whisky, kokteli, hrana. Svaka kartica može imati vlastitu fotografiju; ako je ne dodaš, ostaje standardna.',
           validation: (rule) => rule.max(6),
           of: [
             defineArrayMember({
               type: 'object',
               name: 'offerItem',
-              fields: [string('title', 'Naslov'), text('text', 'Opis')],
-              preview: { select: { title: 'title.hr', subtitle: 'text.hr' } },
+              fields: [string('title', 'Naslov'), text('text', 'Opis'), image('image', 'Fotografija kartice')],
+              preview: { select: { title: 'title.hr', subtitle: 'text.hr', media: 'image' } },
             }),
           ],
         }),
@@ -87,9 +113,19 @@ export const homePage = defineType({
           type: 'array',
           of: [defineArrayMember({ type: 'localizedString' })],
         }),
+        image('mainImage', 'Velika fotografija', 'Široka fotografija prostora.'),
+        image('accentImage', 'Mala fotografija', 'Kvadratni detalj koji se preklapa s velikom fotografijom.'),
       ],
     }),
-    section('gallery', 'Isječak arhive', 'more', [string('title', 'Naslov')]),
+    section('gallery', 'Isječak arhive', 'more', [
+      string('title', 'Naslov'),
+      imageList(
+        'images',
+        'Fotografije u isječku',
+        'Četiri polja redom: velika lijevo, dva uska u sredini, široka desno. Prazno polje zadržava standardnu fotografiju.',
+        4,
+      ),
+    ]),
     section('careers', 'Poziv za posao', 'more', [string('title', 'Naslov'), text('text', 'Tekst')]),
     section('visit', 'Posjet', 'more', [string('title', 'Naslov')]),
     section('meta', 'Naslov i opis za tražilice', 'seo', [string('title', 'Naslov'), text('description', 'Opis')]),

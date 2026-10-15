@@ -8,9 +8,9 @@ import { localizedPath, type Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
 import { site } from '@/lib/site'
 
-type Props = { locale: Locale; m: Messages; event?: LocalizedEvent }
+type Props = { locale: Locale; m: Messages; image: string; event?: LocalizedEvent }
 
-export function NextEvent({ locale, m, event }: Props) {
+export function NextEvent({ locale, m, image, event }: Props) {
   const n = m.home.nextEvent
   const showNote = site.showPlaceholders && (event ? event.placeholder : true)
 
@@ -20,7 +20,7 @@ export function NextEvent({ locale, m, event }: Props) {
         <div className="tone-ink glow-card group grid overflow-hidden rounded-[2rem] border border-border bg-brand-anthracite md:grid-cols-[1.2fr_1fr]">
           <div className="image-reveal relative min-h-72 overflow-hidden md:min-h-full">
             <Image
-              src="/images/live-music.png"
+              src={event?.image ?? image}
               alt=""
               fill
               sizes="(min-width: 768px) 40vw, 100vw"
