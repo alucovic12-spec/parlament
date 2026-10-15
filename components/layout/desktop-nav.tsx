@@ -38,13 +38,13 @@ export function DesktopNav({ items, label, className }: { items: NavItem[]; labe
       <ul
         ref={listRef}
         onMouseLeave={() => setHovered(null)}
-        className="relative flex items-center rounded-full border border-brand-gold/25 bg-white/[0.04] p-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md"
+        className="relative flex items-center gap-0.5 rounded-full border border-brand-gold/30 bg-white/[0.05] p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_12px_30px_-18px_rgba(0,0,0,0.8)] backdrop-blur-md 2xl:gap-1 2xl:p-2"
       >
         <span
           aria-hidden
           style={indicator ? { transform: `translateX(${indicator.left}px)`, width: indicator.width } : undefined}
           className={cn(
-            'pointer-events-none absolute inset-y-1 left-0 rounded-full bg-brand-gold transition-[transform,width,opacity] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]',
+            'pointer-events-none absolute inset-y-1.5 left-0 rounded-full 2xl:inset-y-2 bg-brand-gold transition-[transform,width,opacity] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)]',
             indicator ? 'opacity-100' : 'opacity-0',
           )}
         />
@@ -65,11 +65,11 @@ export function DesktopNav({ items, label, className }: { items: NavItem[]; labe
                 onFocus={() => setHovered(item.id)}
                 onBlur={() => setHovered(null)}
                 className={cn(
-                  'relative z-10 flex h-10 items-center whitespace-nowrap rounded-full px-2 font-display text-[0.64rem] font-medium uppercase tracking-[0.1em] transition-colors duration-300 2xl:h-11 2xl:px-3 2xl:text-[0.68rem]',
+                  'relative z-10 flex h-10 items-center whitespace-nowrap rounded-full px-3.5 font-display text-[0.66rem] font-medium uppercase tracking-[0.1em] transition-colors duration-300 2xl:h-11 2xl:px-4 2xl:text-[0.7rem]',
                   lit ? 'text-brand-ink' : 'text-foreground/80',
                 )}
               >
-                <Icon aria-hidden className="mr-1.5 hidden size-3.5 shrink-0 2xl:block" />
+                <Icon aria-hidden className="mr-1.5 hidden size-3.5 shrink-0 xl:block" />
                 {item.label}
               </Link>
             </li>
