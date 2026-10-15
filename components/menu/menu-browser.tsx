@@ -1,7 +1,7 @@
 'use client'
 
 import { Search, X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CmsImage } from '@/components/shared/cms-image'
 import { Button } from '@/components/ui/button'
 import type { Locale } from '@/lib/i18n/config'
@@ -30,6 +30,25 @@ const normalize = (value: string) =>
 export function MenuBrowser({ locale, labels, categories, items }: Props) {
   const [query, setQuery] = useState('')
   const [active, setActive] = useState<ActiveCategory>('all')
+  const stickyRef = useRef<HTMLDivElement>(null)
+  const resultsRef = useRef<HTMLDivElement>(null)
+  const scrollAfterSelect = useRef(false)
+
+  function selectCategory(id: ActiveCategory) {
+    scrollAfterSelect.current = true
+    setActive(id)
+  }
+
+  // Filtering shortens the page, so without this the browser clamps the scroll position down to the footer.
+  useEffect(() => {
+    if (!scrollAfterSelect.current) return
+    scrollAfterSelect.current = false
+    const sticky = stickyRef.current
+    const results = resultsRef.current
+    if (!sticky || !results) return
+    const offset = results.getBoundingClientRect().top - sticky.getBoundingClientRect().bottom
+    if (offset < 0) window.scrollBy({ top: offset - 8 })
+  }, [active])
 
   useEffect(() => {
     const applyHash = () => {
@@ -84,7 +103,7 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
 
   return (
     <div>
-      <div className="sticky top-16 z-20 sm:top-[4.5rem] xl:top-24 border-b border-border bg-background/92 backdrop-blur-xl">
+      <div ref={stickyRef} className="sticky top-16 z-20 sm:top-[4.5rem] xl:top-24 border-b border-border bg-background/92 backdrop-blur-xl">
         <div className="mx-auto max-w-5xl px-4 py-3 sm:px-6 lg:px-8">
           <div className="relative">
             <label htmlFor="menu-search" className="sr-only">
@@ -121,7 +140,7 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
                     <button
                       type="button"
                       aria-pressed={selected}
-                      onClick={() => setActive(category.id)}
+                      onClick={() => selectCategory(category.id)}
                       className={cn(
                         'flex min-h-11 items-center rounded-full border px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                         selected
@@ -144,7 +163,7 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
                       <button
                         type="button"
                         aria-pressed={selected}
-                        onClick={() => setActive(category.id)}
+                        onClick={() => selectCategory(category.id)}
                         className={cn(
                           'flex min-h-10 items-center rounded-full border px-3.5 text-[0.8125rem] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
                           selected
@@ -163,7 +182,7 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
         </div>
       </div>
 
-      <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div ref={resultsRef} className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <p role="status" aria-live="polite" className="text-sm text-muted-foreground">
           {labels.results.replace('{count}', String(total))}
         </p>
