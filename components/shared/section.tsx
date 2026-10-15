@@ -27,7 +27,7 @@ export function Section({ id, labelledBy, tone = 'base', compact = false, classN
     <section
       id={id}
       aria-labelledby={labelledBy}
-      className={cn(tones[tone], 'section-atmosphere relative overflow-x-clip', compact ? 'py-10 sm:py-14' : 'py-24 sm:py-32', sectionClassName)}
+      className={cn(tones[tone], 'section-atmosphere relative overflow-x-clip', compact ? 'py-8 sm:py-12' : 'py-14 sm:py-20', sectionClassName)}
     >
       <div className={cn('relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8', className)}>{children}</div>
     </section>

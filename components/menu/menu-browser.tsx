@@ -2,6 +2,7 @@
 
 import { Search, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
+import { CmsImage } from '@/components/shared/cms-image'
 import { Button } from '@/components/ui/button'
 import type { Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
@@ -166,6 +167,17 @@ export function MenuBrowser({ locale, labels, categories, items }: Props) {
           <div className="mt-6 space-y-14">
             {groups.map(({ category, items: groupItems }) => (
               <section key={category.id} aria-labelledby={`menu-${category.id}`} >
+                {category.image ? (
+                  <div className="relative mb-5 aspect-[16/6] w-full overflow-hidden rounded-2xl border border-border">
+                    <CmsImage
+                      src={category.image}
+                      alt=""
+                      fill
+                      sizes="(min-width: 1024px) 64rem, 100vw"
+                      className="object-cover"
+                    />
+                  </div>
+                ) : null}
                 {category.parentId ? (
                   <p className="text-xs uppercase tracking-[0.18em] text-muted-foreground">
                     {categories.find((parent) => parent.id === category.parentId)?.name}

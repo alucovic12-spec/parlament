@@ -24,7 +24,7 @@ export function NextEvent({ locale, m, image, event, buttons }: Props) {
   const showNote = site.showPlaceholders && (event ? event.placeholder : true)
 
   return (
-    <Section labelledBy="next-event-title" tone="base" className="py-16 sm:py-20">
+    <Section labelledBy="next-event-title" tone="base" compact>
       <Reveal>
         <div className="tone-ink glow-card group grid overflow-hidden rounded-[2rem] border border-border bg-brand-anthracite md:grid-cols-[1.2fr_1fr]">
           <div className="image-reveal relative min-h-72 overflow-hidden md:min-h-full">

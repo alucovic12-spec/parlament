@@ -32,7 +32,7 @@ export type MenuItem = {
   placeholder: boolean
 }
 
-export type LocalizedMenuCategory = { id: MenuCategoryId; name: string; parentId?: MenuCategoryId }
+export type LocalizedMenuCategory = { id: MenuCategoryId; name: string; parentId?: MenuCategoryId; image?: string }
 
 export type LocalizedMenuItem = {
   id: string

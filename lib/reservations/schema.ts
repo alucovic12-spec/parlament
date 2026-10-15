@@ -19,4 +19,7 @@ export const reservationSchema = z.object({
   consent: z.string().refine((value) => value === 'on', 'consent'),
 })
 
+/** Reservations for an event take their date and time from the event, so the guest never submits them. */
+export const eventReservationSchema = reservationSchema.omit({ date: true, time: true })
+
 export type ReservationInput = z.infer<typeof reservationSchema>

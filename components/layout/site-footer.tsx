@@ -14,8 +14,8 @@ export async function SiteFooter({ locale, m, items, logo }: SiteFooterProps) {
   const socials = Object.entries(settings.social).filter((entry): entry is [string, string] => Boolean(entry[1]))
 
   return (
-    <footer className="tone-ink relative overflow-hidden border-t border-brand-cream/10">
-      <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-[42px] sm:px-6 md:grid-cols-[1.4fr_0.8fr_1fr] lg:px-8">
+    <footer className="tone-ink relative w-full max-w-full overflow-x-clip border-t border-brand-cream/10">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-10 sm:px-6 md:grid-cols-[1.4fr_0.8fr_1fr] md:gap-12 lg:px-8 [&>*]:min-w-0">
         <div>
           <BrandWordmark locale={locale} logoClassName="text-[1.75rem]" logo={logo} compact />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">{m.home.hero.text}</p>
@@ -36,7 +36,7 @@ export async function SiteFooter({ locale, m, items, logo }: SiteFooterProps) {
 
         <div>
           <h2 className="text-xs uppercase tracking-[0.22em] text-primary">{m.footer.visit}</h2>
-          <dl className="mt-4 space-y-3 text-sm">
+          <dl className="mt-4 space-y-3 text-sm [overflow-wrap:anywhere]">
             <div>
               <dt className="sr-only">{v.address}</dt>
               <dd className={settings.contact.address ? '' : 'text-muted-foreground'}>{settings.contact.address ?? v.addressPending}</dd>

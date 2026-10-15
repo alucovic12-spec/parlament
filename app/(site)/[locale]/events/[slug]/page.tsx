@@ -10,20 +10,16 @@ import { eventPriceText } from '@/components/events/event-price'
 import { JsonLd } from '@/components/shared/json-ld'
 import { PhotoPlaceholder } from '@/components/shared/photo-placeholder'
 import { getSiteSettings } from '@/lib/content/site-content'
-import { getEvent, getEventIds } from '@/lib/events/get-events'
+import { getEvent } from '@/lib/events/get-events'
 import { isLocale, localizedPath, locales, type Locale } from '@/lib/i18n/config'
 import { getMessages } from '@/lib/i18n/messages'
 import { absoluteUrl, alternateLanguages, breadcrumbJsonLd, defaultOgImage } from '@/lib/seo'
 import { getSiteUrl, site } from '@/lib/site'
 
-export const revalidate = 60
+// Prerendered detail pages kept serving the old photo after an edit in Studio, so the page renders on request.
+export const dynamic = 'force-dynamic'
 
 type Props = { params: Promise<{ locale: string; slug: string }> }
-
-export async function generateStaticParams() {
-  const ids = await getEventIds()
-  return locales.flatMap((locale) => ids.map((slug) => ({ locale, slug })))
-}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params

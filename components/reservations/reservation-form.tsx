@@ -20,7 +20,8 @@ import {
 } from '@/lib/reservations/types'
 import { cn } from '@/lib/utils'
 
-type Props = { locale: Locale; labels: Messages['reservations'] }
+type EventSummary = { id: string; title: string; dateLabel: string; timeLabel: string }
+type Props = { locale: Locale; labels: Messages['reservations']; event?: EventSummary }
 
 const fieldClass =
   'mt-2 block w-full rounded-xl border border-input bg-card px-4 py-3 text-base text-foreground placeholder:text-muted-foreground focus-visible:border-ring focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/25 aria-[invalid=true]:border-destructive'
@@ -55,7 +56,7 @@ export function ReservationForm(props: Props) {
   return <ReservationFormInner key={attempt} {...props} onReset={() => setAttempt((value) => value + 1)} />
 }
 
-function ReservationFormInner({ locale, labels, onReset }: Props & { onReset: () => void }) {
+function ReservationFormInner({ locale, labels, event, onReset }: Props & { onReset: () => void }) {
   const [state, formAction, pending] = useActionState<ReservationState, FormData>(
     submitReservation,
     initialReservationState,
@@ -127,11 +128,16 @@ function ReservationFormInner({ locale, labels, onReset }: Props & { onReset: ()
 
       {formError ? (
         <p role="alert" className="mt-5 rounded-xl border border-destructive/50 px-4 py-3 text-sm text-destructive">
-          {errors[formError]}
+          {formError === 'eventUnavailable'
+            ? locale === 'hr'
+              ? 'Ovaj događaj više nije dostupan za rezervaciju.'
+              : 'This event is no longer available for booking.'
+            : errors[formError]}
         </p>
       ) : null}
 
       <input type="hidden" name="locale" value={locale} />
+      {event ? <input type="hidden" name="eventId" value={event.id} /> : null}
       <input type="hidden" name="idempotencyKey" value={idempotencyKey} />
       <div aria-hidden className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
         <label>
@@ -199,6 +205,20 @@ function ReservationFormInner({ locale, labels, onReset }: Props & { onReset: ()
           <FieldError field="email" />
         </div>
 
+        {event ? (
+          <div className="rounded-xl border border-primary/40 bg-primary/5 px-4 py-3 sm:col-span-2">
+            <p className="text-xs uppercase tracking-[0.2em] text-primary">
+              {locale === 'hr' ? 'Rezervacija za događaj' : 'Reservation for event'}
+            </p>
+            <p className="mt-1 font-display text-xl">{event.title}</p>
+            <p className="text-sm text-muted-foreground">
+              {event.dateLabel} · {event.timeLabel}
+            </p>
+          </div>
+        ) : null}
+
+        {event ? null : (
+          <>
         <div>
           <label htmlFor="date" className="text-sm font-medium">
             {labels.fields.date}
@@ -242,6 +262,8 @@ function ReservationFormInner({ locale, labels, onReset }: Props & { onReset: ()
           </select>
           <FieldError field="time" />
         </div>
+          </>
+        )}
 
         <div>
           <label htmlFor="partySize" className="text-sm font-medium">

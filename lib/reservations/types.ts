@@ -16,7 +16,7 @@ export type ReservationState =
   | {
       status: 'error'
       fieldErrors: Partial<Record<ReservationFieldName, string>>
-      formError?: 'rateLimit' | 'server'
+      formError?: 'rateLimit' | 'server' | 'eventUnavailable'
       values: ReservationValues
     }
   | {

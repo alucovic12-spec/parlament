@@ -2,10 +2,12 @@
 
 import { createHmac } from 'node:crypto'
 import { headers } from 'next/headers'
+import { getEvent } from '@/lib/events/get-events'
 import { isLocale } from '@/lib/i18n/config'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { limits, maxDaysAhead, minLeadMinutes, reservationTimeZone } from './config'
-import { reservationSchema } from './schema'
+import { eventSlot } from './event-slot'
+import { eventReservationSchema, reservationSchema, type ReservationInput } from './schema'
 import type { ReservationFieldName, ReservationState, ReservationValues } from './types'
 
 const FIELD_NAMES: ReservationFieldName[] = [
@@ -70,7 +72,18 @@ export async function submitReservation(
   const localeValue = String(formData.get('locale') ?? 'hr')
   const locale = isLocale(localeValue) ? localeValue : 'hr'
 
-  const parsed = reservationSchema.safeParse(raw)
+  const eventId = String(formData.get('eventId') ?? '').trim()
+  const event = eventId ? await getEvent(locale, eventId) : null
+  if (eventId && (!event || event.isPast || event.status !== 'scheduled')) {
+    return { status: 'error', fieldErrors: {}, formError: 'eventUnavailable', values: raw }
+  }
+  const slot = event ? eventSlot(event.start) : null
+  if (slot) {
+    raw.date = slot.date
+    raw.time = slot.time
+  }
+
+  const parsed = slot ? eventReservationSchema.safeParse(raw) : reservationSchema.safeParse(raw)
   const fieldErrors: Partial<Record<ReservationFieldName, string>> = {}
 
   if (!parsed.success) {
@@ -78,8 +91,8 @@ export async function submitReservation(
       const field = issue.path[0] as ReservationFieldName | undefined
       if (field && !fieldErrors[field]) fieldErrors[field] = issue.message
     }
-  } else {
-    const { date, time } = parsed.data
+  } else if (!slot) {
+    const { date, time } = parsed.data as ReservationInput
     const now = zagrebNow()
     if (!isRealDate(date)) {
       fieldErrors.date = 'date'
@@ -98,7 +111,12 @@ export async function submitReservation(
     return { status: 'error', fieldErrors, values: { ...raw, consent: raw.consent } }
   }
 
-  const input = parsed.data
+  const input: ReservationInput = slot
+    ? { ...(parsed.data as Omit<ReservationInput, 'date' | 'time'>), ...slot }
+    : (parsed.data as ReservationInput)
+  const notes = event
+    ? `[Događaj: ${event.title}, ${event.dateLabel} ${event.timeLabel}] ${input.notes}`.trim()
+    : input.notes
   const idempotencyKeyRaw = String(formData.get('idempotencyKey') ?? '')
   const idempotencyKey = UUID_PATTERN.test(idempotencyKeyRaw) ? idempotencyKeyRaw : null
 
@@ -138,7 +156,7 @@ export async function submitReservation(
       reservation_time: input.time,
       party_size: input.partySize,
       occasion: input.occasion,
-      notes: input.notes.length > 0 ? input.notes : null,
+      notes: notes.length > 0 ? notes : null,
       consent: true,
       locale,
       idempotency_key: idempotencyKey,
