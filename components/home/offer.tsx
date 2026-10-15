@@ -7,17 +7,9 @@ import { Section, SectionHeading } from '@/components/shared/section'
 import { localizedPath, type Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
 
-/** Same order as `offer.items` in the messages. Each card opens its matching menu category. */
-const cards = [
-  { category: 'coffee' },
-  { category: 'beer' },
-  { category: 'wine' },
-  { category: 'whisky' },
-  { category: 'cocktails' },
-  { category: 'food' },
-]
+type OfferProps = { locale: Locale; m: Messages; images: (string | null)[]; categories: (string | null)[] }
 
-export function Offer({ locale, m, images }: { locale: Locale; m: Messages; images: string[] }) {
+export function Offer({ locale, m, images, categories }: OfferProps) {
   const o = m.home.offer
   const menuPath = localizedPath(locale, 'menu')
 
@@ -29,14 +21,14 @@ export function Offer({ locale, m, images }: { locale: Locale; m: Messages; imag
 
       <ul className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-12">
         {o.items.map((item, index) => {
-          const card = cards[index]
+          const category = categories[index]
           return (
             <li
-              key={item.title}
+              key={index}
               className="lg:col-span-6 lg:[&:nth-child(4n+1)]:col-span-7 lg:[&:nth-child(4n+2)]:col-span-5 lg:[&:nth-child(4n+3)]:col-span-5 lg:[&:nth-child(4n)]:col-span-7"
             >
               <Link
-                href={card ? `${menuPath}#menu-${card.category}` : menuPath}
+                href={category ? `${menuPath}#menu-${category}` : menuPath}
                 className="glow-card group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-border bg-card text-card-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <div className="relative h-60 overflow-hidden sm:h-64 lg:h-72">

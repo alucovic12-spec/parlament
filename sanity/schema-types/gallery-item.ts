@@ -4,14 +4,13 @@ export const galleryItem = defineType({
   name: 'galleryItem',
   title: 'Fotografija arhive',
   type: 'document',
-  initialValue: { category: 'atmosphere', order: 100 },
+  initialValue: { order: 100 },
   fields: [
     defineField({
       name: 'image',
       title: 'Fotografija',
       type: 'image',
       options: { hotspot: true },
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'category',
@@ -26,9 +25,7 @@ export const galleryItem = defineType({
           { title: 'Osoblje', value: 'team' },
           { title: 'Gostovanja i večeri', value: 'guest' },
         ],
-        layout: 'radio',
       },
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'caption',

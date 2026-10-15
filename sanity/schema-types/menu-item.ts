@@ -28,7 +28,6 @@ export const menuItem = defineType({
       title: 'Kategorija',
       type: 'string',
       options: { list: menuCategoryOptions },
-      validation: (rule) => rule.required(),
     }),
     defineField({ name: 'description', title: 'Opis', type: 'localizedText' }),
     defineField({
@@ -63,9 +62,8 @@ export const menuItem = defineType({
       name: 'status',
       title: 'Status',
       type: 'string',
-      options: { list: menuItemStatusOptions, layout: 'radio' },
+      options: { list: menuItemStatusOptions },
       initialValue: 'available',
-      validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'image',

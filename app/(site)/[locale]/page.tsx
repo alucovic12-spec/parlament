@@ -30,18 +30,19 @@ export default async function HomePage({ params }: Props) {
     getEvents(locale),
   ])
   const nextEvent = upcoming.find((event) => event.status !== 'cancelled')
+  const { hidden } = images
   const announcements = upcoming.filter((event) => event.image && event.status !== 'cancelled').slice(0, 3)
 
   return (
     <>
-      <Hero locale={locale} m={m} images={images.hero} events={announcements} />
+      {hidden.hero ? null : <Hero locale={locale} m={m} images={images.hero} events={announcements} />}
       <Ticker m={m} />
-      <NextEvent locale={locale} m={m} image={images.nextEvent} event={nextEvent} />
-      <Offer locale={locale} m={m} images={images.offer} />
-      <Concept m={m} images={images.concept} />
-      <GalleryTeaser locale={locale} m={m} images={images.gallery} />
-      <CareersTeaser locale={locale} m={m} />
-      <Visit locale={locale} m={m} />
+      {hidden.nextEvent ? null : <NextEvent locale={locale} m={m} image={images.nextEvent} event={nextEvent} />}
+      {hidden.offer ? null : <Offer locale={locale} m={m} images={images.offer} categories={images.offerCategories} />}
+      {hidden.concept ? null : <Concept m={m} images={images.concept} />}
+      {hidden.gallery ? null : <GalleryTeaser locale={locale} m={m} images={images.gallery} />}
+      {hidden.careers ? null : <CareersTeaser locale={locale} m={m} />}
+      {hidden.visit ? null : <Visit locale={locale} m={m} />}
     </>
   )
 }

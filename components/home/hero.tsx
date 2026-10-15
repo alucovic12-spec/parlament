@@ -22,7 +22,7 @@ export function Hero({ locale, m, images, events = [] }: HeroProps) {
       className="tone-photo relative isolate flex min-h-[min(52rem,calc(100svh-4.5rem))] flex-col justify-end overflow-hidden bg-brand-ink"
     >
       <div className="absolute inset-x-0 top-0 -z-20 h-[48svh] lg:inset-y-0 lg:left-auto lg:right-0 lg:h-full lg:w-[78%]">
-        <HeroSlides slides={slides} labels={slideLabels} />
+        {slides.length > 0 ? <HeroSlides slides={slides} labels={slideLabels} /> : null}
       </div>
 
       {/* Dissolves the photos into the ink background: bottom edge on mobile, left edge on desktop, plus a soft top edge under the header. */}
@@ -46,10 +46,12 @@ export function Hero({ locale, m, images, events = [] }: HeroProps) {
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-48 bg-gradient-to-t from-brand-ink/50 to-transparent" />
 
       <div className="pointer-events-none mx-auto w-full max-w-[90rem] px-4 pb-12 pt-[38svh] sm:px-6 sm:pb-16 lg:px-8 lg:pb-12 lg:pt-14 [&>*]:pointer-events-auto">
-        <p className="font-accent fade-up inline-flex items-center gap-3 text-[0.68rem] font-medium uppercase tracking-[0.32em] text-brand-green">
-          <span aria-hidden className="h-px w-10 bg-brand-gold" />
-          {h.eyebrow}
-        </p>
+        {h.eyebrow ? (
+          <p className="font-accent fade-up inline-flex items-center gap-3 text-[0.68rem] font-medium uppercase tracking-[0.32em] text-brand-green">
+            <span aria-hidden className="h-px w-10 bg-brand-gold" />
+            {h.eyebrow}
+          </p>
+        ) : null}
         <h1
           id="hero-title"
           style={{ animationDelay: '100ms' }}
@@ -62,12 +64,14 @@ export function Hero({ locale, m, images, events = [] }: HeroProps) {
             </span>
           ) : null}
         </h1>
-        <p
-          style={{ animationDelay: '220ms' }}
-          className="fade-up mt-6 max-w-xl text-pretty text-base font-light leading-relaxed text-brand-cream/80 sm:text-lg"
-        >
-          {h.text}
-        </p>
+        {h.text ? (
+          <p
+            style={{ animationDelay: '220ms' }}
+            className="fade-up mt-6 max-w-xl text-pretty text-base font-light leading-relaxed text-brand-cream/80 sm:text-lg"
+          >
+            {h.text}
+          </p>
+        ) : null}
         <div style={{ animationDelay: '340ms' }} className="fade-up mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           <LinkButton href={localizedPath(locale, 'reservations')} className="w-full sm:w-auto">
             {h.reserve}
