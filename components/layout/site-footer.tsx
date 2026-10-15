@@ -15,7 +15,7 @@ export function SiteFooter({ locale, m, items }: SiteFooterProps) {
     <footer className="tone-ink relative overflow-hidden border-t border-brand-cream/10">
       <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-[42px] sm:px-6 md:grid-cols-[1.4fr_0.8fr_1fr] lg:px-8">
         <div>
-          <BrandWordmark locale={locale} variant="stacked" logoClassName="text-[1.75rem]" />
+          <BrandWordmark locale={locale} logoClassName="text-[1.75rem]" />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">{m.home.hero.text}</p>
         </div>
 

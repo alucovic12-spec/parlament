@@ -1,23 +1,19 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
-import { ParlamentLogo, type LogoTone, type LogoVariant } from '@/components/brand/parlament-logo'
+import { ParlamentLogo, type LogoTone } from '@/components/brand/parlament-logo'
 
 export const metadata: Metadata = {
   title: 'Brand',
   robots: { index: false, follow: false },
 }
 
-type Tile = { label: string; variant: LogoVariant; tone: LogoTone; surface: string; size: string }
+type Tile = { label: string; tone: LogoTone; surface: string; size: string }
 
 const tiles: Tile[] = [
-  { label: 'Vertikalni znak, zlatna na crnoj', variant: 'stacked', tone: 'gold', surface: 'bg-brand-ink', size: 'text-5xl' },
-  { label: 'Vertikalni znak, crna na slonovači', variant: 'stacked', tone: 'ink', surface: 'bg-brand-cream', size: 'text-5xl' },
-  { label: 'Horizontalni potpis, zlatna na antracitu', variant: 'horizontal', tone: 'gold', surface: 'bg-brand-anthracite', size: 'text-3xl' },
-  { label: 'Horizontalni potpis, slonovača na crnoj', variant: 'horizontal', tone: 'cream', surface: 'bg-brand-ink', size: 'text-3xl' },
-  { label: 'Samo natpis, zlatna na crnoj', variant: 'wordmark', tone: 'gold', surface: 'bg-brand-ink', size: 'text-5xl' },
-  { label: 'Samo natpis, crna na zlatnoj', variant: 'wordmark', tone: 'ink', surface: 'bg-brand-gold', size: 'text-5xl' },
-  { label: 'Samo hram, zlatna na crnoj', variant: 'mark', tone: 'gold', surface: 'bg-brand-ink', size: 'text-7xl' },
-  { label: 'Samo hram, crna na zlatnoj', variant: 'mark', tone: 'ink', surface: 'bg-brand-gold', size: 'text-7xl' },
+  { label: 'Topla bijela na crnoj', tone: 'light', surface: 'bg-brand-ink', size: 'text-5xl' },
+  { label: 'Topla bijela na antracitu', tone: 'light', surface: 'bg-brand-anthracite', size: 'text-5xl' },
+  { label: 'Crna na toploj bijeloj', tone: 'ink', surface: 'bg-brand-cream', size: 'text-5xl' },
+  { label: 'Crna na pijesku', tone: 'ink', surface: 'bg-brand-sand', size: 'text-5xl' },
 ]
 
 const palette = [
@@ -43,7 +39,7 @@ export default function BrandPage() {
     <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
       <h1 className="text-4xl sm:text-5xl">Identitet</h1>
       <p className="mt-3 max-w-2xl text-muted-foreground">
-        Finalni logotip, paleta i pravila upotrebe. Svaka verzija je čisti vektor, pa je oštra u svakoj veličini.
+        Službeni logotip, paleta i pravila upotrebe.
       </p>
 
       <section aria-labelledby="palette" className="mt-12">
@@ -71,7 +67,7 @@ export default function BrandPage() {
           {tiles.map((tile) => (
             <li key={tile.label} className="overflow-hidden rounded-xl border border-border">
               <div className={`${tile.surface} flex min-h-64 items-center justify-center p-8`}>
-                <ParlamentLogo variant={tile.variant} tone={tile.tone} className={tile.size} />
+                <ParlamentLogo tone={tile.tone} className={tile.size} />
               </div>
               <p className="px-5 py-3 text-sm font-medium">{tile.label}</p>
             </li>
@@ -97,13 +93,13 @@ export default function BrandPage() {
         <h2 id="original" className="text-2xl">
           Izvorni logotip
         </h2>
-        <div className="mt-4 max-w-4xl overflow-hidden rounded-xl bg-brand-ink">
+        <div className="mt-4 flex max-w-4xl justify-center overflow-hidden rounded-xl bg-brand-ink p-10">
           <Image
-            src="/brand/logo-system.png"
-            alt="PARLAMENT People’s Bar, finalni sustav logotipa"
-            width={942}
-            height={589}
-            className="h-auto w-full"
+            src="/brand/parlament-logo-source.png"
+            alt="PARLAMENT People’s Bar, službeni logotip"
+            width={2400}
+            height={690}
+            className="h-auto w-full max-w-2xl"
           />
         </div>
       </section>
