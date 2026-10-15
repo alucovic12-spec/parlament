@@ -78,7 +78,6 @@ export function MenuPanel() {
         if (category !== 'all' && category !== 'none' && !inCategory.has(row.categoryId ?? '')) return false
         if (status !== 'all' && (row.status ?? 'available') !== status) return false
         if (flag === 'noPrice' && typeof row.price === 'number') return false
-        if (flag === 'placeholder' && !row.placeholder) return false
         if (flag === 'draft' && !row.hasDraft) return false
         if (!query) return true
         return [row.name, row.volume].some((value) => value?.toLowerCase().includes(query))
@@ -188,7 +187,6 @@ export function MenuPanel() {
         <select aria-label="Posebni prikaz" value={flag} onChange={(event) => setFlag(event.target.value)} style={inputStyle}>
           <option value="all">Sve stavke</option>
           <option value="noPrice">Bez cijene</option>
-          <option value="placeholder">Probni sadržaj</option>
           <option value="draft">Neobjavljeno</option>
         </select>
         <span style={{ color: 'var(--card-muted-fg-color)', fontSize: 13 }}>
@@ -272,7 +270,6 @@ export function MenuPanel() {
                 <td style={cellStyle}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
                     <strong>{row.name ?? 'Bez naziva'}</strong>
-                    {row.placeholder ? <Chip>Probno</Chip> : null}
                     {row.hasDraft && !row.hasPublished ? <Chip tone="caution">Nije objavljeno</Chip> : null}
                     {row.hasDraft && row.hasPublished ? <Chip tone="caution">Neobjavljene izmjene</Chip> : null}
                   </div>

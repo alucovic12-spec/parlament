@@ -111,9 +111,9 @@ export const event = defineType({
     }),
     defineField({
       name: 'placeholder',
-      title: 'Probni sadržaj',
+      title: 'Interna oznaka',
       type: 'boolean',
-      description: 'Označi dok je unos samo primjer koji treba zamijeniti ili potvrditi.',
+      hidden: true,
       initialValue: false,
     }),
   ],
