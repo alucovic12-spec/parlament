@@ -1,6 +1,6 @@
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { ShoppingBasket as BasketIcon } from 'lucide-react'
 import { defineField, defineType } from 'sanity'
-import { menuCategoryOptions } from './menu-category'
 
 export const menuItemStatusOptions = [
   { title: 'Dostupno', value: 'available' },
@@ -22,13 +22,17 @@ export const menuItem = defineType({
   type: 'document',
   icon: BasketIcon,
   fields: [
+    orderRankField({ type: 'menuItem' }),
     defineField({ name: 'name', title: 'Naziv', type: 'localizedString' }),
     defineField({
-      name: 'category',
-      title: 'Kategorija',
-      type: 'string',
-      options: { list: menuCategoryOptions },
+      name: 'categoryRef',
+      title: 'Kategorija ili potkategorija',
+      type: 'reference',
+      to: [{ type: 'menuCategory' }],
+      weak: true,
+      description: 'Može ostati prazno. Kategorije dodaješ, brišeš i slažeš u Meni, pa Kategorije.',
     }),
+    defineField({ name: 'category', title: 'Stara kategorija', type: 'string', hidden: true }),
     defineField({ name: 'description', title: 'Opis', type: 'localizedText' }),
     defineField({
       name: 'volume',
@@ -81,23 +85,21 @@ export const menuItem = defineType({
     }),
   ],
   orderings: [
+    orderRankOrdering,
     { title: 'Naziv', name: 'nameAsc', by: [{ field: 'name.hr', direction: 'asc' }] },
-    {
-      title: 'Kategorija',
-      name: 'categoryAsc',
-      by: [
-        { field: 'category', direction: 'asc' },
-        { field: 'name.hr', direction: 'asc' },
-      ],
-    },
   ],
   preview: {
-    select: { title: 'name.hr', category: 'category', price: 'price', status: 'status', media: 'image' },
+    select: {
+      title: 'name.hr',
+      category: 'categoryRef.name.hr',
+      price: 'price',
+      status: 'status',
+      media: 'image',
+    },
     prepare({ title, category, price, status, media }) {
-      const categoryTitle = menuCategoryOptions.find((option) => option.value === category)?.title ?? category
-      const priceLabel = typeof price === 'number' ? `${price.toFixed(2)} €` : 'cijena nije potvrđena'
+      const priceLabel = typeof price === 'number' ? `${price.toFixed(2)} €` : 'bez cijene'
       const flag = status && status !== 'available' ? ` · ${status}` : ''
-      return { title: title ?? 'Bez naziva', subtitle: `${categoryTitle} · ${priceLabel}${flag}`, media }
+      return { title: title ?? 'Bez naziva', subtitle: `${category ?? 'Bez kategorije'} · ${priceLabel}${flag}`, media }
     },
   },
 })

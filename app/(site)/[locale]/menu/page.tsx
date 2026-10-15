@@ -16,8 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function MenuPage({ params }: Props) {
   const locale = (await params).locale as Locale
-  const m = await getMessagesWithContent(locale)
-  const { categories, items } = getMenu(locale)
+  const [m, { categories, items }] = await Promise.all([getMessagesWithContent(locale), getMenu(locale)])
 
   return (
     <main className="interior-page">

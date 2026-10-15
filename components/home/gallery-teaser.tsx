@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import { LinkButton } from '@/components/shared/link-button'
 import { Reveal } from '@/components/shared/reveal'
 import { Section, SectionHeading } from '@/components/shared/section'

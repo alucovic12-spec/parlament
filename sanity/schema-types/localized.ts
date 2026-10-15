@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { TranslateInput } from '../translate/translate-input'
 
 const languageFields = (type: 'string' | 'text') => [
   defineField({
@@ -8,8 +9,14 @@ const languageFields = (type: 'string' | 'text') => [
   }),
   defineField({
     name: 'en',
-    title: 'English',
+    title: 'English (prevodi se automatski iz hrvatskog)',
     type,
+  }),
+  defineField({
+    name: 'enAuto',
+    title: 'Engleski preveden automatski',
+    type: 'boolean',
+    hidden: true,
   }),
 ]
 
@@ -18,6 +25,7 @@ export const localizedString = defineType({
   title: 'Tekst (HR / EN)',
   type: 'object',
   fields: languageFields('string'),
+  components: { input: TranslateInput },
 })
 
 export const localizedText = defineType({
@@ -25,4 +33,5 @@ export const localizedText = defineType({
   title: 'Dugi tekst (HR / EN)',
   type: 'object',
   fields: languageFields('text'),
+  components: { input: TranslateInput },
 })

@@ -1,19 +1,6 @@
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { Tag as TagIcon } from 'lucide-react'
 import { defineField, defineType } from 'sanity'
-
-export const menuCategoryOptions = [
-  { title: 'Kava', value: 'coffee' },
-  { title: 'Topli napitci', value: 'hot-drinks' },
-  { title: 'Bezalkoholna pića', value: 'soft-drinks' },
-  { title: 'Pivo', value: 'beer' },
-  { title: 'Vino', value: 'wine' },
-  { title: 'Žestoka pića', value: 'spirits' },
-  { title: 'Viski', value: 'whisky' },
-  { title: 'Kokteli', value: 'cocktails' },
-  { title: 'Hrana', value: 'food' },
-  { title: 'Posebna ponuda', value: 'special' },
-  { title: 'Piće tjedna', value: 'drink-of-the-week' },
-]
 
 export const menuCategory = defineType({
   name: 'menuCategory',
@@ -21,24 +8,33 @@ export const menuCategory = defineType({
   type: 'document',
   icon: TagIcon,
   fields: [
-    defineField({
-      name: 'key',
-      title: 'Identifikator',
-      type: 'string',
-      description: 'Povezuje kategoriju s kodom stranice (sidra, poveznice). Ne mijenjati nakon objave.',
-      options: { list: menuCategoryOptions },
-    }),
+    orderRankField({ type: 'menuCategory' }),
     defineField({ name: 'name', title: 'Naziv', type: 'localizedString' }),
     defineField({
-      name: 'order',
-      title: 'Redoslijed',
-      type: 'number',
-      initialValue: 0,
-      validation: (rule) => rule.integer().min(0),
+      name: 'parent',
+      title: 'Nadređena kategorija',
+      type: 'reference',
+      to: [{ type: 'menuCategory' }],
+      weak: true,
+      description:
+        'Ostavi prazno da ovo bude glavna kategorija. Odaberi kategoriju da ova postane njezina potkategorija.',
+      options: {
+        disableNew: true,
+        filter: ({ document }) => ({
+          filter: '_type == "menuCategory" && !defined(parent) && _id != $id',
+          params: { id: String(document._id ?? '').replace(/^drafts\./, '') },
+        }),
+      },
     }),
+    defineField({ name: 'key', title: 'Identifikator', type: 'string', hidden: true }),
+    defineField({ name: 'order', title: 'Stari redoslijed', type: 'number', hidden: true }),
   ],
-  orderings: [{ title: 'Redoslijed', name: 'orderAsc', by: [{ field: 'order', direction: 'asc' }] }],
+  orderings: [orderRankOrdering],
   preview: {
-    select: { title: 'name.hr', subtitle: 'key' },
+    select: { title: 'name.hr', parent: 'parent.name.hr' },
+    prepare: ({ title, parent }) => ({
+      title: title ?? 'Bez naziva',
+      subtitle: parent ? `Potkategorija: ${parent}` : 'Glavna kategorija',
+    }),
   },
 })

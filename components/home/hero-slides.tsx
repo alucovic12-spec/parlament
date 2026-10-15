@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 

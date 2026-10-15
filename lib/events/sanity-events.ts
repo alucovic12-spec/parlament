@@ -1,3 +1,4 @@
+import { imageUrl, sizedImage } from '@/lib/sanity/image'
 import { eventTypes, type EventEntry, type EventStatus, type EventType, type VenueEvent } from './types'
 
 const apiVersion = '2025-01-01'
@@ -16,7 +17,7 @@ const query = `*[_type == "event" && defined(slug.current) && defined(start)]{
   ticketUrl,
   status,
   placeholder,
-  "image": image.asset->url
+  "image": ${imageUrl('image')}
 }`
 
 type SanityEvent = {
@@ -56,7 +57,7 @@ function toVenueEvent(doc: SanityEvent): VenueEvent {
     price: doc.entry === 'paid' && typeof doc.price === 'number' ? doc.price : null,
     ticketing: { mode: 'external', url: doc.ticketUrl ?? null },
     status: statuses.includes(doc.status as EventStatus) ? (doc.status as EventStatus) : 'scheduled',
-    image: doc.image ? `${doc.image}?w=1600&auto=format` : undefined,
+    image: doc.image ? sizedImage(doc.image, 1600) : undefined,
     placeholder: doc.placeholder ?? false,
   }
 }

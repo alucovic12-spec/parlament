@@ -1,5 +1,5 @@
 import { ArrowUpRight } from 'lucide-react'
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import Link from 'next/link'
 import type { LocalizedEvent } from '@/lib/events/types'
 import { localizedPath, type Locale } from '@/lib/i18n/config'

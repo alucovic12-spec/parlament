@@ -1,11 +1,12 @@
+import { orderRankField, orderRankOrdering } from '@sanity/orderable-document-list'
 import { defineField, defineType } from 'sanity'
 
 export const galleryItem = defineType({
   name: 'galleryItem',
   title: 'Fotografija arhive',
   type: 'document',
-  initialValue: { order: 100 },
   fields: [
+    orderRankField({ type: 'galleryItem', newItemPosition: 'before' }),
     defineField({
       name: 'image',
       title: 'Fotografija',
@@ -38,15 +39,10 @@ export const galleryItem = defineType({
       type: 'localizedString',
       description: 'Kratko opiši što je na fotografiji. Ako ostane prazno, koristi se opis ispod fotografije.',
     }),
-    defineField({
-      name: 'order',
-      title: 'Redoslijed',
-      type: 'number',
-      description: 'Manji broj se prikazuje ranije.',
-    }),
+    defineField({ name: 'order', title: 'Stari redoslijed', type: 'number', hidden: true }),
   ],
   orderings: [
-    { title: 'Redoslijed', name: 'order', by: [{ field: 'order', direction: 'asc' }] },
+    orderRankOrdering,
     { title: 'Najnovije', name: 'newest', by: [{ field: '_createdAt', direction: 'desc' }] },
   ],
   preview: {

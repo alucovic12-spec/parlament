@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import { useMemo, useState } from 'react'
 import { PhotoPlaceholder } from '@/components/shared/photo-placeholder'
 import { galleryCategories, type GalleryAspect, type GalleryCategory, type GalleryTile } from '@/lib/gallery/types'

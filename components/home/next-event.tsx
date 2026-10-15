@@ -1,5 +1,5 @@
 import { CalendarDays } from 'lucide-react'
-import Image from 'next/image'
+import { CmsImage as Image } from '@/components/shared/cms-image'
 import { LinkButton } from '@/components/shared/link-button'
 import { Reveal } from '@/components/shared/reveal'
 import { Section } from '@/components/shared/section'
