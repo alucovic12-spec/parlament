@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
 import { homePageDefaults, homeSections, layoutTypeName } from '../defaults'
+import { linkFields, linkSubtitle } from './link-fields'
 
 const layoutBlocks = homeSections.map(({ key, title }) =>
   defineArrayMember({
@@ -86,6 +87,50 @@ export const homePage = defineType({
         description: 'Izmjenjuju se jedna za drugom. Svaku možeš zamijeniti, obrisati ili dodati novu.',
         options: { layout: 'grid' },
         of: [defineArrayMember({ type: 'image', options: { hotspot: true } })],
+      }),
+      defineField({
+        name: 'hideButtons',
+        title: 'Ukloni sve gumbe u naslovnom dijelu',
+        type: 'boolean',
+      }),
+      defineField({
+        name: 'buttons',
+        title: 'Gumbi u naslovnom dijelu',
+        type: 'array',
+        description:
+          'Dodaj, obriši i presloži gumbe. Ako je popis prazan, prikazuju se zadani gumbi (Rezerviraj, Meni, Večernje sjednice).',
+        of: [
+          defineArrayMember({
+            type: 'object',
+            name: 'heroButton',
+            title: 'Gumb',
+            fields: [
+              string('label', 'Natpis'),
+              defineField({
+                name: 'style',
+                title: 'Izgled',
+                type: 'string',
+                initialValue: 'default',
+                options: {
+                  layout: 'radio',
+                  list: [
+                    { title: 'Ispunjen (glavni)', value: 'default' },
+                    { title: 'S okvirom', value: 'outline' },
+                    { title: 'Samo tekst', value: 'ghost' },
+                  ],
+                },
+              }),
+              ...linkFields(),
+            ],
+            preview: {
+              select: { label: 'label.hr', kind: 'kind', page: 'page', url: 'url' },
+              prepare: ({ label, kind, page, url }) => ({
+                title: label || 'Gumb bez natpisa',
+                subtitle: linkSubtitle({ kind, page, url }),
+              }),
+            },
+          }),
+        ],
       }),
     ]),
     defineField({

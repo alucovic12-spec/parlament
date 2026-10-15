@@ -5,6 +5,7 @@ import {
   House as HomeIcon,
   Image as ImageIcon,
   MapPin as ContactIcon,
+  PanelTop as HeaderIcon,
   ShoppingBasket as BasketIcon,
   Tag as TagIcon,
 } from 'lucide-react'
@@ -113,6 +114,7 @@ export const structure: StructureResolver = (S, context) =>
         context,
       }),
       S.divider(),
+      singleton(S, 'Zaglavlje (logotip, izbornik, gumb)', 'siteHeader', 'siteHeader', HeaderIcon),
       singleton(S, 'Početna stranica', 'homePage', 'homePage', HomeIcon),
       S.listItem()
         .title('Tekstovi stranica')

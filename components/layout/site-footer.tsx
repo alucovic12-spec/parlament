@@ -2,13 +2,13 @@ import Link from 'next/link'
 import { BrandWordmark } from '@/components/layout/brand-wordmark'
 import type { Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
-import type { NavItem } from '@/lib/navigation'
+import { linkAttrs, type HeaderLogo, type NavItem } from '@/lib/navigation'
 import { getSiteSettings } from '@/lib/content/site-content'
 import { site } from '@/lib/site'
 
-type SiteFooterProps = { locale: Locale; m: Messages; items: NavItem[] }
+type SiteFooterProps = { locale: Locale; m: Messages; items: NavItem[]; logo?: HeaderLogo | null }
 
-export async function SiteFooter({ locale, m, items }: SiteFooterProps) {
+export async function SiteFooter({ locale, m, items, logo }: SiteFooterProps) {
   const v = m.home.visit
   const settings = await getSiteSettings(locale)
   const socials = Object.entries(settings.social).filter((entry): entry is [string, string] => Boolean(entry[1]))
@@ -17,7 +17,7 @@ export async function SiteFooter({ locale, m, items }: SiteFooterProps) {
     <footer className="tone-ink relative overflow-hidden border-t border-brand-cream/10">
       <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-[42px] sm:px-6 md:grid-cols-[1.4fr_0.8fr_1fr] lg:px-8">
         <div>
-          <BrandWordmark locale={locale} logoClassName="text-[1.75rem]" />
+          <BrandWordmark locale={locale} logoClassName="text-[1.75rem]" logo={logo} compact />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">{m.home.hero.text}</p>
         </div>
 
@@ -25,8 +25,8 @@ export async function SiteFooter({ locale, m, items }: SiteFooterProps) {
           <h2 className="text-xs uppercase tracking-[0.22em] text-primary">{m.footer.explore}</h2>
           <ul className="mt-4 grid grid-cols-2 gap-x-6 md:grid-cols-1">
             {items.map((item) => (
-              <li key={item.key}>
-                <Link href={item.href} className="flex min-h-11 items-center text-sm text-brand-cream/65 transition-all hover:translate-x-1 hover:text-brand-cream">
+              <li key={item.id}>
+                <Link href={item.href} {...linkAttrs(item)} className="flex min-h-11 items-center text-sm text-brand-cream/65 transition-all hover:translate-x-1 hover:text-brand-cream">
                   {item.label}
                 </Link>
               </li>

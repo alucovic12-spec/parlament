@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { parsePath } from '@/lib/i18n/config'
-import type { NavItem } from '@/lib/navigation'
+import { linkAttrs, type NavItem } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
 
 type Indicator = { left: number; width: number } | null
@@ -16,7 +16,8 @@ export function DesktopNav({ items, label, className }: { items: NavItem[]; labe
   const [hovered, setHovered] = useState<string | null>(null)
   const [indicator, setIndicator] = useState<Indicator>(null)
 
-  const target = hovered ?? (items.some((item) => item.key === current) ? current : null)
+  const activeId = items.find((item) => item.key === current)?.id ?? null
+  const target = hovered ?? activeId
 
   const measure = useCallback(() => {
     const link = target ? linkRefs.current[target] : null
@@ -47,18 +48,19 @@ export function DesktopNav({ items, label, className }: { items: NavItem[]; labe
           )}
         />
         {items.map((item) => {
-          const active = item.key === current
-          const lit = item.key === target
+          const active = item.id === activeId
+          const lit = item.id === target
           return (
-            <li key={item.key} className="relative">
+            <li key={item.id} className="relative">
               <Link
                 ref={(node) => {
-                  linkRefs.current[item.key] = node
+                  linkRefs.current[item.id] = node
                 }}
                 href={item.href}
+                {...linkAttrs(item)}
                 aria-current={active ? 'page' : undefined}
-                onMouseEnter={() => setHovered(item.key)}
-                onFocus={() => setHovered(item.key)}
+                onMouseEnter={() => setHovered(item.id)}
+                onFocus={() => setHovered(item.id)}
                 onBlur={() => setHovered(null)}
                 className={cn(
                   'relative z-10 flex h-10 items-center whitespace-nowrap rounded-full px-2 font-display text-[0.64rem] font-medium uppercase tracking-[0.1em] transition-colors duration-300 2xl:h-11 2xl:px-3 2xl:text-[0.68rem]',

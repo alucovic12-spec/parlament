@@ -1,6 +1,7 @@
 'use client'
 
 import {
+  ArrowUpRight,
   CalendarCheck,
   CalendarDays,
   Ellipsis,
@@ -17,7 +18,7 @@ import { usePathname } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { LanguageSwitcher } from '@/components/layout/language-switcher'
 import { parsePath, type Locale, type PageKey } from '@/lib/i18n/config'
-import type { NavItem } from '@/lib/navigation'
+import { linkAttrs, type NavItem } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
 
 const icons: Record<PageKey, LucideIcon> = {
@@ -30,14 +31,17 @@ const icons: Record<PageKey, LucideIcon> = {
   contact: MapPin,
 }
 
+const iconFor = (item: NavItem): LucideIcon => (item.key === 'external' ? ArrowUpRight : icons[item.key])
+
 type MobileNavProps = {
   locale: Locale
   primary: NavItem[]
   more: NavItem[]
+  showLanguage?: boolean
   labels: { nav: string; more: string; moreTitle: string; close: string; language: string }
 }
 
-export function MobileNav({ locale, primary, more, labels }: MobileNavProps) {
+export function MobileNav({ locale, primary, more, showLanguage = true, labels }: MobileNavProps) {
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [open, setOpen] = useState(false)
   const current = parsePath(usePathname()).page
@@ -57,12 +61,13 @@ export function MobileNav({ locale, primary, more, labels }: MobileNavProps) {
       >
         <ul className="mx-auto flex max-w-xl items-stretch justify-around">
           {primary.map((item) => {
-            const Icon = icons[item.key]
+            const Icon = iconFor(item)
             const active = item.key === current
             return (
-              <li key={item.key} className="flex-1">
+              <li key={item.id} className="flex-1">
                 <Link
                   href={item.href}
+                  {...linkAttrs(item)}
                   aria-current={active ? 'page' : undefined}
                   className={cn(
                     'flex h-16 flex-col items-center justify-center gap-1 text-[0.6875rem] font-medium transition-colors',
@@ -117,11 +122,12 @@ export function MobileNav({ locale, primary, more, labels }: MobileNavProps) {
 
           <ul className="mt-3 divide-y divide-border">
             {more.map((item) => {
-              const Icon = icons[item.key]
+              const Icon = iconFor(item)
               return (
-                <li key={item.key}>
+                <li key={item.id}>
                   <Link
                     href={item.href}
+                    {...linkAttrs(item)}
                     onClick={closeSheet}
                     aria-current={item.key === current ? 'page' : undefined}
                     className={cn(
@@ -137,10 +143,12 @@ export function MobileNav({ locale, primary, more, labels }: MobileNavProps) {
             })}
           </ul>
 
-          <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
-            <span className="text-sm text-muted-foreground">{labels.language}</span>
-            <LanguageSwitcher locale={locale} label={labels.language} />
-          </div>
+          {showLanguage ? (
+            <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
+              <span className="text-sm text-muted-foreground">{labels.language}</span>
+              <LanguageSwitcher locale={locale} label={labels.language} />
+            </div>
+          ) : null}
         </div>
       </dialog>
     </>
