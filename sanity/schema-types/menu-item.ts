@@ -1,4 +1,4 @@
-import { BasketIcon } from '@sanity/icons/Basket'
+import { ShoppingBasket as BasketIcon } from 'lucide-react'
 import { defineField, defineType } from 'sanity'
 import { menuCategoryOptions } from './menu-category'
 
