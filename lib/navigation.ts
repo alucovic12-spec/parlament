@@ -8,8 +8,6 @@ const order: PageKey[] = [
   'menu',
   'events',
   'reservations',
-  'tickets',
-  'loyalty',
   'gallery',
   'careers',
   'contact',

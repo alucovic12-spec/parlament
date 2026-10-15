@@ -3,7 +3,6 @@ import { CareersTeaser } from '@/components/home/careers-teaser'
 import { Concept } from '@/components/home/concept'
 import { GalleryTeaser } from '@/components/home/gallery-teaser'
 import { Hero } from '@/components/home/hero'
-import { LoyaltyTeaser } from '@/components/home/loyalty-teaser'
 import { NextEvent } from '@/components/home/next-event'
 import { Offer } from '@/components/home/offer'
 import { Ticker } from '@/components/home/ticker'
@@ -36,7 +35,6 @@ export default async function HomePage({ params }: Props) {
       <NextEvent locale={locale} m={m} event={nextEvent} />
       <Offer locale={locale} m={m} />
       <Concept m={m} />
-      <LoyaltyTeaser locale={locale} m={m} />
       <GalleryTeaser locale={locale} m={m} />
       <CareersTeaser locale={locale} m={m} />
       <Visit locale={locale} m={m} />

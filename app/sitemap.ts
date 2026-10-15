@@ -8,8 +8,6 @@ const priorities: Record<PageKey, number> = {
   menu: 0.9,
   events: 0.9,
   reservations: 0.8,
-  tickets: 0.6,
-  loyalty: 0.6,
   gallery: 0.6,
   careers: 0.5,
   contact: 0.7,

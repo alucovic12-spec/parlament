@@ -1,4 +1,3 @@
-import { ExternalLink } from 'lucide-react'
 import { LinkButton } from '@/components/shared/link-button'
 import type { LocalizedEvent } from '@/lib/events/types'
 import { localizedPath, type Locale } from '@/lib/i18n/config'
@@ -20,19 +19,6 @@ export function EventCta({ event, locale, labels, className }: Props) {
 
   if (event.status === 'sold-out') {
     return <span className={cn(disabledClass, className)}>{labels.status.soldOut}</span>
-  }
-
-  if (event.entry === 'paid') {
-    if (!event.ticketUrl) {
-      return <span className={cn(disabledClass, className)}>{labels.ticketSoon}</span>
-    }
-    return (
-      <LinkButton href={event.ticketUrl} target="_blank" rel="noopener noreferrer" className={className}>
-        {labels.buyTicket}
-        <ExternalLink aria-hidden className="ml-2 size-4" />
-        <span className="sr-only"> (new tab)</span>
-      </LinkButton>
-    )
   }
 
   return (

@@ -1,14 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { isLocale, localeCookie, routeKeyFromSlug, type Locale } from '@/lib/i18n/config'
-import { refreshSession } from '@/lib/supabase/session'
 
 /**
  * Maps public URLs to the internal /[locale]/<routeKey> folders:
- *   /meni           -> /hr/menu
+ *   /meni             -> /hr/menu
  *   /en/join-our-team -> /en/careers
  * Croatian has no prefix; English lives under /en.
  */
-export async function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const segments = pathname.split('/').filter(Boolean)
 
@@ -37,18 +36,7 @@ export async function proxy(request: NextRequest) {
   const key = routeKeyFromSlug(locale, first)
   if (!key) return rewriteTo(`/${locale}/not-found`)
 
-  const target = `/${[locale, key, ...tail].join('/')}`
-
-  // Only the member area reads the Supabase session, so only it pays for a token refresh.
-  if (key === 'loyalty') {
-    return refreshSession(request, () => {
-      const url = request.nextUrl.clone()
-      url.pathname = target
-      return NextResponse.rewrite(url, { request })
-    })
-  }
-
-  return rewriteTo(target)
+  return rewriteTo(`/${[locale, key, ...tail].join('/')}`)
 }
 
 export const config = {
