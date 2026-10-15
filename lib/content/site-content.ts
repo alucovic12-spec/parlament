@@ -1,5 +1,6 @@
 import { cache } from 'react'
 import type { Locale } from '@/lib/i18n/config'
+import { linkProjection } from '@/lib/content/link-query'
 import { getMessages, type Messages } from '@/lib/i18n/messages'
 import { sanityFetch } from '@/lib/sanity/fetch'
 import { site } from '@/lib/site'
@@ -7,7 +8,14 @@ import { site } from '@/lib/site'
 export type Localized = { hr?: string | null; en?: string | null } | null | undefined
 type TitleText = { title?: Localized; text?: Localized }
 
-export type LinkSource = { kind?: string | null; page?: string | null; url?: string | null; newTab?: boolean | null }
+export type LinkSource = {
+  kind?: string | null
+  page?: string | null
+  url?: string | null
+  newTab?: boolean | null
+  customPage?: string | null
+  customPageTitle?: Localized
+}
 export type NavLinkSource = LinkSource & { label?: Localized; hidden?: boolean | null; visibility?: string | null }
 export type HeroButtonSource = LinkSource & { label?: Localized; style?: string | null }
 
@@ -70,13 +78,16 @@ const query = `{
   "header": *[_id == "siteHeader"][0]{
     hideNav, logoAlt, logoHeight, showLanguageSwitcher, stickyHeader,
     "logo": logo.asset->{url, "width": metadata.dimensions.width, "height": metadata.dimensions.height},
-    nav[]{label{hr, en}, kind, page, url, newTab, hidden, visibility},
-    cta{hide, label{hr, en}, kind, page, url, newTab},
-    announcement{show, text{hr, en}, kind, page, url, newTab}
+    nav[]{label{hr, en}, kind, page, url, newTab, hidden, visibility, ${linkProjection}},
+    cta{hide, label{hr, en}, kind, page, url, newTab, ${linkProjection}},
+    announcement{show, text{hr, en}, kind, page, url, newTab, ${linkProjection}}
   },
   "settings": *[_id == "siteSettings"][0]{address, phone, email, hours, instagram, facebook, tiktok},
   "home": *[_id == "homePage"][0]{
-    imported, meta, hero, nextEvent, careers, visit,
+    imported, meta, visit,
+    hero{..., buttons[]{..., ${linkProjection}}},
+    nextEvent{..., buttons[]{..., ${linkProjection}}},
+    careers{..., buttons[]{..., ${linkProjection}}},
     gallery{title, tiles[]{label{hr, en}}},
     ticker[]{hr, en},
     offer{eyebrow, title, intro, items[]{title, text}},

@@ -1,4 +1,4 @@
-import { localizedPath, routeKeys, type Locale, type PageKey } from '@/lib/i18n/config'
+import { customPagePath, localizedPath, routeKeys, type Locale, type PageKey } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
 import {
   getNavItems,
@@ -43,6 +43,11 @@ export function resolveLink(link: LinkSource | null | undefined, locale: Locale)
     return { href: url, external: /^(https?:|mailto:|tel:)/.test(url), newTab }
   }
 
+  if (link.kind === 'customPage') {
+    const slug = link.customPage?.trim()
+    return slug ? { href: customPagePath(locale, slug), external: false, newTab } : null
+  }
+
   if (!link.page || !pages.includes(link.page)) return null
   return { href: localizedPath(locale, link.page as PageKey), external: false, newTab }
 }
@@ -68,8 +73,8 @@ export async function getHeaderConfig(locale: Locale, m: Messages): Promise<Head
       if (link.hidden) return []
       const resolved = resolveLink(link, locale)
       if (!resolved) return []
-      const page = link.kind === 'external' ? null : (link.page as PageKey)
-      const label = text(link.label, locale) ?? (page ? m.nav[page] : undefined)
+      const page = link.kind === 'external' || link.kind === 'customPage' ? null : (link.page as PageKey)
+      const label = text(link.label, locale) ?? (page ? m.nav[page] : text(link.customPageTitle, locale))
       if (!label) return []
       const item: NavItem = { id: `nav-${index}`, key: page ?? 'external', label, ...resolved }
       return [{ item, visibility: link.visibility ?? 'all' }]

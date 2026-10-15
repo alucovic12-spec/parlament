@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { linkProjection } from '@/lib/content/link-query'
 import type { HeroButtonSource, Localized } from '@/lib/content/site-content'
 import { sanityFetch } from '@/lib/sanity/fetch'
 import { imageUrl, sizedImage } from '@/lib/sanity/image'
@@ -21,7 +22,7 @@ export type CustomBlock = {
 
 export type HomeEntry = { type: 'section'; key: HomeSectionKey } | { type: 'custom'; block: CustomBlock }
 
-type RawEntry = {
+export type RawEntry = {
   _key: string
   _type: string
   eyebrow?: Localized
@@ -42,16 +43,19 @@ const typeToKey = new Map<string, HomeSectionKey>(
 const positions = ['right', 'left', 'background', 'none'] as const
 const tones = ['base', 'dusk', 'ink', 'green', 'sand'] as const
 
-const query = `*[_id == "homePage"][0].layout[isHidden != true]{
+/** Projection shared by the home page layout and by pages made in Studio. */
+export const customBlockFields = `
   _key, _type,
   eyebrow{hr, en}, title{hr, en}, text{hr, en},
   "image": ${imageUrl('image')},
   imageAlt, imagePosition, tone,
   "anchor": anchor.current,
-  buttons[]{label{hr, en}, style, kind, page, url, newTab}
-}`
+  buttons[]{label{hr, en}, style, kind, page, url, newTab, ${linkProjection}}
+`
 
-function toBlock(entry: RawEntry): CustomBlock {
+const query = `*[_id == "homePage"][0].layout[isHidden != true]{${customBlockFields}}`
+
+export function toBlock(entry: RawEntry): CustomBlock {
   return {
     id: entry._key,
     anchor: entry.anchor?.trim() || null,

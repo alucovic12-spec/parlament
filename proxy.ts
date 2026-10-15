@@ -34,7 +34,10 @@ export function proxy(request: NextRequest) {
   if (first === 'brand' && tail.length === 0) return rewriteTo(`/${locale}/brand`)
 
   const key = routeKeyFromSlug(locale, first)
-  if (!key) return rewriteTo(`/${locale}/not-found`)
+  if (!key) {
+    // Single-segment unknown addresses may be pages created in Studio; the route returns 404 if none matches.
+    return rewriteTo(tail.length === 0 ? `/${locale}/custom/${first}` : `/${locale}/not-found`)
+  }
 
   return rewriteTo(`/${[locale, key, ...tail].join('/')}`)
 }

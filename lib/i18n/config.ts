@@ -69,7 +69,35 @@ export function parsePath(pathname: string): { locale: Locale; page: PageKey; re
   return key ? { locale, page: key, rest } : { locale, page: 'home', rest: [] }
 }
 
+/** Pages created in Studio share one slug across languages: /slug in Croatian, /en/slug in English. */
+export function customPagePath(locale: Locale, slug: string): string {
+  return locale === defaultLocale ? `/${slug}` : `/${locale}/${slug}`
+}
+
+/** Addresses a Studio-made page must not take, because the site or the framework already uses them. */
+export const reservedSlugs: string[] = [
+  ...routeKeys,
+  ...locales.flatMap((locale) => Object.values(slugs[locale])),
+  'brand',
+  'admin',
+  'api',
+  'auth',
+  'custom',
+  'not-found',
+  'sitemap',
+  'robots',
+  'manifest',
+  'og',
+  ...locales,
+]
+
 export function switchLocalePath(pathname: string, target: Locale): string {
-  const { page, rest } = parsePath(pathname)
+  const { locale, page, rest } = parsePath(pathname)
+  const segments = pathname.split('/').filter(Boolean)
+  if (segments[0] && isLocale(segments[0])) segments.shift()
+  const [first, ...tail] = segments
+  if (first && !routeKeyFromSlug(locale, first) && !isRouteKey(first)) {
+    return customPagePath(target, [first, ...tail].join('/'))
+  }
   return localizedPath(target, page, rest)
 }
