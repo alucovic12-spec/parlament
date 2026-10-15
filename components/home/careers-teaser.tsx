@@ -1,9 +1,13 @@
 import { LinkButton } from '@/components/shared/link-button'
 import { Reveal } from '@/components/shared/reveal'
+import type { HeroButton } from '@/lib/content/links'
 import { localizedPath, type Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
+import { linkAttrs } from '@/lib/navigation'
 
-export function CareersTeaser({ locale, m }: { locale: Locale; m: Messages }) {
+type Props = { locale: Locale; m: Messages; buttons: HeroButton[] | null }
+
+export function CareersTeaser({ locale, m, buttons }: Props) {
   const c = m.home.careers
 
   return (
@@ -26,12 +30,24 @@ export function CareersTeaser({ locale, m }: { locale: Locale; m: Messages }) {
             {c.title}
           </h2>
           <p className="mt-7 max-w-xl text-pretty text-lg font-light leading-relaxed text-muted-foreground">{c.text}</p>
-          <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <LinkButton href={localizedPath(locale, 'careers')}>{c.cta}</LinkButton>
-            <span className="rounded-full border border-foreground/20 bg-foreground/[0.05] px-4 py-2 text-sm text-foreground/75 transition-all hover:-translate-y-0.5 hover:border-brand-green/60 hover:bg-brand-green/15 hover:text-foreground">
-              {c.quick}
-            </span>
-          </div>
+          {buttons ? (
+            buttons.length > 0 ? (
+              <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+                {buttons.map((button, index) => (
+                  <LinkButton key={`${button.href}-${index}`} href={button.href} variant={button.variant} {...linkAttrs(button)}>
+                    {button.label}
+                  </LinkButton>
+                ))}
+              </div>
+            ) : null
+          ) : (
+            <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+              <LinkButton href={localizedPath(locale, 'careers')}>{c.cta}</LinkButton>
+              <span className="rounded-full border border-foreground/20 bg-foreground/[0.05] px-4 py-2 text-sm text-foreground/75 transition-all hover:-translate-y-0.5 hover:border-brand-green/60 hover:bg-brand-green/15 hover:text-foreground">
+                {c.quick}
+              </span>
+            </div>
+          )}
         </Reveal>
       </div>
     </section>
