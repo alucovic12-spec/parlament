@@ -39,7 +39,7 @@ export default async function ReservationsPage({ params, searchParams }: Props) 
         </div>
       </header>
 
-      <div className="mx-auto grid max-w-5xl gap-8 px-4 pb-20 sm:px-6 lg:grid-cols-[1fr_20rem] lg:px-8">
+      <div className="mx-auto grid max-w-5xl gap-8 px-4 pb-20 sm:px-6 sm:pb-24 lg:grid-cols-[1fr_20rem] lg:px-8">
         <ReservationForm
           locale={locale}
           labels={r}

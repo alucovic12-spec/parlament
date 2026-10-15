@@ -64,7 +64,7 @@ export default async function CareersPage({ params }: Props) {
         </div>
       </header>
 
-      <div className="mx-auto max-w-5xl px-4 pb-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
         <CareersApplication locale={locale} labels={c} aside={aside} />
       </div>
     </main>

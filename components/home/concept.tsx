@@ -8,9 +8,9 @@ export function Concept({ m, images }: { m: Messages; images: { main: string | n
   const c = m.home.concept
 
   return (
-    <Section labelledBy="concept-title" tone="dusk" sectionClassName="!pt-[43px] !pb-[46px]">
-      <div className={images.main || images.accent ? 'grid items-center gap-16 lg:grid-cols-[0.92fr_1.08fr] lg:gap-28' : 'grid gap-16'}>
-        <Reveal>
+    <Section labelledBy="concept-title" tone="dusk">
+      <div className={images.main || images.accent ? 'grid grid-cols-1 items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-24' : 'grid grid-cols-1 gap-12'}>
+        <Reveal className="min-w-0">
           <SectionHeading id="concept-title" eyebrow={c.eyebrow} title={c.title} intro={c.text} />
         </Reveal>
 

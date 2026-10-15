@@ -36,7 +36,7 @@ export function EventBrowser({ locale, labels, upcoming, past }: Props) {
   const visible = activeType === 'all' ? source : source.filter((event) => event.type === activeType)
 
   return (
-    <div className="mx-auto max-w-5xl px-4 pb-16 sm:px-6 sm:pb-24 lg:px-8">
+    <div className="mx-auto max-w-5xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
       <div className="flex flex-col gap-4 border-b border-border pb-6">
         <div role="group" aria-label={labels.tabsLabel} className="flex gap-2">
           {(['upcoming', 'past'] as const).map((value) => (

@@ -18,7 +18,7 @@ export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messag
   const g = m.home.gallery
 
   return (
-    <Section labelledBy="gallery-title" tone="base" sectionClassName="!pt-[59px] !pb-[52px]">
+    <Section labelledBy="gallery-title" tone="base">
       <Reveal className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
         <SectionHeading id="gallery-title" eyebrow={g.eyebrow} title={g.title} />
         <LinkButton href={localizedPath(locale, 'gallery')} variant="outline" className="self-start sm:self-auto">
@@ -26,7 +26,7 @@ export function GalleryTeaser({ locale, m, images }: { locale: Locale; m: Messag
         </LinkButton>
       </Reveal>
 
-      <ul className="group/list mt-14 grid grid-cols-2 gap-3 sm:gap-4 lg:h-[38rem] lg:grid-cols-4 lg:grid-rows-2">
+      <ul className="group/list mt-12 grid grid-cols-2 gap-3 sm:gap-4 lg:h-[38rem] lg:grid-cols-4 lg:grid-rows-2">
         {tilePositions.map((_, index) => (
           <li
             key={index}

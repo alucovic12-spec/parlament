@@ -14,12 +14,12 @@ export function Offer({ locale, m, images, categories }: OfferProps) {
   const menuPath = localizedPath(locale, 'menu')
 
   return (
-    <Section labelledBy="offer-title" tone="night" sectionClassName="!pt-[33px] !pb-[37px]">
+    <Section labelledBy="offer-title" tone="night">
       <Reveal>
         <SectionHeading id="offer-title" eyebrow={o.eyebrow} title={o.title} intro={o.intro} />
       </Reveal>
 
-      <ul className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-12">
+      <ul className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-12">
         {o.items.map((item, index) => {
           const category = categories[index]
           return (

@@ -11,7 +11,7 @@ export function CareersTeaser({ locale, m, buttons }: Props) {
   const c = m.home.careers
 
   return (
-    <section aria-labelledby="careers-title" className="tone-glow group relative isolate overflow-hidden py-[64px] sm:py-[70px]">
+    <section aria-labelledby="careers-title" className="tone-glow group relative isolate overflow-hidden py-14 sm:py-20">
       <div
         aria-hidden
         className="absolute right-0 top-0 -z-10 h-px w-1/3 bg-brand-green/50"

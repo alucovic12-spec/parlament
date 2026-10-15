@@ -22,17 +22,17 @@ export async function Visit({ locale, m }: { locale: Locale; m: Messages }) {
   ]
 
   return (
-    <Section labelledBy="visit-title" tone="sand" sectionClassName="!pt-[76px] !pb-[78px]">
-      <div className="grid gap-14 lg:grid-cols-2">
-        <Reveal>
+    <Section labelledBy="visit-title" tone="sand">
+      <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
+        <Reveal className="min-w-0">
           <SectionHeading id="visit-title" eyebrow={v.eyebrow} title={v.title} />
-          <dl className="mt-12 grid gap-3 sm:grid-cols-2">
+          <dl className="mt-12 grid grid-cols-1 gap-3 sm:grid-cols-2">
             {rows.map(({ icon: Icon, label, value, pending }) => (
               <div key={label} className="group flex min-h-28 gap-4 rounded-2xl border border-border bg-card p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/30">
                 <span className={iconBox}>
                   <Icon aria-hidden className="size-4" />
                 </span>
-                <div>
+                <div className="min-w-0">
                   <dt className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{label}</dt>
                   <dd className={value ? 'mt-1 whitespace-pre-line text-lg' : 'mt-1 text-lg text-muted-foreground'}>
                     {value && Icon === Mail ? (
@@ -50,7 +50,7 @@ export async function Visit({ locale, m }: { locale: Locale; m: Messages }) {
               <span className={iconBox}>
                 <Share2 aria-hidden className="size-4" />
               </span>
-              <div>
+              <div className="min-w-0">
                 <dt className="text-xs uppercase tracking-[0.22em] text-muted-foreground">{v.social}</dt>
                 <dd className="mt-1 text-lg">
                   {socials.length > 0 ? (
@@ -79,7 +79,7 @@ export async function Visit({ locale, m }: { locale: Locale; m: Messages }) {
           </div>
         </Reveal>
 
-        <Reveal>
+        <Reveal className="min-w-0">
           <div
             role="img"
             aria-label={v.addressPending}

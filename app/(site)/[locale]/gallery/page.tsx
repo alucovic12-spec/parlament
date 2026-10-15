@@ -29,7 +29,7 @@ export default async function GalleryPage({ params }: Props) {
         </div>
       </header>
 
-      <div className="mx-auto max-w-5xl px-4 pb-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-5xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
         <GalleryBrowser items={items} labels={m.galleryPage} placeholderLabel={m.placeholder.photo} />
       </div>
     </main>
