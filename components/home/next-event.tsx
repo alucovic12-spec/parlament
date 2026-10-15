@@ -3,14 +3,22 @@ import { CmsImage as Image } from '@/components/shared/cms-image'
 import { LinkButton } from '@/components/shared/link-button'
 import { Reveal } from '@/components/shared/reveal'
 import { Section } from '@/components/shared/section'
+import type { HeroButton } from '@/lib/content/links'
 import type { LocalizedEvent } from '@/lib/events/types'
 import { localizedPath, type Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
+import { linkAttrs } from '@/lib/navigation'
 import { site } from '@/lib/site'
 
-type Props = { locale: Locale; m: Messages; image: string | null; event?: LocalizedEvent }
+type Props = {
+  locale: Locale
+  m: Messages
+  image: string | null
+  event?: LocalizedEvent
+  buttons: HeroButton[] | null
+}
 
-export function NextEvent({ locale, m, image, event }: Props) {
+export function NextEvent({ locale, m, image, event, buttons }: Props) {
   const n = m.home.nextEvent
   const photo = event?.image ?? image
   const showNote = site.showPlaceholders && (event ? event.placeholder : true)
@@ -64,14 +72,26 @@ export function NextEvent({ locale, m, image, event }: Props) {
                 </p>
               ) : null}
             </div>
-            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-              {event ? (
-                <LinkButton href={localizedPath(locale, 'events', [event.id])}>{m.events.details}</LinkButton>
-              ) : null}
-              <LinkButton href={localizedPath(locale, 'events')} variant={event ? 'outline' : 'default'}>
-                {n.cta}
-              </LinkButton>
-            </div>
+            {buttons ? (
+              buttons.length > 0 ? (
+                <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap">
+                  {buttons.map((button, index) => (
+                    <LinkButton key={`${button.href}-${index}`} href={button.href} variant={button.variant} {...linkAttrs(button)}>
+                      {button.label}
+                    </LinkButton>
+                  ))}
+                </div>
+              ) : null
+            ) : (
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+                {event ? (
+                  <LinkButton href={localizedPath(locale, 'events', [event.id])}>{m.events.details}</LinkButton>
+                ) : null}
+                <LinkButton href={localizedPath(locale, 'events')} variant={event ? 'outline' : 'default'}>
+                  {n.cta}
+                </LinkButton>
+              </div>
+            )}
           </div>
         </div>
       </Reveal>

@@ -44,6 +44,128 @@ const text = (name: string, title: string) => defineField({ name, title, type: '
 const image = (name: string, title: string, description?: string) =>
   defineField({ name, title, type: 'image', description, options: { hotspot: true } })
 
+const buttonsField = (title: string, description: string) =>
+  defineField({
+    name: 'buttons',
+    title,
+    type: 'array',
+    description,
+    of: [
+      defineArrayMember({
+        type: 'object',
+        name: 'sectionButton',
+        title: 'Gumb',
+        fields: [
+          string('label', 'Natpis'),
+          defineField({
+            name: 'style',
+            title: 'Izgled',
+            type: 'string',
+            initialValue: 'default',
+            options: {
+              layout: 'radio',
+              list: [
+                { title: 'Ispunjen (glavni)', value: 'default' },
+                { title: 'S okvirom', value: 'outline' },
+                { title: 'Samo tekst', value: 'ghost' },
+              ],
+            },
+          }),
+          ...linkFields(),
+        ],
+        preview: {
+          select: { label: 'label.hr', kind: 'kind', page: 'page', url: 'url' },
+          prepare: ({ label, kind, page, url }) => ({
+            title: label || 'Gumb bez natpisa',
+            subtitle: linkSubtitle({ kind, page, url }),
+          }),
+        },
+      }),
+    ],
+  })
+
+const hideButtons = defineField({
+  name: 'hideButtons',
+  title: 'Ukloni sve gumbe u ovoj sekciji',
+  type: 'boolean',
+})
+
+const sectionButtons = [
+  hideButtons,
+  buttonsField('Gumbi u ovoj sekciji', 'Dodaj, obriši i presloži gumbe. Ako je popis prazan, prikazuju se zadani gumbi.'),
+]
+
+const imagePositions = [
+  { title: 'Slika desno od teksta', value: 'right' },
+  { title: 'Slika lijevo od teksta', value: 'left' },
+  { title: 'Slika kao pozadina', value: 'background' },
+  { title: 'Samo tekst, bez slike', value: 'none' },
+]
+
+const customTones = [
+  { title: 'Tamna (zadana)', value: 'base' },
+  { title: 'Sumračna', value: 'dusk' },
+  { title: 'Crna', value: 'ink' },
+  { title: 'Zelena', value: 'green' },
+  { title: 'Svijetla (pješčana)', value: 'sand' },
+]
+
+const customBlock = defineArrayMember({
+  type: 'object',
+  name: layoutTypeName('custom'),
+  title: 'Nova sekcija (vlastiti sadržaj)',
+  initialValue: { isHidden: false, imagePosition: 'right', tone: 'base' },
+  fields: [
+    defineField({
+      name: 'isHidden',
+      title: 'Privremeno sakrij ovu sekciju',
+      type: 'boolean',
+      initialValue: false,
+    }),
+    string('eyebrow', 'Nadnaslov'),
+    string('title', 'Naslov'),
+    text('text', 'Tekst'),
+    image('image', 'Slika'),
+    defineField({
+      name: 'imageAlt',
+      title: 'Opis slike za čitače zaslona',
+      type: 'string',
+      description: 'Kratko opiši što je na slici. Može ostati prazno ako je slika samo ukras.',
+    }),
+    defineField({
+      name: 'imagePosition',
+      title: 'Raspored slike',
+      type: 'string',
+      initialValue: 'right',
+      options: { layout: 'radio', list: imagePositions },
+    }),
+    defineField({
+      name: 'tone',
+      title: 'Boja pozadine sekcije',
+      type: 'string',
+      initialValue: 'base',
+      options: { list: customTones },
+    }),
+    defineField({
+      name: 'anchor',
+      title: 'Sidro za poveznice (neobavezno)',
+      type: 'slug',
+      description:
+        'Npr. "o-nama". Tada gumb ili izbornik mogu voditi na ovu sekciju adresom #o-nama (Vanjska poveznica).',
+      options: { source: (_doc, options) => (options.parent as { title?: { hr?: string } })?.title?.hr ?? '' },
+    }),
+    buttonsField('Gumbi', 'Dodaj koliko god gumba želiš, svaki vodi na stranicu ili vanjsku adresu.'),
+  ],
+  preview: {
+    select: { title: 'title.hr', media: 'image', hidden: 'isHidden', position: 'imagePosition' },
+    prepare: ({ title, media, hidden, position }) => ({
+      title: title || 'Nova sekcija bez naslova',
+      subtitle: `${hidden ? 'Skriveno' : 'Prikazuje se'} · ${imagePositions.find((p) => p.value === position)?.title ?? ''}`,
+      media,
+    }),
+  },
+})
+
 export const homePage = defineType({
   name: 'homePage',
   title: 'Početna stranica',
@@ -73,8 +195,8 @@ export const homePage = defineType({
       type: 'array',
       group: 'layout',
       description:
-        'Povuci sekciju za promjenu mjesta, obriši je da nestane sa stranice ili je privremeno sakrij. Sadržaj sekcije uređuješ u ostalim karticama. Svaka se sekcija prikazuje najviše jednom.',
-      of: layoutBlocks,
+        'Povuci sekciju za promjenu mjesta, obriši je da nestane sa stranice ili je privremeno sakrij. Sadržaj ugrađenih sekcija uređuješ u ostalim karticama. Gumbom "Dodaj stavku" možeš dodati i "Novu sekciju" s vlastitim naslovom, tekstom, slikom i gumbima, koliko god puta želiš. Svaka ugrađena sekcija prikazuje se najviše jednom.',
+      of: [...layoutBlocks, customBlock],
     }),
     section('hero', 'Naslovni dio', 'hero', [
       string('eyebrow', 'Nadnaslov'),
@@ -146,6 +268,7 @@ export const homePage = defineType({
       string('title', 'Naslov (kad nema najavljenog događaja)'),
       text('text', 'Tekst (kad nema najavljenog događaja)'),
       image('image', 'Slika', 'Slika koju dodaš na samom događaju ima prednost.'),
+      ...sectionButtons,
     ]),
     section('offer', 'Ponuda', 'offer', [
       string('eyebrow', 'Nadnaslov'),
@@ -211,7 +334,7 @@ export const homePage = defineType({
         ],
       }),
     ]),
-    section('careers', 'Poziv za posao', 'more', [string('title', 'Naslov'), text('text', 'Tekst')]),
+    section('careers', 'Poziv za posao', 'more', [string('title', 'Naslov'), text('text', 'Tekst'), ...sectionButtons]),
     section('visit', 'Posjet', 'more', [string('title', 'Naslov')]),
     defineField({
       name: 'meta',

@@ -6,7 +6,7 @@ import {
   type HeaderLogo,
   type NavItem,
 } from '@/lib/navigation'
-import { getSiteContent, type Localized, type LinkSource } from '@/lib/content/site-content'
+import { getSiteContent, type HeroButtonSource, type Localized, type LinkSource } from '@/lib/content/site-content'
 import { site } from '@/lib/site'
 
 const pages: string[] = ['home', ...routeKeys]
@@ -124,19 +124,36 @@ export async function getHeaderConfig(locale: Locale, m: Messages): Promise<Head
 
 const buttonVariants = { default: 'default', outline: 'outline', ghost: 'ghost' } as const
 
-/** Hero buttons: what the editor set up, or the three built-in ones when nothing was configured. */
-export async function getHeroButtons(locale: Locale, m: Messages): Promise<HeroButton[]> {
-  const hero = (await getSiteContent())?.home?.hero
-  if (hero?.hideButtons) return []
-
-  const custom = (hero?.buttons ?? []).flatMap((button) => {
+/** Turns the buttons an editor configured into renderable ones; buttons without a label or target are dropped. */
+export function resolveButtons(list: HeroButtonSource[] | null | undefined, locale: Locale): HeroButton[] {
+  return (list ?? []).flatMap((button) => {
     const label = text(button.label, locale)
     const link = label ? resolveLink(button, locale) : null
     if (!label || !link) return []
     const variant = buttonVariants[button.style as keyof typeof buttonVariants] ?? 'default'
     return [{ label, variant, ...link }]
   })
-  if (custom.length > 0) return custom
+}
+
+type ButtonSection = { hideButtons?: boolean | null; buttons?: HeroButtonSource[] | null } | null | undefined
+
+/** `null` means "nothing configured, keep the built-in buttons"; an empty list means "show no buttons". */
+function configuredButtons(section: ButtonSection, locale: Locale): HeroButton[] | null {
+  if (section?.hideButtons) return []
+  const custom = resolveButtons(section?.buttons, locale)
+  return custom.length > 0 ? custom : null
+}
+
+export async function getSectionButtons(locale: Locale) {
+  const home = (await getSiteContent())?.home
+  return { nextEvent: configuredButtons(home?.nextEvent, locale), careers: configuredButtons(home?.careers, locale) }
+}
+
+/** Hero buttons: what the editor set up, or the three built-in ones when nothing was configured. */
+export async function getHeroButtons(locale: Locale, m: Messages): Promise<HeroButton[]> {
+  const hero = (await getSiteContent())?.home?.hero
+  const custom = configuredButtons(hero, locale)
+  if (custom) return custom
 
   const h = m.home.hero
   const internal = (page: PageKey, label: string, variant: HeroButton['variant']): HeroButton => ({

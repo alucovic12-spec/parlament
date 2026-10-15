@@ -45,11 +45,22 @@ type SiteContent = {
       buttons?: HeroButtonSource[] | null
     }
     ticker?: Localized[]
-    nextEvent?: { eyebrow?: Localized; title?: Localized; text?: Localized }
+    nextEvent?: {
+      eyebrow?: Localized
+      title?: Localized
+      text?: Localized
+      hideButtons?: boolean | null
+      buttons?: HeroButtonSource[] | null
+    }
     offer?: { eyebrow?: Localized; title?: Localized; intro?: Localized; items?: TitleText[] }
     concept?: { eyebrow?: Localized; title?: Localized; text?: Localized; materials?: Localized[] }
     gallery?: { title?: Localized; tiles?: { label?: Localized }[] }
-    careers?: { title?: Localized; text?: Localized }
+    careers?: {
+      title?: Localized
+      text?: Localized
+      hideButtons?: boolean | null
+      buttons?: HeroButtonSource[] | null
+    }
     visit?: { title?: Localized }
   } | null
   pages: { route?: string; title?: Localized; description?: Localized; intro?: Localized }[] | null
