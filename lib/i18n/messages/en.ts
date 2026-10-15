@@ -29,8 +29,8 @@ export const en: Messages = {
       description: 'The Parlament digital menu: coffee, beer, wine, spirits, cocktails and small bites.',
     },
     events: {
-      title: 'The Agenda: events',
-      description: 'What is sitting tonight at Parlament: music, quizzes, tastings and special nights.',
+      title: 'Evening Sessions',
+      description: 'Music, comedy and special nights at Parlament.',
     },
     reservations: {
       title: 'Table reservations',
@@ -88,7 +88,7 @@ export const en: Messages = {
   },
   events: {
     eyebrow: 'Evening programme',
-    intro: 'Live music, DJ nights, quizzes and special sessions. See what is coming up and take your seat.',
+    intro: 'Music, comedy and special nights at Parlament. See what is coming up and take your seat.',
     temporaryNotice:
       'The events shown are temporary samples. The official programme will be published once confirmed.',
     tabsLabel: 'Event view',
