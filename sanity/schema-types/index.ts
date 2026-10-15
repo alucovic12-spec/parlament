@@ -5,6 +5,7 @@ import { localizedString, localizedText } from './localized'
 import { menuCategory } from './menu-category'
 import { menuItem } from './menu-item'
 import { pageContent } from './page-content'
+import { siteHeader } from './site-header'
 import { siteSettings } from './site-settings'
 
 export const schemaTypes = [
@@ -15,9 +16,10 @@ export const schemaTypes = [
   menuItem,
   galleryItem,
   siteSettings,
+  siteHeader,
   homePage,
   pageContent,
 ]
 
 /** Documents that exist exactly once and cannot be created, duplicated or deleted. */
-export const singletonTypes = new Set(['siteSettings', 'homePage', 'pageContent'])
+export const singletonTypes = new Set(['siteSettings', 'siteHeader', 'homePage', 'pageContent'])

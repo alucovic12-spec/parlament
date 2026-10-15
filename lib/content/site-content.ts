@@ -4,10 +4,27 @@ import { getMessages, type Messages } from '@/lib/i18n/messages'
 import { sanityFetch } from '@/lib/sanity/fetch'
 import { site } from '@/lib/site'
 
-type Localized = { hr?: string | null; en?: string | null } | null | undefined
+export type Localized = { hr?: string | null; en?: string | null } | null | undefined
 type TitleText = { title?: Localized; text?: Localized }
 
+export type LinkSource = { kind?: string | null; page?: string | null; url?: string | null; newTab?: boolean | null }
+export type NavLinkSource = LinkSource & { label?: Localized; hidden?: boolean | null; visibility?: string | null }
+export type HeroButtonSource = LinkSource & { label?: Localized; style?: string | null }
+
+type HeaderSource = {
+  hideNav?: boolean | null
+  logoAlt?: string | null
+  logoHeight?: number | null
+  showLanguageSwitcher?: boolean | null
+  stickyHeader?: boolean | null
+  logo?: { url?: string | null; width?: number | null; height?: number | null } | null
+  nav?: NavLinkSource[] | null
+  cta?: (LinkSource & { hide?: boolean | null; label?: Localized }) | null
+  announcement?: (LinkSource & { show?: boolean | null; text?: Localized }) | null
+}
+
 type SiteContent = {
+  header: HeaderSource | null
   settings: {
     address?: string | null
     phone?: string | null
@@ -20,7 +37,13 @@ type SiteContent = {
   home: {
     imported?: boolean | null
     meta?: { title?: Localized; description?: Localized }
-    hero?: { eyebrow?: Localized; title?: Localized; text?: Localized }
+    hero?: {
+      eyebrow?: Localized
+      title?: Localized
+      text?: Localized
+      hideButtons?: boolean | null
+      buttons?: HeroButtonSource[] | null
+    }
     ticker?: Localized[]
     nextEvent?: { eyebrow?: Localized; title?: Localized; text?: Localized }
     offer?: { eyebrow?: Localized; title?: Localized; intro?: Localized; items?: TitleText[] }
@@ -33,6 +56,13 @@ type SiteContent = {
 }
 
 const query = `{
+  "header": *[_id == "siteHeader"][0]{
+    hideNav, logoAlt, logoHeight, showLanguageSwitcher, stickyHeader,
+    "logo": logo.asset->{url, "width": metadata.dimensions.width, "height": metadata.dimensions.height},
+    nav[]{label{hr, en}, kind, page, url, newTab, hidden, visibility},
+    cta{hide, label{hr, en}, kind, page, url, newTab},
+    announcement{show, text{hr, en}, kind, page, url, newTab}
+  },
   "settings": *[_id == "siteSettings"][0]{address, phone, email, hours, instagram, facebook, tiktok},
   "home": *[_id == "homePage"][0]{
     imported, meta, hero, nextEvent, careers, visit,

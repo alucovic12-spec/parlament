@@ -1,14 +1,17 @@
 import { HeroAnnouncements } from '@/components/home/hero-announcements'
 import { HeroSlides } from '@/components/home/hero-slides'
 import { LinkButton } from '@/components/shared/link-button'
+import { getHeroButtons } from '@/lib/content/links'
 import type { LocalizedEvent } from '@/lib/events/types'
-import { localizedPath, type Locale } from '@/lib/i18n/config'
+import type { Locale } from '@/lib/i18n/config'
 import type { Messages } from '@/lib/i18n/messages'
+import { linkAttrs } from '@/lib/navigation'
 
 type HeroProps = { locale: Locale; m: Messages; images: string[]; events?: LocalizedEvent[] }
 
-export function Hero({ locale, m, images, events = [] }: HeroProps) {
+export async function Hero({ locale, m, images, events = [] }: HeroProps) {
   const h = m.home.hero
+  const buttons = await getHeroButtons(locale, m)
   const slides = images.map((src) => ({ src }))
   const [firstLine, ...rest] = h.title.split(/(?<=\.)\s+/)
   const secondLine = rest.join(' ')
@@ -72,17 +75,21 @@ export function Hero({ locale, m, images, events = [] }: HeroProps) {
             {h.text}
           </p>
         ) : null}
-        <div style={{ animationDelay: '340ms' }} className="fade-up mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-          <LinkButton href={localizedPath(locale, 'reservations')} className="w-full sm:w-auto">
-            {h.reserve}
-          </LinkButton>
-          <LinkButton href={localizedPath(locale, 'menu')} variant="outline" className="w-full sm:w-auto">
-            {h.viewMenu}
-          </LinkButton>
-          <LinkButton href={localizedPath(locale, 'events')} variant="ghost" className="w-full sm:w-auto">
-            {h.viewEvents}
-          </LinkButton>
-        </div>
+        {buttons.length > 0 ? (
+          <div style={{ animationDelay: '340ms' }} className="fade-up mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            {buttons.map((button, index) => (
+              <LinkButton
+                key={`${button.href}-${index}`}
+                href={button.href}
+                variant={button.variant}
+                {...linkAttrs(button)}
+                className="w-full sm:w-auto"
+              >
+                {button.label}
+              </LinkButton>
+            ))}
+          </div>
+        ) : null}
 
         <ul
           style={{ animationDelay: '460ms' }}

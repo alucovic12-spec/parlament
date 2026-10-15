@@ -9,7 +9,7 @@ import { SiteHeader } from '@/components/layout/site-header'
 import { JsonLd } from '@/components/shared/json-ld'
 import { isLocale, locales } from '@/lib/i18n/config'
 import { getMessagesWithContent } from '@/lib/content/site-content'
-import { getNavItems, splitMobileNav } from '@/lib/navigation'
+import { getHeaderConfig } from '@/lib/content/links'
 import { siteJsonLd } from '@/lib/seo'
 import { getSiteUrl, site } from '@/lib/site'
 import '../../globals.css'
@@ -70,8 +70,7 @@ export default async function LocaleLayout({
   if (!isLocale(locale)) notFound()
 
   const m = await getMessagesWithContent(locale)
-  const items = getNavItems(locale, m)
-  const { primary, more } = splitMobileNav(items)
+  const header = await getHeaderConfig(locale, m)
 
   return (
     <html lang={locale} className={poppins.variable}>
@@ -83,13 +82,14 @@ export default async function LocaleLayout({
           {m.nav.skip}
         </a>
         <JsonLd data={await siteJsonLd(locale)} />
-        <SiteHeader locale={locale} m={m} items={items} />
+        <SiteHeader locale={locale} m={m} config={header} />
         <main id="main">{children}</main>
-        <SiteFooter locale={locale} m={m} items={items} />
+        <SiteFooter locale={locale} m={m} items={header.footerItems} logo={header.logo} />
         <MobileNav
           locale={locale}
-          primary={primary}
-          more={more}
+          primary={header.mobilePrimary}
+          more={header.mobileMore}
+          showLanguage={header.showLanguageSwitcher}
           labels={{
             nav: m.nav.mobileLabel,
             more: m.nav.more,

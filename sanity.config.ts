@@ -30,7 +30,10 @@ export const config = defineConfig({
       creationContext.type === 'global' ? prev.filter(({ templateId }) => !singletonTypes.has(templateId) && !templateId.startsWith('page-')) : prev,
     actions: (prev, { schemaType }) => {
       const base = singletonTypes.has(schemaType) ? prev.filter(({ action }) => action !== 'duplicate') : prev
-      return [translateMissingAction, translateAllAction, ...base]
+      // The first action becomes the big primary button, so Publish has to lead or it ends up hidden in the "..." menu.
+      const publish = base.filter(({ action }) => action === 'publish')
+      const others = base.filter(({ action }) => action !== 'publish')
+      return [...publish, translateMissingAction, translateAllAction, ...others]
     },
   },
 })
