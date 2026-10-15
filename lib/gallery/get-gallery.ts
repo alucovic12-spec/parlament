@@ -34,14 +34,13 @@ function aspectFor(dimensions: SanityGalleryItem['dimensions']): GalleryAspect {
 
 function placeholderTiles(locale: Locale, m: Messages): GalleryTile[] {
   return galleryItems.map((item) => {
-    const categoryLabel = m.galleryPage.categories[item.category]
     return {
       id: item.id,
       category: item.category,
       aspect: item.aspect,
       image: item.image,
-      alt: item.alt?.[locale] ?? `${m.placeholder.photo}: ${categoryLabel}`,
-      caption: item.caption?.[locale] ?? categoryLabel,
+      alt: item.alt?.[locale] ?? m.placeholder.photo,
+      caption: item.caption?.[locale] ?? '',
     }
   })
 }
@@ -56,8 +55,7 @@ export async function getGallery(locale: Locale, m: Messages): Promise<GalleryTi
     const category: GalleryCategory = galleryCategories.includes(item.category as GalleryCategory)
       ? (item.category as GalleryCategory)
       : 'atmosphere'
-    const categoryLabel = m.galleryPage.categories[category]
-    const caption = item.caption?.[locale]?.trim() || item.caption?.hr?.trim() || categoryLabel
+    const caption = item.caption?.[locale]?.trim() || item.caption?.hr?.trim() || ''
 
     return [
       {
@@ -69,7 +67,7 @@ export async function getGallery(locale: Locale, m: Messages): Promise<GalleryTi
           width: item.dimensions?.width ?? 1600,
           height: item.dimensions?.height ?? 1067,
         },
-        alt: item.alt?.[locale]?.trim() || caption,
+        alt: item.alt?.[locale]?.trim() || caption || m.placeholder.photo,
         caption,
       },
     ]

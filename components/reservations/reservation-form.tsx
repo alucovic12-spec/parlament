@@ -290,26 +290,29 @@ function ReservationFormInner({ locale, labels, event, onReset }: Props & { onRe
           <FieldError field="partySize" />
         </div>
 
-        <div>
-          <label htmlFor="occasion" className="text-sm font-medium">
-            {labels.fields.occasion}
-          </label>
-          <select
-            id="occasion"
-            name="occasion"
-            defaultValue={values.occasion ?? 'casual'}
-            aria-invalid={Boolean(errorFor('occasion'))}
-            aria-describedby={describedBy('occasion')}
-            className={fieldClass}
-          >
-            {occasions.map((occasion) => (
-              <option key={occasion} value={occasion}>
-                {labels.occasions[occasion]}
-              </option>
-            ))}
-          </select>
-          <FieldError field="occasion" />
-        </div>
+        {event ? null : (
+          <div>
+            <label htmlFor="occasion" className="text-sm font-medium">
+              {labels.fields.occasion}
+            </label>
+            <select
+              id="occasion"
+              name="occasion"
+              defaultValue={values.occasion ?? ''}
+              aria-invalid={Boolean(errorFor('occasion'))}
+              aria-describedby={describedBy('occasion')}
+              className={fieldClass}
+            >
+              <option value="">{labels.fields.occasionNone}</option>
+              {occasions.map((occasion) => (
+                <option key={occasion} value={occasion}>
+                  {labels.occasions[occasion]}
+                </option>
+              ))}
+            </select>
+            <FieldError field="occasion" />
+          </div>
+        )}
 
         <div className="sm:col-span-2">
           <label htmlFor="notes" className="text-sm font-medium">

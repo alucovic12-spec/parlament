@@ -148,20 +148,26 @@ export async function submitReservation(
       return { status: 'error', fieldErrors: {}, formError: 'rateLimit', values: raw }
     }
 
-    const { error } = await supabase.from('reservations').insert({
+    const row = {
       full_name: input.fullName,
       phone: input.phone,
       email: input.email,
       reservation_date: input.date,
       reservation_time: input.time,
       party_size: input.partySize,
-      occasion: input.occasion,
       notes: notes.length > 0 ? notes : null,
       consent: true,
       locale,
       idempotency_key: idempotencyKey,
       ip_hash: ipHash,
-    })
+    }
+
+    let { error } = await supabase.from('reservations').insert({ ...row, occasion: input.occasion ?? null })
+
+    // Databases where `occasion` is still NOT NULL reject an empty choice, so fall back to the old default.
+    if (error?.code === '23502' && !input.occasion) {
+      ;({ error } = await supabase.from('reservations').insert({ ...row, occasion: 'casual' }))
+    }
 
     // A duplicate idempotency key means this exact submission was already stored.
     if (error && error.code !== '23505') throw error
